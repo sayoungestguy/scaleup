@@ -31,10 +31,18 @@ const openAPIItem = () => (
   </MenuItem>
 );
 
-export const AdminMenu = ({ showOpenAPI }) => (
+const databaseItem = () => (
+  <DropdownItem tag="a" href="./h2-console/" target="_tab">
+    <FontAwesomeIcon icon="database" fixedWidth /> Database
+  </DropdownItem>
+);
+
+export const AdminMenu = ({ showOpenAPI, showDatabase }) => (
   <NavDropdown icon="users-cog" name="Administration" id="admin-menu" data-cy="adminMenu">
     {adminMenuItems()}
     {showOpenAPI && openAPIItem()}
+
+    {showDatabase && databaseItem()}
   </NavDropdown>
 );
 

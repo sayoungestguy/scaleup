@@ -1,5 +1,6 @@
 package com.teamsixnus.scaleup.config;
 
+import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
 import org.springframework.test.context.MergedContextConfiguration;
+import tech.jhipster.config.JHipsterConstants;
 
 public class SqlTestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
@@ -26,7 +28,10 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                 ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
-                if (null != sqlAnnotation) {
+                boolean usingTestProdProfile = Arrays.asList(context.getEnvironment().getActiveProfiles()).contains(
+                    "test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION
+                );
+                if (null != sqlAnnotation && usingTestProdProfile) {
                     log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
                     log.info("Warming up the sql database");
                     if (null == prodTestContainer) {
