@@ -141,7 +141,7 @@ jobs:
         run: |
           chmod +x script/zap-script.sh
       - name: ZAP scan
-        run: scripts/zap-script.sh
+        run: script/zap-script.sh
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
