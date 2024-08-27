@@ -1,0 +1,79 @@
+
+application {
+  config {
+    baseName scaleup
+    applicationType monolith
+    packageName com.teamsixnus.scaleup
+    authenticationType jwt
+    devDatabaseType h2Disk
+    prodDatabaseType mysql
+    clientFramework react
+  }
+  entities *
+}
+
+entity CodeTables {
+  category String maxlength(50),
+  codeKey String maxlength(50),
+  codeValue String maxlength(255)
+}
+
+
+entity UserProfile {
+  nickname String maxlength(255),
+  jobRole String maxlength(255),
+  aboutMe String maxlength(255)
+  profilePicture String maxlength(255),
+}
+
+
+entity Skill {
+  skillName String maxlength(255) required
+    individualSkillDesc String maxlength(255),
+    yearsOfExp Integer required
+}
+
+entity Message {
+  content TextBlob required,
+  sentAt Instant required,
+  isDeleted Boolean
+}
+
+entity Activity {
+  activityTime Instant required,
+  duration Integer,
+  venue String maxlength(255),
+  details TextBlob,
+}
+
+entity ActivityInvite {
+    willParticipate Boolean
+}
+
+entity Notification {
+  notificationRefId UUID,
+  content TextBlob,
+  isRead Boolean,
+}
+
+relationship OneToOne {
+  UserProfile{user(login) required} to User with builtInEntity
+}
+
+relationship ManyToOne {
+  Skill{userProfile} to UserProfile,
+  Message{senderProfile} to UserProfile,
+  Message{receiverProfile} to UserProfile,
+  Activity{creatorProfile} to UserProfile,
+  Activity{skill} to Skill,
+  ActivityInvite{activity} to Activity,
+  ActivityInvite{inviteeProfile} to UserProfile,
+  Notification{userProfile} to UserProfile,
+  Notification{type} to CodeTables,
+  ActivityInvite{status} to CodeTables,
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate UserProfile, Skill, Message, Activity, ActivityInvite, Notification, CodeTables with infinite-scroll
+

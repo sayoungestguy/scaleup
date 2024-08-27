@@ -1,6 +1,7 @@
 package com.teamsixnus.scaleup.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.teamsixnus.scaleup.audit.EntityAuditEventListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -17,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * last modified by attributes.
  */
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({ AuditingEntityListener.class, EntityAuditEventListener.class })
 @JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" }, allowGetters = true)
 public abstract class AbstractAuditingEntity<T> implements Serializable {
 
