@@ -141,21 +141,21 @@ export const Activity = () => {
                   <th className="hand" onClick={sort('details')}>
                     Details <FontAwesomeIcon icon={getSortIconByFieldName('details')} />
                   </th>
-                  <th className="hand" onClick={sort('createdBy')}>
-                    Created By <FontAwesomeIcon icon={getSortIconByFieldName('createdBy')} />
-                  </th>
-                  <th className="hand" onClick={sort('createdDate')}>
-                    Created Date <FontAwesomeIcon icon={getSortIconByFieldName('createdDate')} />
-                  </th>
-                  <th className="hand" onClick={sort('lastModifiedBy')}>
-                    Last Modified By <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedBy')} />
-                  </th>
-                  <th className="hand" onClick={sort('lastModifiedDate')}>
-                    Last Modified Date <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
-                  </th>
-                  <th>
-                    Creator Profile <FontAwesomeIcon icon="sort" />
-                  </th>
+                  {/*<th className="hand" onClick={sort('createdBy')}>*/}
+                  {/*  Created By <FontAwesomeIcon icon={getSortIconByFieldName('createdBy')} />*/}
+                  {/*</th>*/}
+                  {/*<th className="hand" onClick={sort('createdDate')}>*/}
+                  {/*  Created Date <FontAwesomeIcon icon={getSortIconByFieldName('createdDate')} />*/}
+                  {/*</th>*/}
+                  {/*<th className="hand" onClick={sort('lastModifiedBy')}>*/}
+                  {/*  Last Modified By <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedBy')} />*/}
+                  {/*</th>*/}
+                  {/*<th className="hand" onClick={sort('lastModifiedDate')}>*/}
+                  {/*  Last Modified Date <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />*/}
+                  {/*</th>*/}
+                  {/*<th>*/}
+                  {/*  Creator Profile <FontAwesomeIcon icon="sort" />*/}
+                  {/*</th>*/}
                   <th>
                     Skill <FontAwesomeIcon icon="sort" />
                   </th>
@@ -176,23 +176,23 @@ export const Activity = () => {
                     <td>{activity.duration}</td>
                     <td>{activity.venue}</td>
                     <td>{activity.details}</td>
-                    <td>{activity.createdBy}</td>
-                    <td>
-                      {activity.createdDate ? <TextFormat type="date" value={activity.createdDate} format={APP_DATE_FORMAT} /> : null}
-                    </td>
-                    <td>{activity.lastModifiedBy}</td>
-                    <td>
-                      {activity.lastModifiedDate ? (
-                        <TextFormat type="date" value={activity.lastModifiedDate} format={APP_DATE_FORMAT} />
-                      ) : null}
-                    </td>
-                    <td>
-                      {activity.creatorProfile ? (
-                        <Link to={`/user-profile/${activity.creatorProfile.id}`}>{activity.creatorProfile.id}</Link>
-                      ) : (
-                        ''
-                      )}
-                    </td>
+                    {/*<td>{activity.createdBy}</td>*/}
+                    {/*<td>*/}
+                    {/*  {activity.createdDate ? <TextFormat type="date" value={activity.createdDate} format={APP_DATE_FORMAT} /> : null}*/}
+                    {/*</td>*/}
+                    {/*<td>{activity.lastModifiedBy}</td>*/}
+                    {/*<td>*/}
+                    {/*  {activity.lastModifiedDate ? (*/}
+                    {/*    <TextFormat type="date" value={activity.lastModifiedDate} format={APP_DATE_FORMAT} />*/}
+                    {/*  ) : null}*/}
+                    {/*</td>*/}
+                    {/*<td>*/}
+                    {/*  {activity.creatorProfile ? (*/}
+                    {/*    <Link to={`/user-profile/${activity.creatorProfile.id}`}>{activity.creatorProfile.id}</Link>*/}
+                    {/*  ) : (*/}
+                    {/*    ''*/}
+                    {/*  )}*/}
+                    {/*</td>*/}
                     <td>{activity.skill ? <Link to={`/skill/${activity.skill.id}`}>{activity.skill.id}</Link> : ''}</td>
                     <td className="text-end">
                       <div className="btn-group flex-btn-group-container">

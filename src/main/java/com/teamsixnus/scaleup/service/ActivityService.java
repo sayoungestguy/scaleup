@@ -1,14 +1,18 @@
 package com.teamsixnus.scaleup.service;
 
 import com.teamsixnus.scaleup.domain.Activity;
+import com.teamsixnus.scaleup.domain.User;
 import com.teamsixnus.scaleup.repository.ActivityRepository;
 import com.teamsixnus.scaleup.service.dto.ActivityDTO;
 import com.teamsixnus.scaleup.service.mapper.ActivityMapper;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +28,12 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
 
     private final ActivityMapper activityMapper;
+    private final UserService userService;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityMapper activityMapper) {
+    public ActivityService(ActivityRepository activityRepository, ActivityMapper activityMapper, UserService userService) {
         this.activityRepository = activityRepository;
         this.activityMapper = activityMapper;
+        this.userService = userService;
     }
 
     /**
@@ -99,6 +105,12 @@ public class ActivityService {
     public Optional<ActivityDTO> findOne(Long id) {
         log.debug("Request to get Activity : {}", id);
         return activityRepository.findById(id).map(activityMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ActivityDTO> findAllByCurrentUser(Pageable pageable) {
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return activityRepository.findAllByCreatorProfileUserId(currentUser.getId(), pageable).map(activityMapper::toDto);
     }
 
     /**

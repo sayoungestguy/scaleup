@@ -144,7 +144,7 @@ public class ActivityResource {
     @GetMapping("")
     public ResponseEntity<List<ActivityDTO>> getAllActivities(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Activities");
-        Page<ActivityDTO> page = activityService.findAll(pageable);
+        Page<ActivityDTO> page = activityService.findAllByCurrentUser(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -161,6 +161,20 @@ public class ActivityResource {
         Optional<ActivityDTO> activityDTO = activityService.findOne(id);
         return ResponseUtil.wrapOrNotFound(activityDTO);
     }
+
+    /**
+     * {@code GET  /activities} : get all the activities.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of activities in body.
+     */
+    //    @GetMapping("")
+    //    public ResponseEntity<List<ActivityDTO>> getAllActivitiesByCurrentUser(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    //        log.debug("REST request to get a page of Activities");
+    //        Page<ActivityDTO> page = activityService.findAllByCurrentUser(pageable);
+    //        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    //        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    //    }
 
     /**
      * {@code DELETE  /activities/:id} : delete the "id" activity.
