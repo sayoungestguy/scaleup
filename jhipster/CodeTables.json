@@ -1,0 +1,12 @@
+{
+  "name": "CodeTables",
+  "fields": [
+    { "fieldName": "category", "fieldType": "String", "fieldValidateRules": ["maxlength"], "fieldValidateRulesMaxlength": 50 },
+    { "fieldName": "codeKey", "fieldType": "String", "fieldValidateRules": ["maxlength"], "fieldValidateRulesMaxlength": 50 },
+    { "fieldName": "codeValue", "fieldType": "String", "fieldValidateRules": ["maxlength"], "fieldValidateRulesMaxlength": 255 }
+  ],
+  "relationships": [],
+  "dto": "mapstruct",
+  "service": "serviceClass",
+  "pagination": "infinite-scroll"
+}
