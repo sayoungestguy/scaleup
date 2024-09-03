@@ -11,9 +11,10 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
-import { getEntities as getSkills } from 'app/entities/skill/skill.reducer';
+import { getAllSkills as getSkills } from 'app/entities/skill/skill.reducer';
 import { IActivity } from 'app/shared/model/activity.model';
-import { getEntity, updateEntity, createEntity, reset } from './activity.reducer';
+import { getActivityById, updateEntity, createEntity, reset } from './activity.reducer';
+import { min } from 'lodash';
 
 export const ActivityUpdate = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +37,7 @@ export const ActivityUpdate = () => {
 
   useEffect(() => {
     if (!isNew) {
-      dispatch(getEntity(id));
+      dispatch(getActivityById(id));
     }
 
     dispatch(getUserProfiles({}));
@@ -96,7 +97,7 @@ export const ActivityUpdate = () => {
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="scaleupApp.activity.home.createOrEditLabel" data-cy="ActivityCreateUpdateHeading">
-            Create or edit a Activity
+            {isNew ? 'Create an Activity' : 'Edit an Activity'}
           </h2>
         </Col>
       </Row>
@@ -118,7 +119,22 @@ export const ActivityUpdate = () => {
                   required: { value: true, message: 'This field is required.' },
                 }}
               />
-              <ValidatedField label="Duration" id="activity-duration" name="duration" data-cy="duration" type="text" />
+              <ValidatedField
+                label="Duration"
+                id="activity-duration"
+                name="duration"
+                data-cy="duration"
+                type="text"
+                validate={{
+                  required: { value: true, message: 'This field is required' },
+                  min: { value: 1, message: 'Value must be more than 0' },
+                  max: { value: 999, message: 'Value cannot be more than 999' },
+                  validate: {
+                    notDecimal: value => Number.isInteger(Number(value)) || 'Value cannot be a decimal',
+                    notNegative: value => value >= 0 || 'Value cannot be negative',
+                  },
+                }}
+              />
               <ValidatedField
                 label="Venue"
                 id="activity-venue"
@@ -126,40 +142,30 @@ export const ActivityUpdate = () => {
                 data-cy="venue"
                 type="text"
                 validate={{
+                  required: { value: true, message: 'This field is required' },
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
-              <ValidatedField label="Details" id="activity-details" name="details" data-cy="details" type="textarea" />
-              {/*<ValidatedField label="Created By" id="activity-createdBy" name="createdBy" data-cy="createdBy" type="text" />*/}
-              {/*<ValidatedField*/}
-              {/*  label="Created Date"*/}
-              {/*  id="activity-createdDate"*/}
-              {/*  name="createdDate"*/}
-              {/*  data-cy="createdDate"*/}
-              {/*  type="datetime-local"*/}
-              {/*  placeholder="YYYY-MM-DD HH:mm"*/}
-              {/*/>*/}
-              {/*<ValidatedField*/}
-              {/*  label="Last Modified By"*/}
-              {/*  id="activity-lastModifiedBy"*/}
-              {/*  name="lastModifiedBy"*/}
-              {/*  data-cy="lastModifiedBy"*/}
-              {/*  type="text"*/}
-              {/*/>*/}
-              {/*<ValidatedField*/}
-              {/*  label="Last Modified Date"*/}
-              {/*  id="activity-lastModifiedDate"*/}
-              {/*  name="lastModifiedDate"*/}
-              {/*  data-cy="lastModifiedDate"*/}
-              {/*  type="datetime-local"*/}
-              {/*  placeholder="YYYY-MM-DD HH:mm"*/}
-              {/*/>*/}
+              <ValidatedField
+                label="Details"
+                id="activity-details"
+                name="details"
+                data-cy="details"
+                type="textarea"
+                validate={{
+                  required: { value: true, message: 'This field is required' },
+                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                }}
+              />
               <ValidatedField
                 id="activity-creatorProfile"
                 name="creatorProfile"
                 data-cy="creatorProfile"
                 label="Creator Profile"
                 type="select"
+                validate={{
+                  required: { value: true, message: 'This field is required' },
+                }}
               >
                 <option value="" key="0" />
                 {userProfiles
@@ -170,7 +176,16 @@ export const ActivityUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="activity-skill" name="skill" data-cy="skill" label="Skill" type="select">
+              <ValidatedField
+                id="activity-skill"
+                name="skill"
+                data-cy="skill"
+                label="Skill"
+                type="select"
+                validate={{
+                  required: { value: true, message: 'This field is required' },
+                }}
+              >
                 <option value="" key="0" />
                 {skills
                   ? skills.map(otherEntity => (

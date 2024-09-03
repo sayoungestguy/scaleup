@@ -20,7 +20,7 @@ const apiUrl = 'api/activities';
 
 // Actions
 
-export const getEntities = createAsyncThunk(
+export const getAllActivity = createAsyncThunk(
   'activity/fetch_entity_list',
   async ({ page, size, sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
@@ -29,7 +29,7 @@ export const getEntities = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const getEntity = createAsyncThunk(
+export const getActivityById = createAsyncThunk(
   'activity/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
@@ -78,7 +78,7 @@ export const ActivitySlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getEntity.fulfilled, (state, action) => {
+      .addCase(getActivityById.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
@@ -87,7 +87,7 @@ export const ActivitySlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getAllActivity), (state, action) => {
         const { data, headers } = action.payload;
         const links = parseHeaderForLinks(headers.link);
 
@@ -105,7 +105,7 @@ export const ActivitySlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getAllActivity, getActivityById), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;

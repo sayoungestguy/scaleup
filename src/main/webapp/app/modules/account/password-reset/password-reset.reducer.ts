@@ -47,12 +47,17 @@ export const PasswordResetSlice = createSlice({
       .addCase(handlePasswordResetFinish.fulfilled, () => ({
         ...initialState,
         loading: false,
+        //password reset state set to success
         resetPasswordSuccess: true,
-        successMessage: "Your password couldn't be reset. Remember a password request is only valid for 24 hours.",
+        //successMessage: "Your password couldn't be reset. Remember a password request is only valid for 24 hours.",
+        //scrape 24h thinggy? since cant demo
+        successMessage: 'Your password reset have been completed successfully',
       }))
       .addMatcher(isPending(handlePasswordResetInit, handlePasswordResetFinish), state => {
         state.loading = true;
       })
+      //A matcher function to handle actions that have been rejected
+      //resets the state to initialState, sets loading to false, and marks the operation as failed with a relevant flag (resetPasswordFailure)
       .addMatcher(isRejected(handlePasswordResetInit, handlePasswordResetFinish), () => ({
         ...initialState,
         loading: false,

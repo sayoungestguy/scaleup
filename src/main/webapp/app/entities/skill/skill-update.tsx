@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
-import { getEntity, updateEntity, createEntity, reset } from './skill.reducer';
+import { getSkillById, updateEntity, createEntity, reset } from './skill.reducer';
 
 export const SkillUpdate = () => {
   const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ export const SkillUpdate = () => {
 
   useEffect(() => {
     if (!isNew) {
-      dispatch(getEntity(id));
+      dispatch(getSkillById(id));
     }
 
     dispatch(getUserProfiles({}));

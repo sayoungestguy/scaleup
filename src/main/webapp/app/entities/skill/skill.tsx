@@ -10,7 +10,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities, reset } from './skill.reducer';
+import { getAllSkills, reset } from './skill.reducer';
 
 export const Skill = () => {
   const dispatch = useAppDispatch();
@@ -29,7 +29,7 @@ export const Skill = () => {
 
   const getAllEntities = () => {
     dispatch(
-      getEntities({
+      getAllSkills({
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
         sort: `${paginationState.sort},${paginationState.order}`,
@@ -43,7 +43,7 @@ export const Skill = () => {
       ...paginationState,
       activePage: 1,
     });
-    dispatch(getEntities({}));
+    dispatch(getAllSkills({}));
   };
 
   useEffect(() => {

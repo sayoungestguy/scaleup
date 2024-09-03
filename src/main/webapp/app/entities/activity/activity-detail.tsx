@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './activity.reducer';
+import { getActivityById } from './activity.reducer';
 
 export const ActivityDetail = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ export const ActivityDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getActivityById(id));
   }, []);
 
   const activityEntity = useAppSelector(state => state.activity.entity);
@@ -46,28 +46,6 @@ export const ActivityDetail = () => {
             <span id="details">Details</span>
           </dt>
           <dd>{activityEntity.details}</dd>
-          <dt>
-            <span id="createdBy">Created By</span>
-          </dt>
-          <dd>{activityEntity.createdBy}</dd>
-          <dt>
-            <span id="createdDate">Created Date</span>
-          </dt>
-          <dd>
-            {activityEntity.createdDate ? <TextFormat value={activityEntity.createdDate} type="date" format={APP_DATE_FORMAT} /> : null}
-          </dd>
-          <dt>
-            <span id="lastModifiedBy">Last Modified By</span>
-          </dt>
-          <dd>{activityEntity.lastModifiedBy}</dd>
-          <dt>
-            <span id="lastModifiedDate">Last Modified Date</span>
-          </dt>
-          <dd>
-            {activityEntity.lastModifiedDate ? (
-              <TextFormat value={activityEntity.lastModifiedDate} type="date" format={APP_DATE_FORMAT} />
-            ) : null}
-          </dd>
           <dt>Creator Profile</dt>
           <dd>{activityEntity.creatorProfile ? activityEntity.creatorProfile.id : ''}</dd>
           <dt>Skill</dt>

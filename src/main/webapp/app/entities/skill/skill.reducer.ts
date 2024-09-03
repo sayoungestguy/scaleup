@@ -20,7 +20,7 @@ const apiUrl = 'api/skills';
 
 // Actions
 
-export const getEntities = createAsyncThunk(
+export const getAllSkills = createAsyncThunk(
   'skill/fetch_entity_list',
   async ({ page, size, sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
@@ -29,7 +29,7 @@ export const getEntities = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const getEntity = createAsyncThunk(
+export const getSkillById = createAsyncThunk(
   'skill/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
@@ -78,7 +78,7 @@ export const SkillSlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getEntity.fulfilled, (state, action) => {
+      .addCase(getSkillById.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
@@ -87,7 +87,7 @@ export const SkillSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getAllSkills), (state, action) => {
         const { data, headers } = action.payload;
         const links = parseHeaderForLinks(headers.link);
 
@@ -105,7 +105,7 @@ export const SkillSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getAllSkills, getSkillById), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
