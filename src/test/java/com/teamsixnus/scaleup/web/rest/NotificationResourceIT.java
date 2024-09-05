@@ -295,7 +295,7 @@ class NotificationResourceIT {
         Notification partialUpdatedNotification = new Notification();
         partialUpdatedNotification.setId(notification.getId());
 
-        partialUpdatedNotification.notificationRefId(UPDATED_NOTIFICATION_REF_ID).content(UPDATED_CONTENT);
+        partialUpdatedNotification.notificationRefId(UPDATED_NOTIFICATION_REF_ID);
 
         restNotificationMockMvc
             .perform(

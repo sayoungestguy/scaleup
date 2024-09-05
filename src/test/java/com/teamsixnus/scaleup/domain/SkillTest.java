@@ -1,7 +1,6 @@
 package com.teamsixnus.scaleup.domain;
 
 import static com.teamsixnus.scaleup.domain.SkillTestSamples.*;
-import static com.teamsixnus.scaleup.domain.UserProfileTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.teamsixnus.scaleup.web.rest.TestUtil;
@@ -21,17 +20,5 @@ class SkillTest {
 
         skill2 = getSkillSample2();
         assertThat(skill1).isNotEqualTo(skill2);
-    }
-
-    @Test
-    void userProfileTest() {
-        Skill skill = getSkillRandomSampleGenerator();
-        UserProfile userProfileBack = getUserProfileRandomSampleGenerator();
-
-        skill.setUserProfile(userProfileBack);
-        assertThat(skill.getUserProfile()).isEqualTo(userProfileBack);
-
-        skill.userProfile(null);
-        assertThat(skill.getUserProfile()).isNull();
     }
 }

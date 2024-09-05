@@ -303,7 +303,7 @@ class MessageResourceIT {
         Message partialUpdatedMessage = new Message();
         partialUpdatedMessage.setId(message.getId());
 
-        partialUpdatedMessage.content(UPDATED_CONTENT);
+        partialUpdatedMessage.content(UPDATED_CONTENT).sentAt(UPDATED_SENT_AT).isDeleted(UPDATED_IS_DELETED);
 
         restMessageMockMvc
             .perform(

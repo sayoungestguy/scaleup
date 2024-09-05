@@ -48,6 +48,9 @@ class ActivityResourceIT {
     private static final String DEFAULT_DETAILS = "AAAAAAAAAA";
     private static final String UPDATED_DETAILS = "BBBBBBBBBB";
 
+    private static final String DEFAULT_ACTIVITY_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_ACTIVITY_NAME = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/activities";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -84,7 +87,8 @@ class ActivityResourceIT {
             .activityTime(DEFAULT_ACTIVITY_TIME)
             .duration(DEFAULT_DURATION)
             .venue(DEFAULT_VENUE)
-            .details(DEFAULT_DETAILS);
+            .details(DEFAULT_DETAILS)
+            .activityName(DEFAULT_ACTIVITY_NAME);
         return activity;
     }
 
@@ -99,7 +103,8 @@ class ActivityResourceIT {
             .activityTime(UPDATED_ACTIVITY_TIME)
             .duration(UPDATED_DURATION)
             .venue(UPDATED_VENUE)
-            .details(UPDATED_DETAILS);
+            .details(UPDATED_DETAILS)
+            .activityName(UPDATED_ACTIVITY_NAME);
         return activity;
     }
 
@@ -177,6 +182,23 @@ class ActivityResourceIT {
 
     @Test
     @Transactional
+    void checkActivityNameIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        activity.setActivityName(null);
+
+        // Create the Activity, which fails.
+        ActivityDTO activityDTO = activityMapper.toDto(activity);
+
+        restActivityMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(activityDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllActivities() throws Exception {
         // Initialize the database
         insertedActivity = activityRepository.saveAndFlush(activity);
@@ -190,7 +212,8 @@ class ActivityResourceIT {
             .andExpect(jsonPath("$.[*].activityTime").value(hasItem(DEFAULT_ACTIVITY_TIME.toString())))
             .andExpect(jsonPath("$.[*].duration").value(hasItem(DEFAULT_DURATION)))
             .andExpect(jsonPath("$.[*].venue").value(hasItem(DEFAULT_VENUE)))
-            .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS.toString())))
+            .andExpect(jsonPath("$.[*].activityName").value(hasItem(DEFAULT_ACTIVITY_NAME)));
     }
 
     @Test
@@ -208,7 +231,8 @@ class ActivityResourceIT {
             .andExpect(jsonPath("$.activityTime").value(DEFAULT_ACTIVITY_TIME.toString()))
             .andExpect(jsonPath("$.duration").value(DEFAULT_DURATION))
             .andExpect(jsonPath("$.venue").value(DEFAULT_VENUE))
-            .andExpect(jsonPath("$.details").value(DEFAULT_DETAILS.toString()));
+            .andExpect(jsonPath("$.details").value(DEFAULT_DETAILS.toString()))
+            .andExpect(jsonPath("$.activityName").value(DEFAULT_ACTIVITY_NAME));
     }
 
     @Test
@@ -230,7 +254,12 @@ class ActivityResourceIT {
         Activity updatedActivity = activityRepository.findById(activity.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedActivity are not directly saved in db
         em.detach(updatedActivity);
-        updatedActivity.activityTime(UPDATED_ACTIVITY_TIME).duration(UPDATED_DURATION).venue(UPDATED_VENUE).details(UPDATED_DETAILS);
+        updatedActivity
+            .activityTime(UPDATED_ACTIVITY_TIME)
+            .duration(UPDATED_DURATION)
+            .venue(UPDATED_VENUE)
+            .details(UPDATED_DETAILS)
+            .activityName(UPDATED_ACTIVITY_NAME);
         ActivityDTO activityDTO = activityMapper.toDto(updatedActivity);
 
         restActivityMockMvc
@@ -320,7 +349,7 @@ class ActivityResourceIT {
         Activity partialUpdatedActivity = new Activity();
         partialUpdatedActivity.setId(activity.getId());
 
-        partialUpdatedActivity.details(UPDATED_DETAILS);
+        partialUpdatedActivity.duration(UPDATED_DURATION).venue(UPDATED_VENUE).activityName(UPDATED_ACTIVITY_NAME);
 
         restActivityMockMvc
             .perform(
@@ -348,7 +377,12 @@ class ActivityResourceIT {
         Activity partialUpdatedActivity = new Activity();
         partialUpdatedActivity.setId(activity.getId());
 
-        partialUpdatedActivity.activityTime(UPDATED_ACTIVITY_TIME).duration(UPDATED_DURATION).venue(UPDATED_VENUE).details(UPDATED_DETAILS);
+        partialUpdatedActivity
+            .activityTime(UPDATED_ACTIVITY_TIME)
+            .duration(UPDATED_DURATION)
+            .venue(UPDATED_VENUE)
+            .details(UPDATED_DETAILS)
+            .activityName(UPDATED_ACTIVITY_NAME);
 
         restActivityMockMvc
             .perform(

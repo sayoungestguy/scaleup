@@ -13,17 +13,6 @@
       "fieldValidateRulesMaxlength": "255"
     },
     {
-      "fieldName": "individualSkillDesc",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "255"
-    },
-    {
-      "fieldName": "yearsOfExp",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "auditField": true,
       "autoGenerate": true,
       "columnType": "varchar(50)",
@@ -60,14 +49,7 @@
   ],
   "name": "Skill",
   "pagination": "infinite-scroll",
-  "relationships": [
-    {
-      "otherEntityName": "userProfile",
-      "relationshipName": "userProfile",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one"
-    }
-  ],
+  "relationships": [],
   "searchEngine": "no",
   "service": "serviceClass"
 }

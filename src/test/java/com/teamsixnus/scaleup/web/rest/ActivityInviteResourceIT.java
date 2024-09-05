@@ -278,8 +278,6 @@ class ActivityInviteResourceIT {
         ActivityInvite partialUpdatedActivityInvite = new ActivityInvite();
         partialUpdatedActivityInvite.setId(activityInvite.getId());
 
-        partialUpdatedActivityInvite.willParticipate(UPDATED_WILL_PARTICIPATE);
-
         restActivityInviteMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedActivityInvite.getId())

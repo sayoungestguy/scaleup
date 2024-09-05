@@ -45,6 +45,11 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
     // Inherited createdDate definition
     // Inherited lastModifiedBy definition
     // Inherited lastModifiedDate definition
+    @NotNull
+    @Size(max = 255)
+    @Column(name = "activity_name", length = 255, nullable = false)
+    private String activityName;
+
     @Transient
     private boolean isPersisted;
 
@@ -53,7 +58,6 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
     private UserProfile creatorProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "userProfile" }, allowSetters = true)
     private Skill skill;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -147,6 +151,19 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
         return this;
     }
 
+    public String getActivityName() {
+        return this.activityName;
+    }
+
+    public Activity activityName(String activityName) {
+        this.setActivityName(activityName);
+        return this;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
     @PostLoad
     @PostPersist
     public void updateEntityState() {
@@ -222,6 +239,7 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", activityName='" + getActivityName() + "'" +
             "}";
     }
 }

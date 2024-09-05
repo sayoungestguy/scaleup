@@ -130,30 +130,41 @@ export const ActivityUpdate = () => {
                 }}
               />
               <ValidatedField label="Details" id="activity-details" name="details" data-cy="details" type="textarea" />
-              {/*<ValidatedField label="Created By" id="activity-createdBy" name="createdBy" data-cy="createdBy" type="text" />*/}
-              {/*<ValidatedField*/}
-              {/*  label="Created Date"*/}
-              {/*  id="activity-createdDate"*/}
-              {/*  name="createdDate"*/}
-              {/*  data-cy="createdDate"*/}
-              {/*  type="datetime-local"*/}
-              {/*  placeholder="YYYY-MM-DD HH:mm"*/}
-              {/*/>*/}
-              {/*<ValidatedField*/}
-              {/*  label="Last Modified By"*/}
-              {/*  id="activity-lastModifiedBy"*/}
-              {/*  name="lastModifiedBy"*/}
-              {/*  data-cy="lastModifiedBy"*/}
-              {/*  type="text"*/}
-              {/*/>*/}
-              {/*<ValidatedField*/}
-              {/*  label="Last Modified Date"*/}
-              {/*  id="activity-lastModifiedDate"*/}
-              {/*  name="lastModifiedDate"*/}
-              {/*  data-cy="lastModifiedDate"*/}
-              {/*  type="datetime-local"*/}
-              {/*  placeholder="YYYY-MM-DD HH:mm"*/}
-              {/*/>*/}
+              <ValidatedField label="Created By" id="activity-createdBy" name="createdBy" data-cy="createdBy" type="text" />
+              <ValidatedField
+                label="Created Date"
+                id="activity-createdDate"
+                name="createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+              <ValidatedField
+                label="Last Modified By"
+                id="activity-lastModifiedBy"
+                name="lastModifiedBy"
+                data-cy="lastModifiedBy"
+                type="text"
+              />
+              <ValidatedField
+                label="Last Modified Date"
+                id="activity-lastModifiedDate"
+                name="lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+              <ValidatedField
+                label="Activity Name"
+                id="activity-activityName"
+                name="activityName"
+                data-cy="activityName"
+                type="text"
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                }}
+              />
               <ValidatedField
                 id="activity-creatorProfile"
                 name="creatorProfile"

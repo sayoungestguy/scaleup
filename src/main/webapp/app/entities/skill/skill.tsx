@@ -132,12 +132,6 @@ export const Skill = () => {
                   <th className="hand" onClick={sort('skillName')}>
                     Skill Name <FontAwesomeIcon icon={getSortIconByFieldName('skillName')} />
                   </th>
-                  <th className="hand" onClick={sort('individualSkillDesc')}>
-                    Individual Skill Desc <FontAwesomeIcon icon={getSortIconByFieldName('individualSkillDesc')} />
-                  </th>
-                  <th className="hand" onClick={sort('yearsOfExp')}>
-                    Years Of Exp <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExp')} />
-                  </th>
                   <th className="hand" onClick={sort('createdBy')}>
                     Created By <FontAwesomeIcon icon={getSortIconByFieldName('createdBy')} />
                   </th>
@@ -149,9 +143,6 @@ export const Skill = () => {
                   </th>
                   <th className="hand" onClick={sort('lastModifiedDate')}>
                     Last Modified Date <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
-                  </th>
-                  <th>
-                    User Profile <FontAwesomeIcon icon="sort" />
                   </th>
                   <th />
                 </tr>
@@ -165,15 +156,12 @@ export const Skill = () => {
                       </Button>
                     </td>
                     <td>{skill.skillName}</td>
-                    <td>{skill.individualSkillDesc}</td>
-                    <td>{skill.yearsOfExp}</td>
                     <td>{skill.createdBy}</td>
                     <td>{skill.createdDate ? <TextFormat type="date" value={skill.createdDate} format={APP_DATE_FORMAT} /> : null}</td>
                     <td>{skill.lastModifiedBy}</td>
                     <td>
                       {skill.lastModifiedDate ? <TextFormat type="date" value={skill.lastModifiedDate} format={APP_DATE_FORMAT} /> : null}
                     </td>
-                    <td>{skill.userProfile ? <Link to={`/user-profile/${skill.userProfile.id}`}>{skill.userProfile.id}</Link> : ''}</td>
                     <td className="text-end">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`/skill/${skill.id}`} color="info" size="sm" data-cy="entityDetailsButton">

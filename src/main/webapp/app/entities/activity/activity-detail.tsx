@@ -68,6 +68,10 @@ export const ActivityDetail = () => {
               <TextFormat value={activityEntity.lastModifiedDate} type="date" format={APP_DATE_FORMAT} />
             ) : null}
           </dd>
+          <dt>
+            <span id="activityName">Activity Name</span>
+          </dt>
+          <dd>{activityEntity.activityName}</dd>
           <dt>Creator Profile</dt>
           <dd>{activityEntity.creatorProfile ? activityEntity.creatorProfile.id : ''}</dd>
           <dt>Skill</dt>

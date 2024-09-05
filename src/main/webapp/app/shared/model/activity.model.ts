@@ -12,6 +12,7 @@ export interface IActivity {
   createdDate?: dayjs.Dayjs;
   lastModifiedBy?: string;
   lastModifiedDate?: dayjs.Dayjs;
+  activityName?: string;
   creatorProfile?: IUserProfile | null;
   skill?: ISkill | null;
 }

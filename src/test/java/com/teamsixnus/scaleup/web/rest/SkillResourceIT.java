@@ -37,12 +37,6 @@ class SkillResourceIT {
     private static final String DEFAULT_SKILL_NAME = "AAAAAAAAAA";
     private static final String UPDATED_SKILL_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_INDIVIDUAL_SKILL_DESC = "AAAAAAAAAA";
-    private static final String UPDATED_INDIVIDUAL_SKILL_DESC = "BBBBBBBBBB";
-
-    private static final Integer DEFAULT_YEARS_OF_EXP = 1;
-    private static final Integer UPDATED_YEARS_OF_EXP = 2;
-
     private static final String ENTITY_API_URL = "/api/skills";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -75,10 +69,7 @@ class SkillResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Skill createEntity(EntityManager em) {
-        Skill skill = new Skill()
-            .skillName(DEFAULT_SKILL_NAME)
-            .individualSkillDesc(DEFAULT_INDIVIDUAL_SKILL_DESC)
-            .yearsOfExp(DEFAULT_YEARS_OF_EXP);
+        Skill skill = new Skill().skillName(DEFAULT_SKILL_NAME);
         return skill;
     }
 
@@ -89,10 +80,7 @@ class SkillResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Skill createUpdatedEntity(EntityManager em) {
-        Skill skill = new Skill()
-            .skillName(UPDATED_SKILL_NAME)
-            .individualSkillDesc(UPDATED_INDIVIDUAL_SKILL_DESC)
-            .yearsOfExp(UPDATED_YEARS_OF_EXP);
+        Skill skill = new Skill().skillName(UPDATED_SKILL_NAME);
         return skill;
     }
 
@@ -170,23 +158,6 @@ class SkillResourceIT {
 
     @Test
     @Transactional
-    void checkYearsOfExpIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        skill.setYearsOfExp(null);
-
-        // Create the Skill, which fails.
-        SkillDTO skillDTO = skillMapper.toDto(skill);
-
-        restSkillMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(skillDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllSkills() throws Exception {
         // Initialize the database
         insertedSkill = skillRepository.saveAndFlush(skill);
@@ -197,9 +168,7 @@ class SkillResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(skill.getId().intValue())))
-            .andExpect(jsonPath("$.[*].skillName").value(hasItem(DEFAULT_SKILL_NAME)))
-            .andExpect(jsonPath("$.[*].individualSkillDesc").value(hasItem(DEFAULT_INDIVIDUAL_SKILL_DESC)))
-            .andExpect(jsonPath("$.[*].yearsOfExp").value(hasItem(DEFAULT_YEARS_OF_EXP)));
+            .andExpect(jsonPath("$.[*].skillName").value(hasItem(DEFAULT_SKILL_NAME)));
     }
 
     @Test
@@ -214,9 +183,7 @@ class SkillResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(skill.getId().intValue()))
-            .andExpect(jsonPath("$.skillName").value(DEFAULT_SKILL_NAME))
-            .andExpect(jsonPath("$.individualSkillDesc").value(DEFAULT_INDIVIDUAL_SKILL_DESC))
-            .andExpect(jsonPath("$.yearsOfExp").value(DEFAULT_YEARS_OF_EXP));
+            .andExpect(jsonPath("$.skillName").value(DEFAULT_SKILL_NAME));
     }
 
     @Test
@@ -238,7 +205,7 @@ class SkillResourceIT {
         Skill updatedSkill = skillRepository.findById(skill.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedSkill are not directly saved in db
         em.detach(updatedSkill);
-        updatedSkill.skillName(UPDATED_SKILL_NAME).individualSkillDesc(UPDATED_INDIVIDUAL_SKILL_DESC).yearsOfExp(UPDATED_YEARS_OF_EXP);
+        updatedSkill.skillName(UPDATED_SKILL_NAME);
         SkillDTO skillDTO = skillMapper.toDto(updatedSkill);
 
         restSkillMockMvc
@@ -324,8 +291,6 @@ class SkillResourceIT {
         Skill partialUpdatedSkill = new Skill();
         partialUpdatedSkill.setId(skill.getId());
 
-        partialUpdatedSkill.skillName(UPDATED_SKILL_NAME).yearsOfExp(UPDATED_YEARS_OF_EXP);
-
         restSkillMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedSkill.getId())
@@ -352,10 +317,7 @@ class SkillResourceIT {
         Skill partialUpdatedSkill = new Skill();
         partialUpdatedSkill.setId(skill.getId());
 
-        partialUpdatedSkill
-            .skillName(UPDATED_SKILL_NAME)
-            .individualSkillDesc(UPDATED_INDIVIDUAL_SKILL_DESC)
-            .yearsOfExp(UPDATED_YEARS_OF_EXP);
+        partialUpdatedSkill.skillName(UPDATED_SKILL_NAME);
 
         restSkillMockMvc
             .perform(
