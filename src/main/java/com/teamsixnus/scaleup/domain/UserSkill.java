@@ -24,10 +24,8 @@ public class UserSkill implements Serializable {
     private Long id;
 
     @NotNull
-    @Min(value = 0)
-    @Max(value = 100)
-    @Column(name = "experience", nullable = false)
-    private Integer experience;
+    @Column(name = "years_of_experience", nullable = false)
+    private Integer yearsOfExperience;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
@@ -37,7 +35,7 @@ public class UserSkill implements Serializable {
     private Skill skill;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private CodeTables codeTables;
+    private CodeTables skillType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -54,17 +52,17 @@ public class UserSkill implements Serializable {
         this.id = id;
     }
 
-    public Integer getExperience() {
-        return this.experience;
+    public Integer getYearsOfExperience() {
+        return this.yearsOfExperience;
     }
 
-    public UserSkill experience(Integer experience) {
-        this.setExperience(experience);
+    public UserSkill yearsOfExperience(Integer yearsOfExperience) {
+        this.setYearsOfExperience(yearsOfExperience);
         return this;
     }
 
-    public void setExperience(Integer experience) {
-        this.experience = experience;
+    public void setYearsOfExperience(Integer yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
     }
 
     public UserProfile getUserProfile() {
@@ -93,16 +91,16 @@ public class UserSkill implements Serializable {
         return this;
     }
 
-    public CodeTables getCodeTables() {
-        return this.codeTables;
+    public CodeTables getSkillType() {
+        return this.skillType;
     }
 
-    public void setCodeTables(CodeTables codeTables) {
-        this.codeTables = codeTables;
+    public void setSkillType(CodeTables codeTables) {
+        this.skillType = codeTables;
     }
 
-    public UserSkill codeTables(CodeTables codeTables) {
-        this.setCodeTables(codeTables);
+    public UserSkill skillType(CodeTables codeTables) {
+        this.setSkillType(codeTables);
         return this;
     }
 
@@ -130,7 +128,7 @@ public class UserSkill implements Serializable {
     public String toString() {
         return "UserSkill{" +
             "id=" + getId() +
-            ", experience=" + getExperience() +
+            ", yearsOfExperience=" + getYearsOfExperience() +
             "}";
     }
 }

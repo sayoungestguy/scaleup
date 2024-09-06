@@ -291,6 +291,8 @@ class SkillResourceIT {
         Skill partialUpdatedSkill = new Skill();
         partialUpdatedSkill.setId(skill.getId());
 
+        partialUpdatedSkill.skillName(UPDATED_SKILL_NAME);
+
         restSkillMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedSkill.getId())

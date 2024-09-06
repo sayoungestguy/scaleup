@@ -58,8 +58,8 @@ export const UserSkillUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.experience !== undefined && typeof values.experience !== 'number') {
-      values.experience = Number(values.experience);
+    if (values.yearsOfExperience !== undefined && typeof values.yearsOfExperience !== 'number') {
+      values.yearsOfExperience = Number(values.yearsOfExperience);
     }
 
     const entity = {
@@ -67,7 +67,7 @@ export const UserSkillUpdate = () => {
       ...values,
       userProfile: userProfiles.find(it => it.id.toString() === values.userProfile?.toString()),
       skill: skills.find(it => it.id.toString() === values.skill?.toString()),
-      codeTables: codeTables.find(it => it.id.toString() === values.codeTables?.toString()),
+      skillType: codeTables.find(it => it.id.toString() === values.skillType?.toString()),
     };
 
     if (isNew) {
@@ -84,7 +84,7 @@ export const UserSkillUpdate = () => {
           ...userSkillEntity,
           userProfile: userSkillEntity?.userProfile?.id,
           skill: userSkillEntity?.skill?.id,
-          codeTables: userSkillEntity?.codeTables?.id,
+          skillType: userSkillEntity?.skillType?.id,
         };
 
   return (
@@ -104,15 +104,13 @@ export const UserSkillUpdate = () => {
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
               {!isNew ? <ValidatedField name="id" required readOnly id="user-skill-id" label="ID" validate={{ required: true }} /> : null}
               <ValidatedField
-                label="Experience"
-                id="user-skill-experience"
-                name="experience"
-                data-cy="experience"
+                label="Years Of Experience"
+                id="user-skill-yearsOfExperience"
+                name="yearsOfExperience"
+                data-cy="yearsOfExperience"
                 type="text"
                 validate={{
                   required: { value: true, message: 'This field is required.' },
-                  min: { value: 0, message: 'This field should be at least 0.' },
-                  max: { value: 100, message: 'This field cannot be more than 100.' },
                   validate: v => isNumber(v) || 'This field should be a number.',
                 }}
               />
@@ -136,7 +134,7 @@ export const UserSkillUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="user-skill-codeTables" name="codeTables" data-cy="codeTables" label="Code Tables" type="select">
+              <ValidatedField id="user-skill-skillType" name="skillType" data-cy="skillType" label="Skill Type" type="select">
                 <option value="" key="0" />
                 {codeTables
                   ? codeTables.map(otherEntity => (

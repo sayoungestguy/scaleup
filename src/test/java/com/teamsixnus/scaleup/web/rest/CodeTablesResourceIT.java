@@ -288,7 +288,7 @@ class CodeTablesResourceIT {
         CodeTables partialUpdatedCodeTables = new CodeTables();
         partialUpdatedCodeTables.setId(codeTables.getId());
 
-        partialUpdatedCodeTables.codeValue(UPDATED_CODE_VALUE);
+        partialUpdatedCodeTables.codeKey(UPDATED_CODE_KEY).codeValue(UPDATED_CODE_VALUE);
 
         restCodeTablesMockMvc
             .perform(

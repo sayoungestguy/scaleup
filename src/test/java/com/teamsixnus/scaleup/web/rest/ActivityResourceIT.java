@@ -36,6 +36,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ActivityResourceIT {
 
+    private static final String DEFAULT_ACTIVITY_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_ACTIVITY_NAME = "BBBBBBBBBB";
+
     private static final Instant DEFAULT_ACTIVITY_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_ACTIVITY_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -47,9 +50,6 @@ class ActivityResourceIT {
 
     private static final String DEFAULT_DETAILS = "AAAAAAAAAA";
     private static final String UPDATED_DETAILS = "BBBBBBBBBB";
-
-    private static final String DEFAULT_ACTIVITY_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_ACTIVITY_NAME = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/activities";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -84,11 +84,11 @@ class ActivityResourceIT {
      */
     public static Activity createEntity(EntityManager em) {
         Activity activity = new Activity()
+            .activityName(DEFAULT_ACTIVITY_NAME)
             .activityTime(DEFAULT_ACTIVITY_TIME)
             .duration(DEFAULT_DURATION)
             .venue(DEFAULT_VENUE)
-            .details(DEFAULT_DETAILS)
-            .activityName(DEFAULT_ACTIVITY_NAME);
+            .details(DEFAULT_DETAILS);
         return activity;
     }
 
@@ -100,11 +100,11 @@ class ActivityResourceIT {
      */
     public static Activity createUpdatedEntity(EntityManager em) {
         Activity activity = new Activity()
+            .activityName(UPDATED_ACTIVITY_NAME)
             .activityTime(UPDATED_ACTIVITY_TIME)
             .duration(UPDATED_DURATION)
             .venue(UPDATED_VENUE)
-            .details(UPDATED_DETAILS)
-            .activityName(UPDATED_ACTIVITY_NAME);
+            .details(UPDATED_DETAILS);
         return activity;
     }
 
@@ -182,23 +182,6 @@ class ActivityResourceIT {
 
     @Test
     @Transactional
-    void checkActivityNameIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        activity.setActivityName(null);
-
-        // Create the Activity, which fails.
-        ActivityDTO activityDTO = activityMapper.toDto(activity);
-
-        restActivityMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(activityDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllActivities() throws Exception {
         // Initialize the database
         insertedActivity = activityRepository.saveAndFlush(activity);
@@ -209,11 +192,11 @@ class ActivityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(activity.getId().intValue())))
+            .andExpect(jsonPath("$.[*].activityName").value(hasItem(DEFAULT_ACTIVITY_NAME)))
             .andExpect(jsonPath("$.[*].activityTime").value(hasItem(DEFAULT_ACTIVITY_TIME.toString())))
             .andExpect(jsonPath("$.[*].duration").value(hasItem(DEFAULT_DURATION)))
             .andExpect(jsonPath("$.[*].venue").value(hasItem(DEFAULT_VENUE)))
-            .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS.toString())))
-            .andExpect(jsonPath("$.[*].activityName").value(hasItem(DEFAULT_ACTIVITY_NAME)));
+            .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS.toString())));
     }
 
     @Test
@@ -228,11 +211,11 @@ class ActivityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(activity.getId().intValue()))
+            .andExpect(jsonPath("$.activityName").value(DEFAULT_ACTIVITY_NAME))
             .andExpect(jsonPath("$.activityTime").value(DEFAULT_ACTIVITY_TIME.toString()))
             .andExpect(jsonPath("$.duration").value(DEFAULT_DURATION))
             .andExpect(jsonPath("$.venue").value(DEFAULT_VENUE))
-            .andExpect(jsonPath("$.details").value(DEFAULT_DETAILS.toString()))
-            .andExpect(jsonPath("$.activityName").value(DEFAULT_ACTIVITY_NAME));
+            .andExpect(jsonPath("$.details").value(DEFAULT_DETAILS.toString()));
     }
 
     @Test
@@ -255,11 +238,11 @@ class ActivityResourceIT {
         // Disconnect from session so that the updates on updatedActivity are not directly saved in db
         em.detach(updatedActivity);
         updatedActivity
+            .activityName(UPDATED_ACTIVITY_NAME)
             .activityTime(UPDATED_ACTIVITY_TIME)
             .duration(UPDATED_DURATION)
             .venue(UPDATED_VENUE)
-            .details(UPDATED_DETAILS)
-            .activityName(UPDATED_ACTIVITY_NAME);
+            .details(UPDATED_DETAILS);
         ActivityDTO activityDTO = activityMapper.toDto(updatedActivity);
 
         restActivityMockMvc
@@ -349,7 +332,7 @@ class ActivityResourceIT {
         Activity partialUpdatedActivity = new Activity();
         partialUpdatedActivity.setId(activity.getId());
 
-        partialUpdatedActivity.duration(UPDATED_DURATION).venue(UPDATED_VENUE).activityName(UPDATED_ACTIVITY_NAME);
+        partialUpdatedActivity.venue(UPDATED_VENUE);
 
         restActivityMockMvc
             .perform(
@@ -378,11 +361,11 @@ class ActivityResourceIT {
         partialUpdatedActivity.setId(activity.getId());
 
         partialUpdatedActivity
+            .activityName(UPDATED_ACTIVITY_NAME)
             .activityTime(UPDATED_ACTIVITY_TIME)
             .duration(UPDATED_DURATION)
             .venue(UPDATED_VENUE)
-            .details(UPDATED_DETAILS)
-            .activityName(UPDATED_ACTIVITY_NAME);
+            .details(UPDATED_DETAILS);
 
         restActivityMockMvc
             .perform(

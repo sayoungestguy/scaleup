@@ -13,15 +13,13 @@ public class UserSkillDTO implements Serializable {
     private Long id;
 
     @NotNull
-    @Min(value = 0)
-    @Max(value = 100)
-    private Integer experience;
+    private Integer yearsOfExperience;
 
     private UserProfileDTO userProfile;
 
     private SkillDTO skill;
 
-    private CodeTablesDTO codeTables;
+    private CodeTablesDTO skillType;
 
     public Long getId() {
         return id;
@@ -31,12 +29,12 @@ public class UserSkillDTO implements Serializable {
         this.id = id;
     }
 
-    public Integer getExperience() {
-        return experience;
+    public Integer getYearsOfExperience() {
+        return yearsOfExperience;
     }
 
-    public void setExperience(Integer experience) {
-        this.experience = experience;
+    public void setYearsOfExperience(Integer yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
     }
 
     public UserProfileDTO getUserProfile() {
@@ -55,12 +53,12 @@ public class UserSkillDTO implements Serializable {
         this.skill = skill;
     }
 
-    public CodeTablesDTO getCodeTables() {
-        return codeTables;
+    public CodeTablesDTO getSkillType() {
+        return skillType;
     }
 
-    public void setCodeTables(CodeTablesDTO codeTables) {
-        this.codeTables = codeTables;
+    public void setSkillType(CodeTablesDTO skillType) {
+        this.skillType = skillType;
     }
 
     @Override
@@ -89,10 +87,10 @@ public class UserSkillDTO implements Serializable {
     public String toString() {
         return "UserSkillDTO{" +
             "id=" + getId() +
-            ", experience=" + getExperience() +
+            ", yearsOfExperience=" + getYearsOfExperience() +
             ", userProfile=" + getUserProfile() +
             ", skill=" + getSkill() +
-            ", codeTables=" + getCodeTables() +
+            ", skillType=" + getSkillType() +
             "}";
     }
 }

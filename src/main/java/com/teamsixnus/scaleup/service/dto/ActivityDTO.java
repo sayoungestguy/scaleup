@@ -14,6 +14,9 @@ public class ActivityDTO implements Serializable {
 
     private Long id;
 
+    @Size(max = 255)
+    private String activityName;
+
     @NotNull
     private Instant activityTime;
 
@@ -33,10 +36,6 @@ public class ActivityDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
-    @NotNull
-    @Size(max = 255)
-    private String activityName;
-
     private UserProfileDTO creatorProfile;
 
     private SkillDTO skill;
@@ -47,6 +46,14 @@ public class ActivityDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
     public Instant getActivityTime() {
@@ -113,14 +120,6 @@ public class ActivityDTO implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getActivityName() {
-        return activityName;
-    }
-
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
-    }
-
     public UserProfileDTO getCreatorProfile() {
         return creatorProfile;
     }
@@ -163,6 +162,7 @@ public class ActivityDTO implements Serializable {
     public String toString() {
         return "ActivityDTO{" +
             "id=" + getId() +
+            ", activityName='" + getActivityName() + "'" +
             ", activityTime='" + getActivityTime() + "'" +
             ", duration=" + getDuration() +
             ", venue='" + getVenue() + "'" +
@@ -171,7 +171,6 @@ public class ActivityDTO implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
-            ", activityName='" + getActivityName() + "'" +
             ", creatorProfile=" + getCreatorProfile() +
             ", skill=" + getSkill() +
             "}";

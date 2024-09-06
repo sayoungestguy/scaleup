@@ -28,15 +28,15 @@ export const UserSkillDetail = () => {
           </dt>
           <dd>{userSkillEntity.id}</dd>
           <dt>
-            <span id="experience">Experience</span>
+            <span id="yearsOfExperience">Years Of Experience</span>
           </dt>
-          <dd>{userSkillEntity.experience}</dd>
+          <dd>{userSkillEntity.yearsOfExperience}</dd>
           <dt>User Profile</dt>
           <dd>{userSkillEntity.userProfile ? userSkillEntity.userProfile.id : ''}</dd>
           <dt>Skill</dt>
           <dd>{userSkillEntity.skill ? userSkillEntity.skill.id : ''}</dd>
-          <dt>Code Tables</dt>
-          <dd>{userSkillEntity.codeTables ? userSkillEntity.codeTables.id : ''}</dd>
+          <dt>Skill Type</dt>
+          <dd>{userSkillEntity.skillType ? userSkillEntity.skillType.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/user-skill" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -129,6 +129,9 @@ export const Activity = () => {
                   <th className="hand" onClick={sort('id')}>
                     ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                   </th>
+                  <th className="hand" onClick={sort('activityName')}>
+                    Activity Name <FontAwesomeIcon icon={getSortIconByFieldName('activityName')} />
+                  </th>
                   <th className="hand" onClick={sort('activityTime')}>
                     Activity Time <FontAwesomeIcon icon={getSortIconByFieldName('activityTime')} />
                   </th>
@@ -153,9 +156,6 @@ export const Activity = () => {
                   <th className="hand" onClick={sort('lastModifiedDate')}>
                     Last Modified Date <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
                   </th>
-                  <th className="hand" onClick={sort('activityName')}>
-                    Activity Name <FontAwesomeIcon icon={getSortIconByFieldName('activityName')} />
-                  </th>
                   <th>
                     Creator Profile <FontAwesomeIcon icon="sort" />
                   </th>
@@ -173,6 +173,7 @@ export const Activity = () => {
                         {activity.id}
                       </Button>
                     </td>
+                    <td>{activity.activityName}</td>
                     <td>
                       {activity.activityTime ? <TextFormat type="date" value={activity.activityTime} format={APP_DATE_FORMAT} /> : null}
                     </td>
@@ -189,7 +190,6 @@ export const Activity = () => {
                         <TextFormat type="date" value={activity.lastModifiedDate} format={APP_DATE_FORMAT} />
                       ) : null}
                     </td>
-                    <td>{activity.activityName}</td>
                     <td>
                       {activity.creatorProfile ? (
                         <Link to={`/user-profile/${activity.creatorProfile.id}`}>{activity.creatorProfile.id}</Link>

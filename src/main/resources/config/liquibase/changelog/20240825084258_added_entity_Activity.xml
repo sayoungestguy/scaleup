@@ -14,6 +14,9 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="activity_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="activity_time" type="${datetimeType}">
                 <constraints nullable="false" />
             </column>
@@ -36,9 +39,6 @@
                 <constraints nullable="false" />
             </column>
             <column name="last_modified_date" type="${datetimeType}">
-                <constraints nullable="false" />
-            </column>
-            <column name="activity_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
             <column name="creator_profile_id" type="bigint">
@@ -71,6 +71,7 @@
                   tableName="activity"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
+            <column name="activity_name" type="string"/>
             <column name="activity_time" type="date"/>
             <column name="duration" type="numeric"/>
             <column name="venue" type="string"/>
@@ -79,7 +80,6 @@
             <column name="created_date" type="date"/>
             <column name="last_modified_by" type="string"/>
             <column name="last_modified_date" type="date"/>
-            <column name="activity_name" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

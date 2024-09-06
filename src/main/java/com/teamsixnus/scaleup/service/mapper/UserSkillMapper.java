@@ -17,7 +17,7 @@ import org.mapstruct.*;
 public interface UserSkillMapper extends EntityMapper<UserSkillDTO, UserSkill> {
     @Mapping(target = "userProfile", source = "userProfile", qualifiedByName = "userProfileId")
     @Mapping(target = "skill", source = "skill", qualifiedByName = "skillId")
-    @Mapping(target = "codeTables", source = "codeTables", qualifiedByName = "codeTablesId")
+    @Mapping(target = "skillType", source = "skillType", qualifiedByName = "codeTablesId")
     UserSkillDTO toDto(UserSkill s);
 
     @Named("userProfileId")

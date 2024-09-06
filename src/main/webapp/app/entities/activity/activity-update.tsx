@@ -108,6 +108,16 @@ export const ActivityUpdate = () => {
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
               {!isNew ? <ValidatedField name="id" required readOnly id="activity-id" label="ID" validate={{ required: true }} /> : null}
               <ValidatedField
+                label="Activity Name"
+                id="activity-activityName"
+                name="activityName"
+                data-cy="activityName"
+                type="text"
+                validate={{
+                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                }}
+              />
+              <ValidatedField
                 label="Activity Time"
                 id="activity-activityTime"
                 name="activityTime"
@@ -153,17 +163,6 @@ export const ActivityUpdate = () => {
                 data-cy="lastModifiedDate"
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField
-                label="Activity Name"
-                id="activity-activityName"
-                name="activityName"
-                data-cy="activityName"
-                type="text"
-                validate={{
-                  required: { value: true, message: 'This field is required.' },
-                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
-                }}
               />
               <ValidatedField
                 id="activity-creatorProfile"

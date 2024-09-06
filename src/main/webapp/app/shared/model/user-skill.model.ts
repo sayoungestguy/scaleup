@@ -4,10 +4,10 @@ import { ICodeTables } from 'app/shared/model/code-tables.model';
 
 export interface IUserSkill {
   id?: number;
-  experience?: number;
+  yearsOfExperience?: number;
   userProfile?: IUserProfile | null;
   skill?: ISkill | null;
-  codeTables?: ICodeTables | null;
+  skillType?: ICodeTables | null;
 }
 
 export const defaultValue: Readonly<IUserSkill> = {};

@@ -71,9 +71,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
             message.setTo(to);
-            //            message.setFrom(jHipsterProperties.getMail().getFrom());
-            String SenderMail = "MS_hwQpFm@trial-k68zxl2o29egj905.mlsender.net";
-            message.setFrom(SenderMail);
+            message.setFrom(jHipsterProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);

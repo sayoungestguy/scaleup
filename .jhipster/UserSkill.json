@@ -2,40 +2,33 @@
   "annotations": {
     "changelogDate": "20240905014534"
   },
+  "applications": ["scaleup"],
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "experience",
+      "fieldName": "yearsOfExperience",
       "fieldType": "Integer",
-      "fieldValidateRules": ["required", "min", "max"],
-      "fieldValidateRulesMax": "100",
-      "fieldValidateRulesMin": "0"
+      "fieldValidateRules": ["required"]
     }
   ],
-  "jpaMetamodelFiltering": false,
   "name": "UserSkill",
   "pagination": "infinite-scroll",
-  "readOnly": false,
   "relationships": [
     {
-      "otherEntityField": "id",
       "otherEntityName": "userProfile",
       "relationshipName": "userProfile",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": []
+      "relationshipType": "many-to-one"
     },
     {
-      "otherEntityField": "id",
       "otherEntityName": "skill",
       "relationshipName": "skill",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
-      "otherEntityField": "id",
       "otherEntityName": "codeTables",
-      "relationshipName": "codeTables",
+      "relationshipName": "skillType",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     }

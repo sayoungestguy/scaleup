@@ -47,7 +47,7 @@ public class UserSkillAsserts {
     public static void assertUserSkillUpdatableFieldsEquals(UserSkill expected, UserSkill actual) {
         assertThat(expected)
             .as("Verify UserSkill relevant properties")
-            .satisfies(e -> assertThat(e.getExperience()).as("check experience").isEqualTo(actual.getExperience()));
+            .satisfies(e -> assertThat(e.getYearsOfExperience()).as("check yearsOfExperience").isEqualTo(actual.getYearsOfExperience()));
     }
 
     /**
@@ -61,6 +61,6 @@ public class UserSkillAsserts {
             .as("Verify UserSkill relationships")
             .satisfies(e -> assertThat(e.getUserProfile()).as("check userProfile").isEqualTo(actual.getUserProfile()))
             .satisfies(e -> assertThat(e.getSkill()).as("check skill").isEqualTo(actual.getSkill()))
-            .satisfies(e -> assertThat(e.getCodeTables()).as("check codeTables").isEqualTo(actual.getCodeTables()));
+            .satisfies(e -> assertThat(e.getSkillType()).as("check skillType").isEqualTo(actual.getSkillType()));
     }
 }

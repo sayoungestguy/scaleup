@@ -24,9 +24,9 @@
                                  referencedTableName="skill"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="code_tables_id"
+        <addForeignKeyConstraint baseColumnNames="skill_type_id"
                                  baseTableName="user_skill"
-                                 constraintName="fk_user_skill__code_tables_id"
+                                 constraintName="fk_user_skill__skill_type_id"
                                  referencedColumnNames="id"
                                  referencedTableName="code_tables"
                                  />

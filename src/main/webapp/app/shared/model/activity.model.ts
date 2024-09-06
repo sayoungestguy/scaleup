@@ -4,6 +4,7 @@ import { ISkill } from 'app/shared/model/skill.model';
 
 export interface IActivity {
   id?: number;
+  activityName?: string | null;
   activityTime?: dayjs.Dayjs;
   duration?: number | null;
   venue?: string | null;
@@ -12,7 +13,6 @@ export interface IActivity {
   createdDate?: dayjs.Dayjs;
   lastModifiedBy?: string;
   lastModifiedDate?: dayjs.Dayjs;
-  activityName?: string;
   creatorProfile?: IUserProfile | null;
   skill?: ISkill | null;
 }

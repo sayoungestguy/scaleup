@@ -128,8 +128,8 @@ export const UserSkill = () => {
                   <th className="hand" onClick={sort('id')}>
                     ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                   </th>
-                  <th className="hand" onClick={sort('experience')}>
-                    Experience <FontAwesomeIcon icon={getSortIconByFieldName('experience')} />
+                  <th className="hand" onClick={sort('yearsOfExperience')}>
+                    Years Of Experience <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
                   </th>
                   <th>
                     User Profile <FontAwesomeIcon icon="sort" />
@@ -138,7 +138,7 @@ export const UserSkill = () => {
                     Skill <FontAwesomeIcon icon="sort" />
                   </th>
                   <th>
-                    Code Tables <FontAwesomeIcon icon="sort" />
+                    Skill Type <FontAwesomeIcon icon="sort" />
                   </th>
                   <th />
                 </tr>
@@ -151,7 +151,7 @@ export const UserSkill = () => {
                         {userSkill.id}
                       </Button>
                     </td>
-                    <td>{userSkill.experience}</td>
+                    <td>{userSkill.yearsOfExperience}</td>
                     <td>
                       {userSkill.userProfile ? (
                         <Link to={`/user-profile/${userSkill.userProfile.id}`}>{userSkill.userProfile.id}</Link>
@@ -161,7 +161,7 @@ export const UserSkill = () => {
                     </td>
                     <td>{userSkill.skill ? <Link to={`/skill/${userSkill.skill.id}`}>{userSkill.skill.id}</Link> : ''}</td>
                     <td>
-                      {userSkill.codeTables ? <Link to={`/code-tables/${userSkill.codeTables.id}`}>{userSkill.codeTables.id}</Link> : ''}
+                      {userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}
                     </td>
                     <td className="text-end">
                       <div className="btn-group flex-btn-group-container">

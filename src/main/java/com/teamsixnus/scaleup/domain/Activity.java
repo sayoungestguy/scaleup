@@ -26,6 +26,10 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
     @Column(name = "id")
     private Long id;
 
+    @Size(max = 255)
+    @Column(name = "activity_name", length = 255)
+    private String activityName;
+
     @NotNull
     @Column(name = "activity_time", nullable = false)
     private Instant activityTime;
@@ -45,11 +49,6 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
     // Inherited createdDate definition
     // Inherited lastModifiedBy definition
     // Inherited lastModifiedDate definition
-    @NotNull
-    @Size(max = 255)
-    @Column(name = "activity_name", length = 255, nullable = false)
-    private String activityName;
-
     @Transient
     private boolean isPersisted;
 
@@ -73,6 +72,19 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getActivityName() {
+        return this.activityName;
+    }
+
+    public Activity activityName(String activityName) {
+        this.setActivityName(activityName);
+        return this;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
     public Instant getActivityTime() {
@@ -151,19 +163,6 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
         return this;
     }
 
-    public String getActivityName() {
-        return this.activityName;
-    }
-
-    public Activity activityName(String activityName) {
-        this.setActivityName(activityName);
-        return this;
-    }
-
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
-    }
-
     @PostLoad
     @PostPersist
     public void updateEntityState() {
@@ -231,6 +230,7 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
     public String toString() {
         return "Activity{" +
             "id=" + getId() +
+            ", activityName='" + getActivityName() + "'" +
             ", activityTime='" + getActivityTime() + "'" +
             ", duration=" + getDuration() +
             ", venue='" + getVenue() + "'" +
@@ -239,7 +239,6 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
-            ", activityName='" + getActivityName() + "'" +
             "}";
     }
 }

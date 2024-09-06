@@ -50,14 +50,14 @@ class UserSkillTest {
     }
 
     @Test
-    void codeTablesTest() {
+    void skillTypeTest() {
         UserSkill userSkill = getUserSkillRandomSampleGenerator();
         CodeTables codeTablesBack = getCodeTablesRandomSampleGenerator();
 
-        userSkill.setCodeTables(codeTablesBack);
-        assertThat(userSkill.getCodeTables()).isEqualTo(codeTablesBack);
+        userSkill.setSkillType(codeTablesBack);
+        assertThat(userSkill.getSkillType()).isEqualTo(codeTablesBack);
 
-        userSkill.codeTables(null);
-        assertThat(userSkill.getCodeTables()).isNull();
+        userSkill.skillType(null);
+        assertThat(userSkill.getSkillType()).isNull();
     }
 }

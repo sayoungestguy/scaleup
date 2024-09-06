@@ -34,8 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class UserSkillResourceIT {
 
-    private static final Integer DEFAULT_EXPERIENCE = 0;
-    private static final Integer UPDATED_EXPERIENCE = 1;
+    private static final Integer DEFAULT_YEARS_OF_EXPERIENCE = 1;
+    private static final Integer UPDATED_YEARS_OF_EXPERIENCE = 2;
 
     private static final String ENTITY_API_URL = "/api/user-skills";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -69,7 +69,7 @@ class UserSkillResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserSkill createEntity(EntityManager em) {
-        UserSkill userSkill = new UserSkill().experience(DEFAULT_EXPERIENCE);
+        UserSkill userSkill = new UserSkill().yearsOfExperience(DEFAULT_YEARS_OF_EXPERIENCE);
         return userSkill;
     }
 
@@ -80,7 +80,7 @@ class UserSkillResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserSkill createUpdatedEntity(EntityManager em) {
-        UserSkill userSkill = new UserSkill().experience(UPDATED_EXPERIENCE);
+        UserSkill userSkill = new UserSkill().yearsOfExperience(UPDATED_YEARS_OF_EXPERIENCE);
         return userSkill;
     }
 
@@ -141,10 +141,10 @@ class UserSkillResourceIT {
 
     @Test
     @Transactional
-    void checkExperienceIsRequired() throws Exception {
+    void checkYearsOfExperienceIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        userSkill.setExperience(null);
+        userSkill.setYearsOfExperience(null);
 
         // Create the UserSkill, which fails.
         UserSkillDTO userSkillDTO = userSkillMapper.toDto(userSkill);
@@ -168,7 +168,7 @@ class UserSkillResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userSkill.getId().intValue())))
-            .andExpect(jsonPath("$.[*].experience").value(hasItem(DEFAULT_EXPERIENCE)));
+            .andExpect(jsonPath("$.[*].yearsOfExperience").value(hasItem(DEFAULT_YEARS_OF_EXPERIENCE)));
     }
 
     @Test
@@ -183,7 +183,7 @@ class UserSkillResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(userSkill.getId().intValue()))
-            .andExpect(jsonPath("$.experience").value(DEFAULT_EXPERIENCE));
+            .andExpect(jsonPath("$.yearsOfExperience").value(DEFAULT_YEARS_OF_EXPERIENCE));
     }
 
     @Test
@@ -205,7 +205,7 @@ class UserSkillResourceIT {
         UserSkill updatedUserSkill = userSkillRepository.findById(userSkill.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedUserSkill are not directly saved in db
         em.detach(updatedUserSkill);
-        updatedUserSkill.experience(UPDATED_EXPERIENCE);
+        updatedUserSkill.yearsOfExperience(UPDATED_YEARS_OF_EXPERIENCE);
         UserSkillDTO userSkillDTO = userSkillMapper.toDto(updatedUserSkill);
 
         restUserSkillMockMvc
@@ -324,7 +324,7 @@ class UserSkillResourceIT {
         UserSkill partialUpdatedUserSkill = new UserSkill();
         partialUpdatedUserSkill.setId(userSkill.getId());
 
-        partialUpdatedUserSkill.experience(UPDATED_EXPERIENCE);
+        partialUpdatedUserSkill.yearsOfExperience(UPDATED_YEARS_OF_EXPERIENCE);
 
         restUserSkillMockMvc
             .perform(
