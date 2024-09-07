@@ -1,0 +1,25 @@
+{
+  "name": "Notification",
+  "fields": [
+    { "fieldName": "notificationRefId", "fieldType": "UUID" },
+    { "fieldName": "content", "fieldType": "TextBlob" },
+    { "fieldName": "isRead", "fieldType": "Boolean" }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "userProfile",
+      "otherEntityName": "userProfile",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "type",
+      "otherEntityName": "codeTables",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "dto": "mapstruct",
+  "service": "serviceClass",
+  "pagination": "infinite-scroll"
+}

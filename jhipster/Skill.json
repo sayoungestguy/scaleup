@@ -1,0 +1,24 @@
+{
+  "name": "Skill",
+  "fields": [
+    {
+      "fieldName": "skillName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": 255
+    },
+    { "fieldName": "individualSkillDesc", "fieldType": "String", "fieldValidateRules": ["maxlength"], "fieldValidateRulesMaxlength": 255 },
+    { "fieldName": "yearsOfExp", "fieldType": "Integer", "fieldValidateRules": ["required"] }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "userProfile",
+      "otherEntityName": "userProfile",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "dto": "mapstruct",
+  "service": "serviceClass",
+  "pagination": "infinite-scroll"
+}

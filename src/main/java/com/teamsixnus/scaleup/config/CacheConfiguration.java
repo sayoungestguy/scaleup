@@ -50,6 +50,14 @@ public class CacheConfiguration {
             createCache(cm, com.teamsixnus.scaleup.domain.User.class.getName());
             createCache(cm, com.teamsixnus.scaleup.domain.Authority.class.getName());
             createCache(cm, com.teamsixnus.scaleup.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.teamsixnus.scaleup.domain.EntityAuditEvent.class.getName());
+            createCache(cm, com.teamsixnus.scaleup.domain.CodeTables.class.getName());
+            createCache(cm, com.teamsixnus.scaleup.domain.UserProfile.class.getName());
+            createCache(cm, com.teamsixnus.scaleup.domain.Skill.class.getName());
+            createCache(cm, com.teamsixnus.scaleup.domain.Message.class.getName());
+            createCache(cm, com.teamsixnus.scaleup.domain.Activity.class.getName());
+            createCache(cm, com.teamsixnus.scaleup.domain.ActivityInvite.class.getName());
+            createCache(cm, com.teamsixnus.scaleup.domain.Notification.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
