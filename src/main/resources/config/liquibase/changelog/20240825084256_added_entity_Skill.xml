@@ -17,12 +17,6 @@
             <column name="skill_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="individual_skill_desc" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="years_of_exp" type="integer">
-                <constraints nullable="false" />
-            </column>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false" />
             </column>
@@ -34,9 +28,6 @@
             </column>
             <column name="last_modified_date" type="${datetimeType}">
                 <constraints nullable="false" />
-            </column>
-            <column name="user_profile_id" type="bigint">
-                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -62,8 +53,6 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="skill_name" type="string"/>
-            <column name="individual_skill_desc" type="string"/>
-            <column name="years_of_exp" type="numeric"/>
             <column name="created_by" type="string"/>
             <column name="created_date" type="date"/>
             <column name="last_modified_by" type="string"/>

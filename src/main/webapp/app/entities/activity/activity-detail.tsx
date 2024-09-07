@@ -29,6 +29,10 @@ export const ActivityDetail = () => {
           </dt>
           <dd>{activityEntity.id}</dd>
           <dt>
+            <span id="activityName">Activity Name</span>
+          </dt>
+          <dd>{activityEntity.activityName}</dd>
+          <dt>
             <span id="activityTime">Activity Time</span>
           </dt>
           <dd>

@@ -12,16 +12,29 @@ public class ActivityTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static Activity getActivitySample1() {
-        return new Activity().id(1L).duration(1).venue("venue1").createdBy("createdBy1").lastModifiedBy("lastModifiedBy1");
+        return new Activity()
+            .id(1L)
+            .activityName("activityName1")
+            .duration(1)
+            .venue("venue1")
+            .createdBy("createdBy1")
+            .lastModifiedBy("lastModifiedBy1");
     }
 
     public static Activity getActivitySample2() {
-        return new Activity().id(2L).duration(2).venue("venue2").createdBy("createdBy2").lastModifiedBy("lastModifiedBy2");
+        return new Activity()
+            .id(2L)
+            .activityName("activityName2")
+            .duration(2)
+            .venue("venue2")
+            .createdBy("createdBy2")
+            .lastModifiedBy("lastModifiedBy2");
     }
 
     public static Activity getActivityRandomSampleGenerator() {
         return new Activity()
             .id(longCount.incrementAndGet())
+            .activityName(UUID.randomUUID().toString())
             .duration(intCount.incrementAndGet())
             .venue(UUID.randomUUID().toString())
             .createdBy(UUID.randomUUID().toString())

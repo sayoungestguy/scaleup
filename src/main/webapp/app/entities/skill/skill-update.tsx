@@ -8,8 +8,6 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
 import { getSkillById, updateEntity, createEntity, reset } from './skill.reducer';
 
@@ -21,7 +19,6 @@ export const SkillUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const userProfiles = useAppSelector(state => state.userProfile.entities);
   const skillEntity = useAppSelector(state => state.skill.entity);
   const loading = useAppSelector(state => state.skill.loading);
   const updating = useAppSelector(state => state.skill.updating);
@@ -35,8 +32,6 @@ export const SkillUpdate = () => {
     if (!isNew) {
       dispatch(getSkillById(id));
     }
-
-    dispatch(getUserProfiles({}));
   }, []);
 
   useEffect(() => {
@@ -50,16 +45,12 @@ export const SkillUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.yearsOfExp !== undefined && typeof values.yearsOfExp !== 'number') {
-      values.yearsOfExp = Number(values.yearsOfExp);
-    }
     values.createdDate = convertDateTimeToServer(values.createdDate);
     values.lastModifiedDate = convertDateTimeToServer(values.lastModifiedDate);
 
     const entity = {
       ...skillEntity,
       ...values,
-      userProfile: userProfiles.find(it => it.id.toString() === values.userProfile?.toString()),
     };
 
     if (isNew) {
@@ -79,7 +70,6 @@ export const SkillUpdate = () => {
           ...skillEntity,
           createdDate: convertDateTimeFromServer(skillEntity.createdDate),
           lastModifiedDate: convertDateTimeFromServer(skillEntity.lastModifiedDate),
-          userProfile: skillEntity?.userProfile?.id,
         };
 
   return (
@@ -109,27 +99,6 @@ export const SkillUpdate = () => {
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
-              <ValidatedField
-                label="Individual Skill Desc"
-                id="skill-individualSkillDesc"
-                name="individualSkillDesc"
-                data-cy="individualSkillDesc"
-                type="text"
-                validate={{
-                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
-                }}
-              />
-              <ValidatedField
-                label="Years Of Exp"
-                id="skill-yearsOfExp"
-                name="yearsOfExp"
-                data-cy="yearsOfExp"
-                type="text"
-                validate={{
-                  required: { value: true, message: 'This field is required.' },
-                  validate: v => isNumber(v) || 'This field should be a number.',
-                }}
-              />
               <ValidatedField label="Created By" id="skill-createdBy" name="createdBy" data-cy="createdBy" type="text" />
               <ValidatedField
                 label="Created Date"
@@ -154,16 +123,6 @@ export const SkillUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
-              <ValidatedField id="skill-userProfile" name="userProfile" data-cy="userProfile" label="User Profile" type="select">
-                <option value="" key="0" />
-                {userProfiles
-                  ? userProfiles.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/skill" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
