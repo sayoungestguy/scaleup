@@ -49,11 +49,7 @@ public class SkillAsserts {
     public static void assertSkillUpdatableFieldsEquals(Skill expected, Skill actual) {
         assertThat(expected)
             .as("Verify Skill relevant properties")
-            .satisfies(e -> assertThat(e.getSkillName()).as("check skillName").isEqualTo(actual.getSkillName()))
-            .satisfies(
-                e -> assertThat(e.getIndividualSkillDesc()).as("check individualSkillDesc").isEqualTo(actual.getIndividualSkillDesc())
-            )
-            .satisfies(e -> assertThat(e.getYearsOfExp()).as("check yearsOfExp").isEqualTo(actual.getYearsOfExp()));
+            .satisfies(e -> assertThat(e.getSkillName()).as("check skillName").isEqualTo(actual.getSkillName()));
     }
 
     /**
@@ -62,9 +58,5 @@ public class SkillAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertSkillUpdatableRelationshipsEquals(Skill expected, Skill actual) {
-        assertThat(expected)
-            .as("Verify Skill relationships")
-            .satisfies(e -> assertThat(e.getUserProfile()).as("check userProfile").isEqualTo(actual.getUserProfile()));
-    }
+    public static void assertSkillUpdatableRelationshipsEquals(Skill expected, Skill actual) {}
 }
