@@ -3,8 +3,10 @@ package com.teamsixnus.scaleup.service;
 import com.teamsixnus.scaleup.domain.Activity;
 import com.teamsixnus.scaleup.domain.User;
 import com.teamsixnus.scaleup.repository.ActivityRepository;
+import com.teamsixnus.scaleup.security.AuthoritiesConstants;
 import com.teamsixnus.scaleup.service.dto.ActivityDTO;
 import com.teamsixnus.scaleup.service.mapper.ActivityMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -92,7 +94,16 @@ public class ActivityService {
     @Transactional(readOnly = true)
     public Page<ActivityDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Activities");
-        return activityRepository.findAll(pageable).map(activityMapper::toDto);
+        Optional<User> currentUser = userService.getUserById();
+
+        if (currentUser.isPresent()) {
+            if (currentUser.get().getAuthorities().stream().anyMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN))) {
+                return activityRepository.findAll(pageable).map(activityMapper::toDto);
+            } else {
+                return activityRepository.findAllByCreatorProfileUserId(currentUser.get().getId(), pageable).map(activityMapper::toDto);
+            }
+        }
+        return Page.empty(); // Or throw an exception if user not found
     }
 
     /**
@@ -109,7 +120,7 @@ public class ActivityService {
 
     @Transactional(readOnly = true)
     public Page<ActivityDTO> findAllByCurrentUser(Pageable pageable) {
-        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User currentUser = userService.getUserById().orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return activityRepository.findAllByCreatorProfileUserId(currentUser.getId(), pageable).map(activityMapper::toDto);
     }
 

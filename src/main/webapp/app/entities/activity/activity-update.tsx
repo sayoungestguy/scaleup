@@ -24,6 +24,8 @@ export const ActivityUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const currentUser = useAppSelector(state => state.authentication.account);
+
   const userProfiles = useAppSelector(state => state.userProfile.entities);
   const skills = useAppSelector(state => state.skill.entities);
   const activityEntity = useAppSelector(state => state.activity.entity);
@@ -65,7 +67,7 @@ export const ActivityUpdate = () => {
     const entity = {
       ...activityEntity,
       ...values,
-      creatorProfile: userProfiles.find(it => it.id.toString() === values.creatorProfile?.toString()),
+      creatorProfile: userProfiles.find(it => it.id.toString() == currentUser.id.toString()),
       skill: skills.find(it => it.id.toString() === values.skill?.toString()),
     };
 
@@ -107,7 +109,7 @@ export const ActivityUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="activity-id" label="ID" validate={{ required: true }} /> : null}
+              {/*{!isNew ? <ValidatedField name="id" required readOnly id="activity-id" label="ID" validate={{ required: true }} /> : null}*/}
               <ValidatedField
                 label="Activity Name"
                 id="activity-activityName"
@@ -167,25 +169,25 @@ export const ActivityUpdate = () => {
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
-              <ValidatedField
-                id="activity-creatorProfile"
-                name="creatorProfile"
-                data-cy="creatorProfile"
-                label="Creator Profile"
-                type="select"
-                validate={{
-                  required: { value: true, message: 'This field is required' },
-                }}
-              >
-                <option value="" key="0" />
-                {userProfiles
-                  ? userProfiles.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
+              {/*<ValidatedField*/}
+              {/*  id="activity-creatorProfile"*/}
+              {/*  name="creatorProfile"*/}
+              {/*  data-cy="creatorProfile"*/}
+              {/*  label="Creator Profile"*/}
+              {/*  type="select"*/}
+              {/*  validate={{*/}
+              {/*    required: { value: true, message: 'This field is required' },*/}
+              {/*  }}*/}
+              {/*>*/}
+              {/*  <option value="" key="0" />*/}
+              {/*  {userProfiles*/}
+              {/*    ? userProfiles.map(otherEntity => (*/}
+              {/*        <option value={otherEntity.id} key={otherEntity.id}>*/}
+              {/*          {otherEntity.id}*/}
+              {/*        </option>*/}
+              {/*      ))*/}
+              {/*    : null}*/}
+              {/*</ValidatedField>*/}
               <ValidatedField
                 id="activity-skill"
                 name="skill"
@@ -200,7 +202,7 @@ export const ActivityUpdate = () => {
                 {skills
                   ? skills.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.skillName}
                       </option>
                     ))
                   : null}

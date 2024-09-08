@@ -144,8 +144,8 @@ public class ActivityResource {
     @GetMapping("")
     public ResponseEntity<List<ActivityDTO>> getAllActivities(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Activities");
-        Page<ActivityDTO> page = activityService.findAllByCurrentUser(pageable);
-        //        Page<ActivityDTO> page = activityService.findAll(pageable);
+        //        Page<ActivityDTO> page = activityService.findAllByCurrentUser(pageable);
+        Page<ActivityDTO> page = activityService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
