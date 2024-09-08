@@ -1,17 +1,15 @@
 import './footer.scss';
-
 import React from 'react';
-
 import { Col, Row } from 'reactstrap';
 
 const Footer = () => (
-  <div className="footer page-content">
+  <footer className="footer">
     <Row>
-      <Col md="12">
-        <p>This is your footer</p>
+      <Col md="12" className="text-center">
+        <p>&copy; {new Date().getFullYear()} Scaleup. All rights reserved.</p>
       </Col>
     </Row>
-  </div>
+  </footer>
 );
 
 export default Footer;
