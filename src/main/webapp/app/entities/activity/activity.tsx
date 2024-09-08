@@ -189,12 +189,6 @@ export const Activity = () => {
           </div>
         </h3>
         <div className="table-responsive">
-          {/*<InfiniteScroll*/}
-          {/*  dataLength={currentActivities ? 5 : 0}*/}
-          {/*  next={handleLoadMore}*/}
-          {/*  hasMore={paginationState.activePage - 1 < links.next}*/}
-          {/*  loader={<div className="loader">Loading ...</div>}*/}
-          {/*>*/}
           {currentPageActivities.length > 0 ? (
             <Table responsive bordered>
               <thead>
@@ -225,7 +219,7 @@ export const Activity = () => {
                 {currentPageActivities.map((activity, i) => (
                   <tr key={`entity-${i}`} data-cy="entityTable">
                     <td>
-                      <Button tag={Link} to={`/activity/${activity.id}`} color="link" size="sm">
+                      <Button tag={Link} to={`/activity/${activity.id}?type=current`} color="link" size="sm">
                         {(currentPage - 1) * itemsPerPage + i + 1}
                       </Button>
                     </td>
@@ -245,7 +239,13 @@ export const Activity = () => {
                     </td>
                     <td className="text-end">
                       <div className="btn-group flex-btn-group-container">
-                        <Button tag={Link} to={`/activity/${activity.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                        <Button
+                          tag={Link}
+                          to={`/activity/${activity.id}?type=current`}
+                          color="info"
+                          size="sm"
+                          data-cy="entityDetailsButton"
+                        >
                           <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                         </Button>
                         <Button tag={Link} to={`/activity/${activity.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
@@ -268,7 +268,6 @@ export const Activity = () => {
           ) : (
             !loading && <div className="alert alert-warning">No Activities found</div>
           )}
-          {/*</InfiniteScroll>*/}
         </div>
         <Pagination className="justify-content-center d-flex">
           <PaginationItem disabled={currentPage === 1}>
@@ -294,12 +293,6 @@ export const Activity = () => {
       <div className="past-activities border border-5 p-3 mx-2 my-5">
         <h3>Past Activities</h3>
         <div className="table-responsive">
-          {/*<InfiniteScroll*/}
-          {/*  dataLength={pastActivities ? pastActivities.length : 0}*/}
-          {/*  next={handleLoadMore}*/}
-          {/*  hasMore={paginationState.activePage - 1 < links.next}*/}
-          {/*  loader={<div className="loader">Loading ...</div>}*/}
-          {/*>*/}
           {pastPageActivities.length > 0 ? (
             <Table responsive bordered>
               <thead>
@@ -330,7 +323,15 @@ export const Activity = () => {
                 {pastPageActivities.map((activity, i) => (
                   <tr key={`entity-${i}`} data-cy="entityTable">
                     <td>
-                      <Button tag={Link} to={`/activity/${activity.id}`} color="link" size="sm">
+                      <Button
+                        tag={Link}
+                        to={{
+                          pathname: `/activity/${activity.id}`,
+                          state: { isCurrent: false },
+                        }}
+                        color="link"
+                        size="sm"
+                      >
                         {(currentPage - 1) * itemsPerPage + i + 1}
                       </Button>
                     </td>
@@ -362,7 +363,6 @@ export const Activity = () => {
           ) : (
             !loading && <div className="alert alert-warning">No Activities found</div>
           )}
-          {/*</InfiniteScroll>*/}
         </div>
         <Pagination className="justify-content-center d-flex">
           <PaginationItem disabled={currentPage === 1}>
