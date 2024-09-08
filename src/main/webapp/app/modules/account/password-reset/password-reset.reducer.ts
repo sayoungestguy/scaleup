@@ -49,8 +49,6 @@ export const PasswordResetSlice = createSlice({
         loading: false,
         //password reset state set to success
         resetPasswordSuccess: true,
-        //successMessage: "Your password couldn't be reset. Remember a password request is only valid for 24 hours.",
-        //scrape 24h thinggy? since cant demo
         successMessage: 'Your password reset have been completed successfully',
       }))
       .addMatcher(isPending(handlePasswordResetInit, handlePasswordResetFinish), state => {
