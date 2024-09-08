@@ -7,6 +7,12 @@
   "enableAudit": true,
   "fields": [
     {
+      "fieldName": "activityName",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
       "fieldName": "activityTime",
       "fieldType": "Instant",
       "fieldValidateRules": ["required"]

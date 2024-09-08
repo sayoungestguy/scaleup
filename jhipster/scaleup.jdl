@@ -29,8 +29,10 @@ entity UserProfile {
 
 entity Skill {
   skillName String maxlength(255) required
-    individualSkillDesc String maxlength(255),
-    yearsOfExp Integer required
+}
+
+entity UserSkill {
+    yearsOfExperience Integer required
 }
 
 entity Message {
@@ -40,6 +42,7 @@ entity Message {
 }
 
 entity Activity {
+    activityName String maxlength(255)
   activityTime Instant required,
   duration Integer,
   venue String maxlength(255),
@@ -61,7 +64,9 @@ relationship OneToOne {
 }
 
 relationship ManyToOne {
-  Skill{userProfile} to UserProfile,
+    UserSkill{userProfile} to UserProfile,
+    UserSkill{skill} to Skill,
+    UserSkill{skillType} to CodeTables,
   Message{senderProfile} to UserProfile,
   Message{receiverProfile} to UserProfile,
   Activity{creatorProfile} to UserProfile,
@@ -75,5 +80,5 @@ relationship ManyToOne {
 
 dto * with mapstruct
 service * with serviceClass
-paginate UserProfile, Skill, Message, Activity, ActivityInvite, Notification, CodeTables with infinite-scroll
+paginate UserProfile, Skill, UserSkill, Message, Activity, ActivityInvite, Notification, CodeTables with infinite-scroll
 
