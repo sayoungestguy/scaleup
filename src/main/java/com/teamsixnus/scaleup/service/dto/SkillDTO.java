@@ -17,12 +17,6 @@ public class SkillDTO implements Serializable {
     @Size(max = 255)
     private String skillName;
 
-    @Size(max = 255)
-    private String individualSkillDesc;
-
-    @NotNull
-    private Integer yearsOfExp;
-
     private String createdBy;
 
     private Instant createdDate;
@@ -30,8 +24,6 @@ public class SkillDTO implements Serializable {
     private String lastModifiedBy;
 
     private Instant lastModifiedDate;
-
-    private UserProfileDTO userProfile;
 
     public Long getId() {
         return id;
@@ -47,22 +39,6 @@ public class SkillDTO implements Serializable {
 
     public void setSkillName(String skillName) {
         this.skillName = skillName;
-    }
-
-    public String getIndividualSkillDesc() {
-        return individualSkillDesc;
-    }
-
-    public void setIndividualSkillDesc(String individualSkillDesc) {
-        this.individualSkillDesc = individualSkillDesc;
-    }
-
-    public Integer getYearsOfExp() {
-        return yearsOfExp;
-    }
-
-    public void setYearsOfExp(Integer yearsOfExp) {
-        this.yearsOfExp = yearsOfExp;
     }
 
     public String getCreatedBy() {
@@ -97,14 +73,6 @@ public class SkillDTO implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public UserProfileDTO getUserProfile() {
-        return userProfile;
-    }
-
-    public void setUserProfile(UserProfileDTO userProfile) {
-        this.userProfile = userProfile;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -132,13 +100,10 @@ public class SkillDTO implements Serializable {
         return "SkillDTO{" +
             "id=" + getId() +
             ", skillName='" + getSkillName() + "'" +
-            ", individualSkillDesc='" + getIndividualSkillDesc() + "'" +
-            ", yearsOfExp=" + getYearsOfExp() +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
-            ", userProfile=" + getUserProfile() +
             "}";
     }
 }

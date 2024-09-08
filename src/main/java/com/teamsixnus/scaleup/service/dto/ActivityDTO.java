@@ -14,6 +14,9 @@ public class ActivityDTO implements Serializable {
 
     private Long id;
 
+    @Size(max = 255)
+    private String activityName;
+
     @NotNull
     private Instant activityTime;
 
@@ -43,6 +46,14 @@ public class ActivityDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
     public Instant getActivityTime() {
@@ -151,6 +162,7 @@ public class ActivityDTO implements Serializable {
     public String toString() {
         return "ActivityDTO{" +
             "id=" + getId() +
+            ", activityName='" + getActivityName() + "'" +
             ", activityTime='" + getActivityTime() + "'" +
             ", duration=" + getDuration() +
             ", venue='" + getVenue() + "'" +

@@ -129,6 +129,9 @@ export const Activity = () => {
                   <th className="hand" onClick={sort('id')}>
                     ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                   </th>
+                  <th className="hand" onClick={sort('activityName')}>
+                    Activity Name <FontAwesomeIcon icon={getSortIconByFieldName('activityName')} />
+                  </th>
                   <th className="hand" onClick={sort('activityTime')}>
                     Activity Time <FontAwesomeIcon icon={getSortIconByFieldName('activityTime')} />
                   </th>
@@ -170,6 +173,7 @@ export const Activity = () => {
                         {activity.id}
                       </Button>
                     </td>
+                    <td>{activity.activityName}</td>
                     <td>
                       {activity.activityTime ? <TextFormat type="date" value={activity.activityTime} format={APP_DATE_FORMAT} /> : null}
                     </td>

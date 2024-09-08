@@ -31,24 +31,12 @@ public class Skill extends AbstractAuditingEntity<Long> implements Serializable,
     @Column(name = "skill_name", length = 255, nullable = false)
     private String skillName;
 
-    @Size(max = 255)
-    @Column(name = "individual_skill_desc", length = 255)
-    private String individualSkillDesc;
-
-    @NotNull
-    @Column(name = "years_of_exp", nullable = false)
-    private Integer yearsOfExp;
-
     // Inherited createdBy definition
     // Inherited createdDate definition
     // Inherited lastModifiedBy definition
     // Inherited lastModifiedDate definition
     @Transient
     private boolean isPersisted;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
-    private UserProfile userProfile;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -76,32 +64,6 @@ public class Skill extends AbstractAuditingEntity<Long> implements Serializable,
 
     public void setSkillName(String skillName) {
         this.skillName = skillName;
-    }
-
-    public String getIndividualSkillDesc() {
-        return this.individualSkillDesc;
-    }
-
-    public Skill individualSkillDesc(String individualSkillDesc) {
-        this.setIndividualSkillDesc(individualSkillDesc);
-        return this;
-    }
-
-    public void setIndividualSkillDesc(String individualSkillDesc) {
-        this.individualSkillDesc = individualSkillDesc;
-    }
-
-    public Integer getYearsOfExp() {
-        return this.yearsOfExp;
-    }
-
-    public Skill yearsOfExp(Integer yearsOfExp) {
-        this.setYearsOfExp(yearsOfExp);
-        return this;
-    }
-
-    public void setYearsOfExp(Integer yearsOfExp) {
-        this.yearsOfExp = yearsOfExp;
     }
 
     // Inherited createdBy methods
@@ -145,19 +107,6 @@ public class Skill extends AbstractAuditingEntity<Long> implements Serializable,
         return this;
     }
 
-    public UserProfile getUserProfile() {
-        return this.userProfile;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
-    public Skill userProfile(UserProfile userProfile) {
-        this.setUserProfile(userProfile);
-        return this;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -183,8 +132,6 @@ public class Skill extends AbstractAuditingEntity<Long> implements Serializable,
         return "Skill{" +
             "id=" + getId() +
             ", skillName='" + getSkillName() + "'" +
-            ", individualSkillDesc='" + getIndividualSkillDesc() + "'" +
-            ", yearsOfExp=" + getYearsOfExp() +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
