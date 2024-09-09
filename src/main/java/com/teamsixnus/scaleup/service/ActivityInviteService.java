@@ -4,6 +4,7 @@ import com.teamsixnus.scaleup.domain.ActivityInvite;
 import com.teamsixnus.scaleup.repository.ActivityInviteRepository;
 import com.teamsixnus.scaleup.service.dto.ActivityInviteDTO;
 import com.teamsixnus.scaleup.service.mapper.ActivityInviteMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,5 +110,10 @@ public class ActivityInviteService {
     public void delete(Long id) {
         log.debug("Request to delete ActivityInvite : {}", id);
         activityInviteRepository.deleteById(id);
+    }
+
+    // Fetch all invites for a specific activity
+    public List<ActivityInviteDTO> getInvitesByActivityId(Long activityId) {
+        return activityInviteRepository.findByActivity_Id(activityId);
     }
 }

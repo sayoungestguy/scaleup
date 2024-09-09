@@ -13,6 +13,8 @@ import { ASC, DESC, ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants'
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { getSkillById } from 'app/entities/skill/skill.reducer';
+import { getEntity } from 'app/entities/user-profile/user-profile.reducer';
 
 export const ActivityDetail = () => {
   const dispatch = useAppDispatch();
@@ -32,6 +34,20 @@ export const ActivityDetail = () => {
   }, []);
 
   const activityEntity = useAppSelector(state => state.activity.entity);
+
+  useEffect(() => {
+    if (activityEntity?.creatorProfile?.id) {
+      dispatch(getEntity(activityEntity.creatorProfile.id)); // Fetch profile by ID
+    }
+    if (activityEntity?.skill?.id) {
+      dispatch(getSkillById(activityEntity.skill.id)); // Fetch skill by ID
+    }
+  }, [dispatch, activityEntity]);
+
+  // Get profile and skill data from the Redux state
+  const creatorProfile = useAppSelector(state => (activityEntity.creatorProfile?.id ? state.userProfile.entity : null));
+  const skill = useAppSelector(state => (activityEntity.skill?.id ? state.skill.entity : null));
+
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
@@ -150,9 +166,9 @@ export const ActivityDetail = () => {
             </dt>
             <dd>{activityEntity.details}</dd>
             <dt>Creator Profile</dt>
-            <dd>{activityEntity.creatorProfile ? activityEntity.creatorProfile.id : ''}</dd>
+            <dd>{creatorProfile ? creatorProfile.nickname : ''}</dd>
             <dt>Skill</dt>
-            <dd>{activityEntity.skill ? activityEntity.skill.id : ''}</dd>
+            <dd>{skill ? skill.skillName : ''}</dd>
           </dl>
           <Button tag={Link} to="/activity" replace color="info" data-cy="entityDetailsBackButton">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
@@ -225,7 +241,6 @@ export const ActivityDetail = () => {
                           </Button>
                         </td>
                         <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
-                        <td>{activityInvite.createdBy}</td>
                         <td>
                           {activityInvite.activity ? (
                             <Link to={`/activity/${activityInvite.activity.id}`}>{activityInvite.activity.id}</Link>
