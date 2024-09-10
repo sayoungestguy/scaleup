@@ -1,24 +1,29 @@
 import React from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
+import { useAppSelector } from 'app/config/store'; // Import the selector to get account
 
 import { NavDropdown } from './menu-components';
 
-const accountMenuItemsAuthenticated = () => (
-  <>
-    <MenuItem icon="asterisk" to="/account/profile" data-cy="profile">
-      Profile
-    </MenuItem>
-    <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
-      Settings
-    </MenuItem>
-    <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
-      Password
-    </MenuItem>
-    <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
-      Sign out
-    </MenuItem>
-  </>
-);
+const accountMenuItemsAuthenticated = () => {
+  const account = useAppSelector(state => state.authentication.account); // Get account information
+
+  return (
+    <>
+      <MenuItem icon="asterisk" to={`/account/profile/${account.login}`} data-cy="profile">
+        Profile
+      </MenuItem>
+      <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
+        Settings
+      </MenuItem>
+      <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
+        Password
+      </MenuItem>
+      <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
+        Sign out
+      </MenuItem>
+    </>
+  );
+};
 
 const accountMenuItems = () => (
   <>

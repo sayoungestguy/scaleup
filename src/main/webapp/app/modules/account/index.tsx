@@ -10,7 +10,7 @@ import ProfilePage from './profile/profile';
 const AccountRoutes = () => (
   <div>
     <ErrorBoundaryRoutes>
-      <Route path="profile" element={<ProfilePage />} />
+      <Route path="profile/:username" element={<ProfilePage />} />
       <Route path="settings" element={<Settings />} />
       <Route path="password" element={<Password />} />
     </ErrorBoundaryRoutes>

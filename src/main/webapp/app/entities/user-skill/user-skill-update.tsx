@@ -8,6 +8,8 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+import { IUser } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
@@ -25,6 +27,7 @@ export const UserSkillUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const users = useAppSelector(state => state.userManagement.users);
   const userProfiles = useAppSelector(state => state.userProfile.entities);
   const skills = useAppSelector(state => state.skill.entities);
   const codeTables = useAppSelector(state => state.codeTables.entities);
@@ -45,6 +48,7 @@ export const UserSkillUpdate = () => {
     dispatch(getUserProfiles({}));
     dispatch(getSkills({}));
     dispatch(getCodeTables({}));
+    dispatch(getUsers({}));
   }, []);
 
   useEffect(() => {
@@ -68,6 +72,7 @@ export const UserSkillUpdate = () => {
       userProfile: userProfiles.find(it => it.id.toString() === values.userProfile?.toString()),
       skill: skills.find(it => it.id.toString() === values.skill?.toString()),
       skillType: codeTables.find(it => it.id.toString() === values.skillType?.toString()),
+      user: users.find(it => it.id.toString() === values.user?.toString()),
     };
 
     if (isNew) {
@@ -85,6 +90,7 @@ export const UserSkillUpdate = () => {
           userProfile: userSkillEntity?.userProfile?.id,
           skill: userSkillEntity?.skill?.id,
           skillType: userSkillEntity?.skillType?.id,
+          user: userSkillEntity?.user?.id,
         };
 
   return (
@@ -120,6 +126,16 @@ export const UserSkillUpdate = () => {
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <ValidatedField id="user-profile-user" name="user" data-cy="user" label="User" type="select" required>
+                <option value="" key="0" />
+                {users
+                  ? users.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.login}
                       </option>
                     ))
                   : null}
