@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
 import { Translate, TextFormat, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,10 +11,14 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities, reset } from './profile.reducer';
+import { getEntity, getEntityByUsername } from './user-profile.reducer';
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const account = useAppSelector(state => state.authentication.account); //To fetch the account name
+  const userProfileEntity = useAppSelector(state => state.userProfile.entity); // Get the fetched user profile entity
+  const { username } = useParams(); // Get the username from the URL
+
   const successMessage = useAppSelector(state => state.settings.successMessage);
 
   const pageLocation = useLocation();
@@ -47,6 +51,21 @@ export const ProfilePage = () => {
     });
     dispatch(getEntities({}));
   };
+
+  // Checking API fetching payload and state delete later
+
+  useEffect(() => {
+    console.log('User profile entity:', userProfileEntity); // Check the state for the fetched entity
+  }, [userProfileEntity]);
+
+  useEffect(() => {
+    if (username) {
+      dispatch(getEntityByUsername(username)).then(response => {
+        console.log((response.payload as any).data); // Log the response to check if data is being fetched
+      });
+    }
+  }, [username]);
+  // *****************************************************************************************************
 
   useEffect(() => {
     resetAll();
@@ -160,9 +179,16 @@ export const ProfilePage = () => {
               alt="Profile Picture"
               style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
             />
-            <h2>{account.login}</h2>
+            <h2>{username}</h2>
 
-            <p>Web Developer with a passion for creating interactive and responsive web applications.</p>
+            <p>
+              <strong>About Me:</strong> {userProfileEntity.aboutMe}
+            </p>
+            <p>
+              {userProfileEntity && userProfileEntity.user && userProfileEntity.user.login === username
+                ? userProfileEntity.aboutMe
+                : 'Loading...'}
+            </p>
             <div style={{ marginTop: '20px', textAlign: 'left' }}>
               <p>
                 <strong>Email:</strong> john.doe@example.com
