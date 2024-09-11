@@ -1,11 +1,20 @@
 id;category;code_key;code_value;created_by;created_date;last_modified_by;last_modified_date
-1;if;for cleverly;eek putrid;breeze;2024-08-24T15:43:24;gosh;2024-08-24T21:55:03
-2;hourly;that intent;hm well-off;hold distinguish however;2024-08-24T16:57:46;exorcise stealthily;2024-08-25T03:55:47
-3;heed where;mouth claw;among;klap;2024-08-24T20:02:11;as tart spirited;2024-08-25T03:16:56
-4;count;with aha during;phooey;promotion;2024-08-25T03:24:15;joyously;2024-08-24T18:26:13
-5;yum;blather;as apropos;righteously healthily gas;2024-08-24T21:59:54;onto troubled normal;2024-08-25T08:02:16
-6;considering quarrelsomely;woot fruitful;repress;happy;2024-08-25T07:18:04;length seemingly passing;2024-08-24T12:49:57
-7;geez whenever;while;cayenne successfully;rough;2024-08-24T17:36:46;gadzooks coaxingly;2024-08-24T21:52:44
-8;gosh thrifty bijou;phooey care aw;even lob yearly;knock pfft;2024-08-24T17:41:43;out port;2024-08-24T18:02:59
-9;boldly another than;unless;slosh computer even;coolly stiff whoever;2024-08-24T13:36:47;including scaly bare;2024-08-25T02:54:04
-10;hm;pooh;yearly gainsay;sensor feline;2024-08-25T04:38:44;greedily zowie gosh;2024-08-24T21:09:31
+1;notification_type;message;New Message;system;2024-08-24T15:43:24;system;2024-08-24T21:55:03
+2;notification_type;invite;New Invite;system;2024-08-24T16:57:46;system;2024-08-25T03:55:47
+3;skill_type;teach;Teach;system;2024-08-24T20:02:11;system;2024-08-25T03:16:56
+4;skill_type;learn;Learn;system;2024-08-25T03:24:15;system;2024-08-24T18:26:13
+5;invite_status;pending;Pending;system;2024-08-24T21:59:54;system;2024-08-25T08:02:16
+6;invite_status;accepted;Accepted;system;2024-08-25T07:18:04;system;2024-08-24T12:49:57
+7;invite_status;declined;Declined;system;2024-08-24T17:36:46;system;2024-08-24T21:52:44
+8;participation;yes;Will Participate;system;2024-08-24T17:41:43;system;2024-08-24T18:02:59
+9;participation;no;Will Not Participate;system;2024-08-24T13:36:47;system;2024-08-25T02:54:04
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.SkillRepository;
+import com.teamsixnus.scaleup.service.SkillQueryService;
 import com.teamsixnus.scaleup.service.SkillService;
+import com.teamsixnus.scaleup.service.criteria.SkillCriteria;
 import com.teamsixnus.scaleup.service.dto.SkillDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,12 @@ public class SkillResource {
 
     private final SkillRepository skillRepository;
 
-    public SkillResource(SkillService skillService, SkillRepository skillRepository) {
+    private final SkillQueryService skillQueryService;
+
+    public SkillResource(SkillService skillService, SkillRepository skillRepository, SkillQueryService skillQueryService) {
         this.skillService = skillService;
         this.skillRepository = skillRepository;
+        this.skillQueryService = skillQueryService;
     }
 
     /**
@@ -139,14 +144,31 @@ public class SkillResource {
      * {@code GET  /skills} : get all the skills.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of skills in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<SkillDTO>> getAllSkills(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Skills");
-        Page<SkillDTO> page = skillService.findAll(pageable);
+    public ResponseEntity<List<SkillDTO>> getAllSkills(
+        SkillCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get Skills by criteria: {}", criteria);
+
+        Page<SkillDTO> page = skillQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /skills/count} : count all the skills.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countSkills(SkillCriteria criteria) {
+        log.debug("REST request to count Skills by criteria: {}", criteria);
+        return ResponseEntity.ok().body(skillQueryService.countByCriteria(criteria));
     }
 
     /**

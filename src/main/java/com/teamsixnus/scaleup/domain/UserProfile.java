@@ -42,6 +42,10 @@ public class UserProfile extends AbstractAuditingEntity<Long> implements Seriali
     @Column(name = "profile_picture", length = 255)
     private String profilePicture;
 
+    @Size(max = 255)
+    @Column(name = "social_links", length = 255)
+    private String socialLinks;
+
     // Inherited createdBy definition
     // Inherited createdDate definition
     // Inherited lastModifiedBy definition
@@ -119,6 +123,19 @@ public class UserProfile extends AbstractAuditingEntity<Long> implements Seriali
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public String getSocialLinks() {
+        return this.socialLinks;
+    }
+
+    public UserProfile socialLinks(String socialLinks) {
+        this.setSocialLinks(socialLinks);
+        return this;
+    }
+
+    public void setSocialLinks(String socialLinks) {
+        this.socialLinks = socialLinks;
     }
 
     // Inherited createdBy methods
@@ -203,6 +220,7 @@ public class UserProfile extends AbstractAuditingEntity<Long> implements Seriali
             ", jobRole='" + getJobRole() + "'" +
             ", aboutMe='" + getAboutMe() + "'" +
             ", profilePicture='" + getProfilePicture() + "'" +
+            ", socialLinks='" + getSocialLinks() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +

@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.UserProfileRepository;
+import com.teamsixnus.scaleup.service.UserProfileQueryService;
 import com.teamsixnus.scaleup.service.UserProfileService;
+import com.teamsixnus.scaleup.service.criteria.UserProfileCriteria;
 import com.teamsixnus.scaleup.service.dto.UserProfileDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,16 @@ public class UserProfileResource {
 
     private final UserProfileRepository userProfileRepository;
 
-    public UserProfileResource(UserProfileService userProfileService, UserProfileRepository userProfileRepository) {
+    private final UserProfileQueryService userProfileQueryService;
+
+    public UserProfileResource(
+        UserProfileService userProfileService,
+        UserProfileRepository userProfileRepository,
+        UserProfileQueryService userProfileQueryService
+    ) {
         this.userProfileService = userProfileService;
         this.userProfileRepository = userProfileRepository;
+        this.userProfileQueryService = userProfileQueryService;
     }
 
     /**
@@ -139,23 +148,31 @@ public class UserProfileResource {
      * {@code GET  /user-profiles} : get all the userProfiles.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userProfiles in body.
      */
     @GetMapping("")
     public ResponseEntity<List<UserProfileDTO>> getAllUserProfiles(
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+        UserProfileCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get a page of UserProfiles");
-        Page<UserProfileDTO> page;
-        if (eagerload) {
-            page = userProfileService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = userProfileService.findAll(pageable);
-        }
+        log.debug("REST request to get UserProfiles by criteria: {}", criteria);
+
+        Page<UserProfileDTO> page = userProfileQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /user-profiles/count} : count all the userProfiles.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countUserProfiles(UserProfileCriteria criteria) {
+        log.debug("REST request to count UserProfiles by criteria: {}", criteria);
+        return ResponseEntity.ok().body(userProfileQueryService.countByCriteria(criteria));
     }
 
     /**

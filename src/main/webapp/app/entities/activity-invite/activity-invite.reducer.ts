@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
-import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IActivityInvite, defaultValue } from 'app/shared/model/activity-invite.model';
@@ -10,7 +9,6 @@ const initialState: EntityState<IActivityInvite> = {
   errorMessage: null,
   entities: [],
   entity: defaultValue,
-  links: { next: 0 },
   updating: false,
   totalItems: 0,
   updateSuccess: false,
@@ -41,7 +39,9 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   'activityInvite/create_entity',
   async (entity: IActivityInvite, thunkAPI) => {
-    return axios.post<IActivityInvite>(apiUrl, cleanEntity(entity));
+    const result = await axios.post<IActivityInvite>(apiUrl, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -49,7 +49,9 @@ export const createEntity = createAsyncThunk(
 export const updateEntity = createAsyncThunk(
   'activityInvite/update_entity',
   async (entity: IActivityInvite, thunkAPI) => {
-    return axios.put<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    const result = await axios.put<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -57,7 +59,9 @@ export const updateEntity = createAsyncThunk(
 export const partialUpdateEntity = createAsyncThunk(
   'activityInvite/partial_update_entity',
   async (entity: IActivityInvite, thunkAPI) => {
-    return axios.patch<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    const result = await axios.patch<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -66,7 +70,9 @@ export const deleteEntity = createAsyncThunk(
   'activityInvite/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
-    return await axios.delete<IActivityInvite>(requestUrl);
+    const result = await axios.delete<IActivityInvite>(requestUrl);
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -89,13 +95,11 @@ export const ActivityInviteSlice = createEntitySlice({
       })
       .addMatcher(isFulfilled(getEntities), (state, action) => {
         const { data, headers } = action.payload;
-        const links = parseHeaderForLinks(headers.link);
 
         return {
           ...state,
           loading: false,
-          links,
-          entities: loadMoreDataWhenScrolled(state.entities, data, links),
+          entities: data,
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })

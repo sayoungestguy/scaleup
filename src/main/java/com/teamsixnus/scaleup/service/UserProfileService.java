@@ -78,18 +78,6 @@ public class UserProfileService {
     }
 
     /**
-     * Get all the userProfiles.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<UserProfileDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all UserProfiles");
-        return userProfileRepository.findAll(pageable).map(userProfileMapper::toDto);
-    }
-
-    /**
      * Get all the userProfiles with eager load of many-to-many relationships.
      *
      * @return the list of entities.

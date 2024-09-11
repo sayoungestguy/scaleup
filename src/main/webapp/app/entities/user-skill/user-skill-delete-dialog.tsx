@@ -25,7 +25,7 @@ export const UserSkillDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.userSkill.updateSuccess);
 
   const handleClose = () => {
-    navigate('/user-skill');
+    navigate('/user-skill' + pageLocation.search);
   };
 
   useEffect(() => {

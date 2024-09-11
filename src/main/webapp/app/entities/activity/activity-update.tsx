@@ -31,11 +31,13 @@ export const ActivityUpdate = () => {
   const updateSuccess = useAppSelector(state => state.activity.updateSuccess);
 
   const handleClose = () => {
-    navigate('/activity');
+    navigate('/activity' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
 

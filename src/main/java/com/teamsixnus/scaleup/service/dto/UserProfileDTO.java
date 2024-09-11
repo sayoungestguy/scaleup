@@ -25,6 +25,9 @@ public class UserProfileDTO implements Serializable {
     @Size(max = 255)
     private String profilePicture;
 
+    @Size(max = 255)
+    private String socialLinks;
+
     private String createdBy;
 
     private Instant createdDate;
@@ -74,6 +77,14 @@ public class UserProfileDTO implements Serializable {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public String getSocialLinks() {
+        return socialLinks;
+    }
+
+    public void setSocialLinks(String socialLinks) {
+        this.socialLinks = socialLinks;
     }
 
     public String getCreatedBy() {
@@ -146,6 +157,7 @@ public class UserProfileDTO implements Serializable {
             ", jobRole='" + getJobRole() + "'" +
             ", aboutMe='" + getAboutMe() + "'" +
             ", profilePicture='" + getProfilePicture() + "'" +
+            ", socialLinks='" + getSocialLinks() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +

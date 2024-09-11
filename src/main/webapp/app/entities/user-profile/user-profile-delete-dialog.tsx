@@ -25,7 +25,7 @@ export const UserProfileDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.userProfile.updateSuccess);
 
   const handleClose = () => {
-    navigate('/user-profile');
+    navigate('/user-profile' + pageLocation.search);
   };
 
   useEffect(() => {

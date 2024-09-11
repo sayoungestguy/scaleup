@@ -7,8 +7,6 @@ import com.teamsixnus.scaleup.service.mapper.ActivityMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,18 +73,6 @@ public class ActivityService {
             })
             .map(activityRepository::save)
             .map(activityMapper::toDto);
-    }
-
-    /**
-     * Get all the activities.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<ActivityDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all Activities");
-        return activityRepository.findAll(pageable).map(activityMapper::toDto);
     }
 
     /**
