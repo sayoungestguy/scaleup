@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.UserSkillRepository;
+import com.teamsixnus.scaleup.service.UserSkillQueryService;
 import com.teamsixnus.scaleup.service.UserSkillService;
+import com.teamsixnus.scaleup.service.criteria.UserSkillCriteria;
 import com.teamsixnus.scaleup.service.dto.UserSkillDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,16 @@ public class UserSkillResource {
 
     private final UserSkillRepository userSkillRepository;
 
-    public UserSkillResource(UserSkillService userSkillService, UserSkillRepository userSkillRepository) {
+    private final UserSkillQueryService userSkillQueryService;
+
+    public UserSkillResource(
+        UserSkillService userSkillService,
+        UserSkillRepository userSkillRepository,
+        UserSkillQueryService userSkillQueryService
+    ) {
         this.userSkillService = userSkillService;
         this.userSkillRepository = userSkillRepository;
+        this.userSkillQueryService = userSkillQueryService;
     }
 
     /**
@@ -139,14 +148,31 @@ public class UserSkillResource {
      * {@code GET  /user-skills} : get all the userSkills.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userSkills in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<UserSkillDTO>> getAllUserSkills(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of UserSkills");
-        Page<UserSkillDTO> page = userSkillService.findAll(pageable);
+    public ResponseEntity<List<UserSkillDTO>> getAllUserSkills(
+        UserSkillCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get UserSkills by criteria: {}", criteria);
+
+        Page<UserSkillDTO> page = userSkillQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /user-skills/count} : count all the userSkills.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countUserSkills(UserSkillCriteria criteria) {
+        log.debug("REST request to count UserSkills by criteria: {}", criteria);
+        return ResponseEntity.ok().body(userSkillQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -16,6 +16,7 @@ public class UserProfileTestSamples {
             .jobRole("jobRole1")
             .aboutMe("aboutMe1")
             .profilePicture("profilePicture1")
+            .socialLinks("socialLinks1")
             .createdBy("createdBy1")
             .lastModifiedBy("lastModifiedBy1");
     }
@@ -27,6 +28,7 @@ public class UserProfileTestSamples {
             .jobRole("jobRole2")
             .aboutMe("aboutMe2")
             .profilePicture("profilePicture2")
+            .socialLinks("socialLinks2")
             .createdBy("createdBy2")
             .lastModifiedBy("lastModifiedBy2");
     }
@@ -38,6 +40,7 @@ public class UserProfileTestSamples {
             .jobRole(UUID.randomUUID().toString())
             .aboutMe(UUID.randomUUID().toString())
             .profilePicture(UUID.randomUUID().toString())
+            .socialLinks(UUID.randomUUID().toString())
             .createdBy(UUID.randomUUID().toString())
             .lastModifiedBy(UUID.randomUUID().toString());
     }

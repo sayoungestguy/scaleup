@@ -25,7 +25,7 @@ export const MessageDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.message.updateSuccess);
 
   const handleClose = () => {
-    navigate('/message');
+    navigate('/message' + pageLocation.search);
   };
 
   useEffect(() => {

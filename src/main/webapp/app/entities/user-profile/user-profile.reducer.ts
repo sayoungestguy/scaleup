@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
-import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IUserProfile, defaultValue } from 'app/shared/model/user-profile.model';
@@ -10,7 +9,6 @@ const initialState: EntityState<IUserProfile> = {
   errorMessage: null,
   entities: [],
   entity: defaultValue,
-  links: { next: 0 },
   updating: false,
   totalItems: 0,
   updateSuccess: false,
@@ -41,7 +39,9 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   'userProfile/create_entity',
   async (entity: IUserProfile, thunkAPI) => {
-    return axios.post<IUserProfile>(apiUrl, cleanEntity(entity));
+    const result = await axios.post<IUserProfile>(apiUrl, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -49,7 +49,9 @@ export const createEntity = createAsyncThunk(
 export const updateEntity = createAsyncThunk(
   'userProfile/update_entity',
   async (entity: IUserProfile, thunkAPI) => {
-    return axios.put<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    const result = await axios.put<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -57,7 +59,9 @@ export const updateEntity = createAsyncThunk(
 export const partialUpdateEntity = createAsyncThunk(
   'userProfile/partial_update_entity',
   async (entity: IUserProfile, thunkAPI) => {
-    return axios.patch<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    const result = await axios.patch<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -66,7 +70,9 @@ export const deleteEntity = createAsyncThunk(
   'userProfile/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
-    return await axios.delete<IUserProfile>(requestUrl);
+    const result = await axios.delete<IUserProfile>(requestUrl);
+    thunkAPI.dispatch(getEntities({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -89,13 +95,11 @@ export const UserProfileSlice = createEntitySlice({
       })
       .addMatcher(isFulfilled(getEntities), (state, action) => {
         const { data, headers } = action.payload;
-        const links = parseHeaderForLinks(headers.link);
 
         return {
           ...state,
           loading: false,
-          links,
-          entities: loadMoreDataWhenScrolled(state.entities, data, links),
+          entities: data,
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })

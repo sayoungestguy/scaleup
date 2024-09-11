@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.CodeTablesRepository;
+import com.teamsixnus.scaleup.service.CodeTablesQueryService;
 import com.teamsixnus.scaleup.service.CodeTablesService;
+import com.teamsixnus.scaleup.service.criteria.CodeTablesCriteria;
 import com.teamsixnus.scaleup.service.dto.CodeTablesDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,16 @@ public class CodeTablesResource {
 
     private final CodeTablesRepository codeTablesRepository;
 
-    public CodeTablesResource(CodeTablesService codeTablesService, CodeTablesRepository codeTablesRepository) {
+    private final CodeTablesQueryService codeTablesQueryService;
+
+    public CodeTablesResource(
+        CodeTablesService codeTablesService,
+        CodeTablesRepository codeTablesRepository,
+        CodeTablesQueryService codeTablesQueryService
+    ) {
         this.codeTablesService = codeTablesService;
         this.codeTablesRepository = codeTablesRepository;
+        this.codeTablesQueryService = codeTablesQueryService;
     }
 
     /**
@@ -139,14 +148,31 @@ public class CodeTablesResource {
      * {@code GET  /code-tables} : get all the codeTables.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of codeTables in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<CodeTablesDTO>> getAllCodeTables(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of CodeTables");
-        Page<CodeTablesDTO> page = codeTablesService.findAll(pageable);
+    public ResponseEntity<List<CodeTablesDTO>> getAllCodeTables(
+        CodeTablesCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get CodeTables by criteria: {}", criteria);
+
+        Page<CodeTablesDTO> page = codeTablesQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /code-tables/count} : count all the codeTables.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countCodeTables(CodeTablesCriteria criteria) {
+        log.debug("REST request to count CodeTables by criteria: {}", criteria);
+        return ResponseEntity.ok().body(codeTablesQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
-import { byteSize, Translate, TextFormat, getPaginationState } from 'react-jhipster';
+import { Button, Table } from 'reactstrap';
+import { byteSize, Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
+// import { Button, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
+// import { byteSize, Translate, TextFormat, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
@@ -10,6 +11,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+// import { getEntities } from './activity.reducer';
 import { getAllActivity, reset } from './activity.reducer';
 import { getSkillById } from 'app/entities/skill/skill.reducer';
 
@@ -17,6 +19,7 @@ export const Activity = () => {
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
+  const navigate = useNavigate();
 
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
@@ -27,8 +30,7 @@ export const Activity = () => {
 
   const activityList = useAppSelector(state => state.activity.entities);
   const loading = useAppSelector(state => state.activity.loading);
-  const links = useAppSelector(state => state.activity.links);
-  const updateSuccess = useAppSelector(state => state.activity.updateSuccess);
+  const totalItems = useAppSelector(state => state.activity.totalItems);
 
   const [currentActivities, setCurrentActivities] = useState([]);
   const [pastActivities, setPastActivities] = useState([]);
@@ -50,150 +52,142 @@ export const Activity = () => {
     );
   };
 
-  const fetchSkill = async (skillId: number, isCurrent: boolean) => {
-    const response = await dispatch(getSkillById(skillId)).unwrap();
-    const skillName = response.data.skillName;
-
-    if (isCurrent) {
-      setCurrentSkills(prevSkills => ({
-        ...prevSkills,
-        [skillId]: skillName,
-      }));
-    } else {
-      setPastSkills(prevSkills => ({
-        ...prevSkills,
-        [skillId]: skillName,
-      }));
-    }
-
-    return skillName;
-  };
-
-  const resetAll = () => {
-    dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-    });
-    dispatch(getAllActivity({}));
-    console.log('(2)', activityList);
-  };
-
-  useEffect(() => {
-    resetAll();
-  }, []);
-
-  useEffect(() => {
-    if (updateSuccess) {
-      resetAll();
-    }
-  }, [updateSuccess]);
-
-  useEffect(() => {
+  const sortEntities = () => {
     getAllActivities();
-    console.log('(3)', activityList);
-  }, [paginationState.activePage]);
-
-  useEffect(() => {
-    if (activityList && activityList.length > 0) {
-      const current = activityList.filter(
-        (activity: { activityTime: string | number | Date }) => new Date(activity.activityTime) >= new Date(),
-      );
-      const past = activityList.filter(
-        (activity: { activityTime: string | number | Date }) => new Date(activity.activityTime) < new Date(),
-      );
-
-      setCurrentActivities(current);
-      setPastActivities(past);
+    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
     }
-  }, [activityList]);
+    const fetchSkill = async (skillId: number, isCurrent: boolean) => {
+      const response = await dispatch(getSkillById(skillId)).unwrap();
+      const skillName = response.data.skillName;
 
-  useEffect(() => {
-    if (currentActivities.length > 0) {
-      currentActivities.forEach(async activity => {
-        if (activity.skill?.id && !currentSkills[activity.skill.id]) {
-          await fetchSkill(activity.skill.id, true);
-        }
-      });
-    }
+      if (isCurrent) {
+        setCurrentSkills(prevSkills => ({
+          ...prevSkills,
+          [skillId]: skillName,
+        }));
+      } else {
+        setPastSkills(prevSkills => ({
+          ...prevSkills,
+          [skillId]: skillName,
+        }));
+      }
 
-    if (pastActivities.length > 0) {
-      pastActivities.forEach(async activity => {
-        if (activity.skill?.id && !pastSkills[activity.skill.id]) {
-          await fetchSkill(activity.skill.id, false);
-        }
-      });
-    }
-  }, [currentActivities, pastActivities]);
+      return skillName;
+    };
 
-  const handleLoadMore = () => {
-    if ((window as any).pageYOffset > 0) {
+    const resetAll = () => {
+      dispatch(reset());
       setPaginationState({
         ...paginationState,
-        activePage: paginationState.activePage + 1,
+        activePage: 1,
       });
-    }
-  };
+      dispatch(getAllActivity({}));
+      console.log('(2)', activityList);
+    };
 
-  useEffect(() => {
-    if (sorting) {
-      getAllActivities();
-      console.log('(4)', activityList);
-      setSorting(false);
-    }
-  }, [sorting]);
+    useEffect(() => {
+      sortEntities();
+    }, [paginationState.activePage, paginationState.order, paginationState.sort]);
 
-  const sort = p => () => {
-    dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-      order: paginationState.order === ASC ? DESC : ASC,
-      sort: p,
-    });
-    setSorting(true);
-  };
+    useEffect(() => {
+      const params = new URLSearchParams(pageLocation.search);
+      const page = params.get('page');
+      const sort = params.get(SORT);
+      if (page && sort) {
+        const sortSplit = sort.split(',');
+        setPaginationState({
+          ...paginationState,
+          activePage: +page,
+          sort: sortSplit[0],
+          order: sortSplit[1],
+        });
+      }
+    }, [pageLocation.search]);
 
-  const handleSyncList = () => {
-    resetAll();
-  };
+    const sort = p => () => {
+      setPaginationState({
+        ...paginationState,
+        order: paginationState.order === ASC ? DESC : ASC,
+        sort: p,
+      });
+    };
 
-  const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    } else {
-      return order === ASC ? faSortUp : faSortDown;
-    }
-  };
+    const handlePagination = currentPage =>
+      setPaginationState({
+        ...paginationState,
+        activePage: currentPage,
+      });
 
-  return (
-    <div>
-      <h2 id="activity-heading" data-cy="ActivityHeading">
-        Activities
-        <div className="d-flex justify-content-end">
-          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
-          </Button>
-        </div>
-      </h2>
-      <div className="current-activities border border-5 p-3 m-2">
-        <h3>
-          Current Activities
+    const handleSyncList = () => {
+      sortEntities();
+    };
+
+    const getSortIconByFieldName = (fieldName: string) => {
+      const sortFieldName = paginationState.sort;
+      const order = paginationState.order;
+      if (sortFieldName !== fieldName) {
+        return faSort;
+      } else {
+        return order === ASC ? faSortUp : faSortDown;
+      }
+    };
+
+    useEffect(() => {
+      if (activityList && activityList.length > 0) {
+        const current = activityList.filter(
+          (activity: { activityTime: string | number | Date }) => new Date(activity.activityTime) >= new Date(),
+        );
+        const past = activityList.filter(
+          (activity: { activityTime: string | number | Date }) => new Date(activity.activityTime) < new Date(),
+        );
+
+        setCurrentActivities(current);
+        setPastActivities(past);
+      }
+    }, [activityList]);
+
+    useEffect(() => {
+      if (currentActivities.length > 0) {
+        currentActivities.forEach(async activity => {
+          if (activity.skill?.id && !currentSkills[activity.skill.id]) {
+            await fetchSkill(activity.skill.id, true);
+          }
+        });
+      }
+
+      if (pastActivities.length > 0) {
+        pastActivities.forEach(async activity => {
+          if (activity.skill?.id && !pastSkills[activity.skill.id]) {
+            await fetchSkill(activity.skill.id, false);
+          }
+        });
+      }
+    }, [currentActivities, pastActivities]);
+
+    return (
+      <div>
+        <h2 id="activity-heading" data-cy="ActivityHeading">
+          Activities
           <div className="d-flex justify-content-end">
+            <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
+              <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
+            </Button>
             <Link to="/activity/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />
-              &nbsp; New Activity
+              &nbsp; Create a new Activity
             </Link>
           </div>
-        </h3>
+        </h2>
         <div className="table-responsive">
-          {currentPageActivities.length > 0 ? (
-            <Table responsive bordered>
+          {activityList && activityList.length > 0 ? (
+            <Table responsive>
               <thead>
                 <tr>
-                  <th>S/No</th>
+                  <th className="hand" onClick={sort('id')}>
+                    ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                  </th>
                   <th className="hand" onClick={sort('activityName')}>
                     Activity Name <FontAwesomeIcon icon={getSortIconByFieldName('activityName')} />
                   </th>
@@ -209,6 +203,21 @@ export const Activity = () => {
                   <th className="hand" onClick={sort('details')}>
                     Details <FontAwesomeIcon icon={getSortIconByFieldName('details')} />
                   </th>
+                  <th className="hand" onClick={sort('createdBy')}>
+                    Created By <FontAwesomeIcon icon={getSortIconByFieldName('createdBy')} />
+                  </th>
+                  <th className="hand" onClick={sort('createdDate')}>
+                    Created Date <FontAwesomeIcon icon={getSortIconByFieldName('createdDate')} />
+                  </th>
+                  <th className="hand" onClick={sort('lastModifiedBy')}>
+                    Last Modified By <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedBy')} />
+                  </th>
+                  <th className="hand" onClick={sort('lastModifiedDate')}>
+                    Last Modified Date <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
+                  </th>
+                  <th>
+                    Creator Profile <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th>
                     Skill <FontAwesomeIcon icon="sort" />
                   </th>
@@ -216,11 +225,11 @@ export const Activity = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentPageActivities.map((activity, i) => (
+                {activityList.map((activity, i) => (
                   <tr key={`entity-${i}`} data-cy="entityTable">
                     <td>
-                      <Button tag={Link} to={`/activity/${activity.id}?type=current`} color="link" size="sm">
-                        {(currentPage - 1) * itemsPerPage + i + 1}
+                      <Button tag={Link} to={`/activity/${activity.id}`} color="link" size="sm">
+                        {activity.id}
                       </Button>
                     </td>
                     <td>{activity.activityName}</td>
@@ -230,29 +239,42 @@ export const Activity = () => {
                     <td>{activity.duration}</td>
                     <td>{activity.venue}</td>
                     <td>{activity.details}</td>
+                    <td>{activity.createdBy}</td>
                     <td>
-                      {activity.skill ? (
-                        <Link to={`/skill/${activity.skill.id}`}>{currentSkills[activity.skill.id] || 'Loading...'}</Link>
+                      {activity.createdDate ? <TextFormat type="date" value={activity.createdDate} format={APP_DATE_FORMAT} /> : null}
+                    </td>
+                    <td>{activity.lastModifiedBy}</td>
+                    <td>
+                      {activity.lastModifiedDate ? (
+                        <TextFormat type="date" value={activity.lastModifiedDate} format={APP_DATE_FORMAT} />
+                      ) : null}
+                    </td>
+                    <td>
+                      {activity.creatorProfile ? (
+                        <Link to={`/user-profile/${activity.creatorProfile.id}`}>{activity.creatorProfile.id}</Link>
                       ) : (
                         ''
                       )}
                     </td>
+                    <td>{activity.skill ? <Link to={`/skill/${activity.skill.id}`}>{activity.skill.id}</Link> : ''}</td>
                     <td className="text-end">
                       <div className="btn-group flex-btn-group-container">
-                        <Button
-                          tag={Link}
-                          to={`/activity/${activity.id}?type=current`}
-                          color="info"
-                          size="sm"
-                          data-cy="entityDetailsButton"
-                        >
+                        <Button tag={Link} to={`/activity/${activity.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                           <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                         </Button>
-                        <Button tag={Link} to={`/activity/${activity.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
+                        <Button
+                          tag={Link}
+                          to={`/activity/${activity.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                          color="primary"
+                          size="sm"
+                          data-cy="entityEditButton"
+                        >
                           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                         </Button>
                         <Button
-                          onClick={() => (window.location.href = `/activity/${activity.id}/delete`)}
+                          onClick={() =>
+                            (window.location.href = `/activity/${activity.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
                           color="danger"
                           size="sm"
                           data-cy="entityDeleteButton"
@@ -269,122 +291,27 @@ export const Activity = () => {
             !loading && <div className="alert alert-warning">No Activities found</div>
           )}
         </div>
-        <Pagination className="justify-content-center d-flex">
-          <PaginationItem disabled={currentPage === 1}>
-            <PaginationLink previous onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}></PaginationLink>
-          </PaginationItem>
-
-          {[...Array(Math.ceil(currentActivities.length / itemsPerPage)).keys()].map(pageNumber => (
-            <PaginationItem key={pageNumber} active={pageNumber + 1 === currentPage}>
-              <PaginationLink onClick={() => setCurrentPage(pageNumber + 1)}>{pageNumber + 1}</PaginationLink>
-            </PaginationItem>
-          ))}
-
-          <PaginationItem disabled={currentPage === Math.ceil(currentActivities.length / itemsPerPage)}>
-            <PaginationLink
-              next
-              onClick={() =>
-                setCurrentPage(currentPage < Math.ceil(currentActivities.length / itemsPerPage) ? currentPage + 1 : currentPage)
-              }
-            ></PaginationLink>
-          </PaginationItem>
-        </Pagination>
+        {totalItems ? (
+          <div className={activityList && activityList.length > 0 ? '' : 'd-none'}>
+            <div className="justify-content-center d-flex">
+              <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
+            </div>
+            <div className="justify-content-center d-flex">
+              <JhiPagination
+                activePage={paginationState.activePage}
+                onSelect={handlePagination}
+                maxButtons={5}
+                itemsPerPage={paginationState.itemsPerPage}
+                totalItems={totalItems}
+              />
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
-      <div className="past-activities border border-5 p-3 mx-2 my-5">
-        <h3>Past Activities</h3>
-        <div className="table-responsive">
-          {pastPageActivities.length > 0 ? (
-            <Table responsive bordered>
-              <thead>
-                <tr>
-                  <th>S/No</th>
-                  <th className="hand" onClick={sort('activityName')}>
-                    Activity Name <FontAwesomeIcon icon={getSortIconByFieldName('activityName')} />
-                  </th>
-                  <th className="hand" onClick={sort('activityTime')}>
-                    Activity Time <FontAwesomeIcon icon={getSortIconByFieldName('activityTime')} />
-                  </th>
-                  <th className="hand" onClick={sort('duration')}>
-                    Duration <FontAwesomeIcon icon={getSortIconByFieldName('duration')} />
-                  </th>
-                  <th className="hand" onClick={sort('venue')}>
-                    Venue <FontAwesomeIcon icon={getSortIconByFieldName('venue')} />
-                  </th>
-                  <th className="hand" onClick={sort('details')}>
-                    Details <FontAwesomeIcon icon={getSortIconByFieldName('details')} />
-                  </th>
-                  <th>
-                    Skill <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {pastPageActivities.map((activity, i) => (
-                  <tr key={`entity-${i}`} data-cy="entityTable">
-                    <td>
-                      <Button
-                        tag={Link}
-                        to={{
-                          pathname: `/activity/${activity.id}`,
-                          state: { isCurrent: false },
-                        }}
-                        color="link"
-                        size="sm"
-                      >
-                        {(currentPage - 1) * itemsPerPage + i + 1}
-                      </Button>
-                    </td>
-                    <td>{activity.activityName}</td>
-                    <td>
-                      {activity.activityTime ? <TextFormat type="date" value={activity.activityTime} format={APP_DATE_FORMAT} /> : null}
-                    </td>
-                    <td>{activity.duration}</td>
-                    <td>{activity.venue}</td>
-                    <td>{activity.details}</td>
-                    <td>
-                      {activity.skill ? (
-                        <Link to={`/skill/${activity.skill.id}`}>{pastSkills[activity.skill.id] || 'Loading...'}</Link>
-                      ) : (
-                        ''
-                      )}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group flex-btn-group-container">
-                        <Button tag={Link} to={`/activity/${activity.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                          <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          ) : (
-            !loading && <div className="alert alert-warning">No Activities found</div>
-          )}
-        </div>
-        <Pagination className="justify-content-center d-flex">
-          <PaginationItem disabled={currentPage === 1}>
-            <PaginationLink previous onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}></PaginationLink>
-          </PaginationItem>
-
-          {[...Array(Math.ceil(pastActivities.length / itemsPerPage)).keys()].map(pageNumber => (
-            <PaginationItem key={pageNumber} active={pageNumber + 1 === currentPage}>
-              <PaginationLink onClick={() => setCurrentPage(pageNumber + 1)}>{pageNumber + 1}</PaginationLink>
-            </PaginationItem>
-          ))}
-
-          <PaginationItem disabled={currentPage === Math.ceil(pastActivities.length / itemsPerPage)}>
-            <PaginationLink
-              next
-              onClick={() => setCurrentPage(currentPage < Math.ceil(pastActivities.length / itemsPerPage) ? currentPage + 1 : currentPage)}
-            ></PaginationLink>
-          </PaginationItem>
-        </Pagination>
-      </div>
-    </div>
-  );
+    );
+  };
 };
 
 export default Activity;

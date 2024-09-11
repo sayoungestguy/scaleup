@@ -7,8 +7,6 @@ import com.teamsixnus.scaleup.service.mapper.CodeTablesMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,18 +73,6 @@ public class CodeTablesService {
             })
             .map(codeTablesRepository::save)
             .map(codeTablesMapper::toDto);
-    }
-
-    /**
-     * Get all the codeTables.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<CodeTablesDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all CodeTables");
-        return codeTablesRepository.findAll(pageable).map(codeTablesMapper::toDto);
     }
 
     /**

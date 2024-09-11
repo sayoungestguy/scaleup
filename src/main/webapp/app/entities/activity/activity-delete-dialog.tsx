@@ -25,7 +25,7 @@ export const ActivityDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.activity.updateSuccess);
 
   const handleClose = () => {
-    navigate('/activity');
+    navigate('/activity' + pageLocation.search);
   };
 
   useEffect(() => {

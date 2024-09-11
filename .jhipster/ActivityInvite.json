@@ -45,8 +45,9 @@
       "readonly": true
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "ActivityInvite",
-  "pagination": "infinite-scroll",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "activity",

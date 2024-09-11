@@ -28,11 +28,13 @@ export const MessageUpdate = () => {
   const updateSuccess = useAppSelector(state => state.message.updateSuccess);
 
   const handleClose = () => {
-    navigate('/message');
+    navigate('/message' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
 

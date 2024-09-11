@@ -45,6 +45,10 @@ export const UserProfileDetail = () => {
           </dt>
           <dd>{userProfileEntity.profilePicture}</dd>
           <dt>
+            <span id="socialLinks">Social Links</span>
+          </dt>
+          <dd>{userProfileEntity.socialLinks}</dd>
+          <dt>
             <span id="createdBy">Created By</span>
           </dt>
           <dd>{userProfileEntity.createdBy}</dd>

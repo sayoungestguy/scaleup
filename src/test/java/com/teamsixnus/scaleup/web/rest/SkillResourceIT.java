@@ -188,6 +188,114 @@
 //
 //    @Test
 //    @Transactional
+//    void getSkillsByIdFiltering() throws Exception {
+//        // Initialize the database
+//        insertedSkill = skillRepository.saveAndFlush(skill);
+//
+//        Long id = skill.getId();
+//
+//        defaultSkillFiltering("id.equals=" + id, "id.notEquals=" + id);
+//
+//        defaultSkillFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+//
+//        defaultSkillFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllSkillsBySkillNameIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        insertedSkill = skillRepository.saveAndFlush(skill);
+//
+//        // Get all the skillList where skillName equals to
+//        defaultSkillFiltering("skillName.equals=" + DEFAULT_SKILL_NAME, "skillName.equals=" + UPDATED_SKILL_NAME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllSkillsBySkillNameIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        insertedSkill = skillRepository.saveAndFlush(skill);
+//
+//        // Get all the skillList where skillName in
+//        defaultSkillFiltering("skillName.in=" + DEFAULT_SKILL_NAME + "," + UPDATED_SKILL_NAME, "skillName.in=" + UPDATED_SKILL_NAME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllSkillsBySkillNameIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        insertedSkill = skillRepository.saveAndFlush(skill);
+//
+//        // Get all the skillList where skillName is not null
+//        defaultSkillFiltering("skillName.specified=true", "skillName.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllSkillsBySkillNameContainsSomething() throws Exception {
+//        // Initialize the database
+//        insertedSkill = skillRepository.saveAndFlush(skill);
+//
+//        // Get all the skillList where skillName contains
+//        defaultSkillFiltering("skillName.contains=" + DEFAULT_SKILL_NAME, "skillName.contains=" + UPDATED_SKILL_NAME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllSkillsBySkillNameNotContainsSomething() throws Exception {
+//        // Initialize the database
+//        insertedSkill = skillRepository.saveAndFlush(skill);
+//
+//        // Get all the skillList where skillName does not contain
+//        defaultSkillFiltering("skillName.doesNotContain=" + UPDATED_SKILL_NAME, "skillName.doesNotContain=" + DEFAULT_SKILL_NAME);
+//    }
+//
+//    private void defaultSkillFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+//        defaultSkillShouldBeFound(shouldBeFound);
+//        defaultSkillShouldNotBeFound(shouldNotBeFound);
+//    }
+//
+//    /**
+//     * Executes the search, and checks that the default entity is returned.
+//     */
+//    private void defaultSkillShouldBeFound(String filter) throws Exception {
+//        restSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(jsonPath("$.[*].id").value(hasItem(skill.getId().intValue())))
+//            .andExpect(jsonPath("$.[*].skillName").value(hasItem(DEFAULT_SKILL_NAME)));
+//
+//        // Check, that the count call also returns 1
+//        restSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(content().string("1"));
+//    }
+//
+//    /**
+//     * Executes the search, and checks that the default entity is not returned.
+//     */
+//    private void defaultSkillShouldNotBeFound(String filter) throws Exception {
+//        restSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(jsonPath("$").isArray())
+//            .andExpect(jsonPath("$").isEmpty());
+//
+//        // Check, that the count call also returns 0
+//        restSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(content().string("0"));
+//    }
+//
+//    @Test
+//    @Transactional
 //    void getNonExistingSkill() throws Exception {
 //        // Get the skill
 //        restSkillMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
@@ -290,8 +398,6 @@
 //        // Update the skill using partial update
 //        Skill partialUpdatedSkill = new Skill();
 //        partialUpdatedSkill.setId(skill.getId());
-//
-//        partialUpdatedSkill.skillName(UPDATED_SKILL_NAME);
 //
 //        restSkillMockMvc
 //            .perform(

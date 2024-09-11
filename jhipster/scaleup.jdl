@@ -80,5 +80,6 @@ relationship ManyToOne {
 
 dto * with mapstruct
 service * with serviceClass
-paginate UserProfile, Skill, UserSkill, Message, Activity, ActivityInvite, Notification, CodeTables with infinite-scroll
+filter *
+paginate UserProfile, Skill, UserSkill, Message, Activity, ActivityInvite, Notification, CodeTables with pagination
 

@@ -181,6 +181,216 @@ class CodeTablesResourceIT {
 
     @Test
     @Transactional
+    void getCodeTablesByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        Long id = codeTables.getId();
+
+        defaultCodeTablesFiltering("id.equals=" + id, "id.notEquals=" + id);
+
+        defaultCodeTablesFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+
+        defaultCodeTablesFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where category equals to
+        defaultCodeTablesFiltering("category.equals=" + DEFAULT_CATEGORY, "category.equals=" + UPDATED_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCategoryIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where category in
+        defaultCodeTablesFiltering("category.in=" + DEFAULT_CATEGORY + "," + UPDATED_CATEGORY, "category.in=" + UPDATED_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCategoryIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where category is not null
+        defaultCodeTablesFiltering("category.specified=true", "category.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCategoryContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where category contains
+        defaultCodeTablesFiltering("category.contains=" + DEFAULT_CATEGORY, "category.contains=" + UPDATED_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCategoryNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where category does not contain
+        defaultCodeTablesFiltering("category.doesNotContain=" + UPDATED_CATEGORY, "category.doesNotContain=" + DEFAULT_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeKeyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeKey equals to
+        defaultCodeTablesFiltering("codeKey.equals=" + DEFAULT_CODE_KEY, "codeKey.equals=" + UPDATED_CODE_KEY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeKeyIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeKey in
+        defaultCodeTablesFiltering("codeKey.in=" + DEFAULT_CODE_KEY + "," + UPDATED_CODE_KEY, "codeKey.in=" + UPDATED_CODE_KEY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeKeyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeKey is not null
+        defaultCodeTablesFiltering("codeKey.specified=true", "codeKey.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeKeyContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeKey contains
+        defaultCodeTablesFiltering("codeKey.contains=" + DEFAULT_CODE_KEY, "codeKey.contains=" + UPDATED_CODE_KEY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeKeyNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeKey does not contain
+        defaultCodeTablesFiltering("codeKey.doesNotContain=" + UPDATED_CODE_KEY, "codeKey.doesNotContain=" + DEFAULT_CODE_KEY);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeValue equals to
+        defaultCodeTablesFiltering("codeValue.equals=" + DEFAULT_CODE_VALUE, "codeValue.equals=" + UPDATED_CODE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeValue in
+        defaultCodeTablesFiltering("codeValue.in=" + DEFAULT_CODE_VALUE + "," + UPDATED_CODE_VALUE, "codeValue.in=" + UPDATED_CODE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeValue is not null
+        defaultCodeTablesFiltering("codeValue.specified=true", "codeValue.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeValueContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeValue contains
+        defaultCodeTablesFiltering("codeValue.contains=" + DEFAULT_CODE_VALUE, "codeValue.contains=" + UPDATED_CODE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllCodeTablesByCodeValueNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCodeTables = codeTablesRepository.saveAndFlush(codeTables);
+
+        // Get all the codeTablesList where codeValue does not contain
+        defaultCodeTablesFiltering("codeValue.doesNotContain=" + UPDATED_CODE_VALUE, "codeValue.doesNotContain=" + DEFAULT_CODE_VALUE);
+    }
+
+    private void defaultCodeTablesFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultCodeTablesShouldBeFound(shouldBeFound);
+        defaultCodeTablesShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultCodeTablesShouldBeFound(String filter) throws Exception {
+        restCodeTablesMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(codeTables.getId().intValue())))
+            .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
+            .andExpect(jsonPath("$.[*].codeKey").value(hasItem(DEFAULT_CODE_KEY)))
+            .andExpect(jsonPath("$.[*].codeValue").value(hasItem(DEFAULT_CODE_VALUE)));
+
+        // Check, that the count call also returns 1
+        restCodeTablesMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultCodeTablesShouldNotBeFound(String filter) throws Exception {
+        restCodeTablesMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCodeTablesMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingCodeTables() throws Exception {
         // Get the codeTables
         restCodeTablesMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
@@ -288,7 +498,7 @@ class CodeTablesResourceIT {
         CodeTables partialUpdatedCodeTables = new CodeTables();
         partialUpdatedCodeTables.setId(codeTables.getId());
 
-        partialUpdatedCodeTables.codeKey(UPDATED_CODE_KEY).codeValue(UPDATED_CODE_VALUE);
+        partialUpdatedCodeTables.codeValue(UPDATED_CODE_VALUE);
 
         restCodeTablesMockMvc
             .perform(

@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.ActivityInviteRepository;
+import com.teamsixnus.scaleup.service.ActivityInviteQueryService;
 import com.teamsixnus.scaleup.service.ActivityInviteService;
+import com.teamsixnus.scaleup.service.criteria.ActivityInviteCriteria;
 import com.teamsixnus.scaleup.service.dto.ActivityInviteDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -40,9 +42,16 @@ public class ActivityInviteResource {
 
     private final ActivityInviteRepository activityInviteRepository;
 
-    public ActivityInviteResource(ActivityInviteService activityInviteService, ActivityInviteRepository activityInviteRepository) {
+    private final ActivityInviteQueryService activityInviteQueryService;
+
+    public ActivityInviteResource(
+        ActivityInviteService activityInviteService,
+        ActivityInviteRepository activityInviteRepository,
+        ActivityInviteQueryService activityInviteQueryService
+    ) {
         this.activityInviteService = activityInviteService;
         this.activityInviteRepository = activityInviteRepository;
+        this.activityInviteQueryService = activityInviteQueryService;
     }
 
     /**
@@ -138,16 +147,31 @@ public class ActivityInviteResource {
      * {@code GET  /activity-invites} : get all the activityInvites.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of activityInvites in body.
      */
     @GetMapping("")
     public ResponseEntity<List<ActivityInviteDTO>> getAllActivityInvites(
+        ActivityInviteCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get a page of ActivityInvites");
-        Page<ActivityInviteDTO> page = activityInviteService.findAll(pageable);
+        log.debug("REST request to get ActivityInvites by criteria: {}", criteria);
+
+        Page<ActivityInviteDTO> page = activityInviteQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /activity-invites/count} : count all the activityInvites.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countActivityInvites(ActivityInviteCriteria criteria) {
+        log.debug("REST request to count ActivityInvites by criteria: {}", criteria);
+        return ResponseEntity.ok().body(activityInviteQueryService.countByCriteria(criteria));
     }
 
     /**
