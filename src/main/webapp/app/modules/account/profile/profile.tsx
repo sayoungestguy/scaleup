@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import { getPaginationState } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities, reset } from './user-profile.reducer';
-import { getEntityByUsername } from './user-profile.reducer';
+import { getEntityByUsername, getEntity } from './user-profile.reducer';
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
@@ -22,11 +22,15 @@ export const ProfilePage = () => {
   const updateSuccess = useAppSelector(state => state.userProfile.updateSuccess);
 
   // Fetch user profile by username from the URL
+  // useEffect(() => {
+  //   if (username) {
+  //     dispatch(getEntityByUsername(username));
+  //   }
+  // }, [username]);
+
   useEffect(() => {
-    if (username) {
-      dispatch(getEntityByUsername(username));
-    }
-  }, [username]);
+    dispatch(getEntity(username));
+  }, []);
 
   const userProfileEntity = useAppSelector(state => state.userProfile.entity); // Get the fetched user profile entity
 
