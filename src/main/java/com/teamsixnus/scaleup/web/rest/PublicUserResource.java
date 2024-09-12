@@ -3,7 +3,6 @@ package com.teamsixnus.scaleup.web.rest;
 import com.teamsixnus.scaleup.service.UserService;
 import com.teamsixnus.scaleup.service.dto.UserDTO;
 import java.util.*;
-import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -49,6 +48,15 @@ public class PublicUserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+    // //added service method
+    // @GetMapping("/account/profile/{login}")
+    // public ResponseEntity<UserDTO> getUserProfileByLogin(@PathVariable String login) {
+    //     log.debug("REST request to get User profile by login: {}", login);
+    //     Optional<UserDTO> userDTO = userService.getUserProfileByLogin(login);
+    //     return userDTO.map(response -> ResponseEntity.ok().body(response))
+    //                   .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    // }
 
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);

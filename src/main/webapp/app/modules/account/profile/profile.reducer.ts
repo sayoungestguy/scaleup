@@ -29,6 +29,15 @@ export const getEntities = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
+export const getEntityByUsername = createAsyncThunk(
+  'userProfile/fetch_entity_by_username',
+  async (username: string) => {
+    const requestUrl = `${apiUrl}?username=${username}`; // Adjust the URL to query by username
+    return axios.get<IUserProfile>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
 export const getEntity = createAsyncThunk(
   'userProfile/fetch_entity',
   async (id: string | number) => {
@@ -82,6 +91,11 @@ export const ProfileSlice = createEntitySlice({
         state.loading = false;
         state.entity = action.payload.data;
       })
+      .addCase(getEntityByUsername.fulfilled, (state, action) => {
+        // Handling the new action
+        state.loading = false;
+        state.entity = action.payload.data;
+      })
       .addCase(deleteEntity.fulfilled, state => {
         state.updating = false;
         state.updateSuccess = true;
@@ -106,6 +120,12 @@ export const ProfileSlice = createEntitySlice({
         state.entity = action.payload.data;
       })
       .addMatcher(isPending(getEntities, getEntity), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.loading = true;
+      })
+      .addMatcher(isPending(getEntities, getEntityByUsername), state => {
+        // Handle pending state for getEntityByUsername
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;

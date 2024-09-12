@@ -1,48 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
-import { Translate, TextFormat, getPaginationState } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { useLocation, useParams } from 'react-router-dom';
+import { Button } from 'reactstrap';
+import { getPaginationState } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
 import { getEntities, reset } from './profile.reducer';
-import { getEntity, getEntityByUsername } from './user-profile.reducer';
+import { getEntityByUsername } from './user-profile.reducer';
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
-  const account = useAppSelector(state => state.authentication.account); //To fetch the account name
-  const userProfileEntity = useAppSelector(state => state.userProfile.entity); // Get the fetched user profile entity
-  const { username } = useParams(); // Get the username from the URL
-
-  const successMessage = useAppSelector(state => state.settings.successMessage);
+  const account = useAppSelector(state => state.authentication.account); // To fetch the account name
+  const loading = useAppSelector(state => state.userProfile.loading); // Get the loading state
+  const { username } = useParams<'username'>(); // Get the username from the URL
 
   const pageLocation = useLocation();
 
-  const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
-  );
+  const [paginationState, setPaginationState] = useState(getPaginationState(pageLocation, 20, 'id'));
   const [sorting, setSorting] = useState(false);
 
   const userProfileList = useAppSelector(state => state.userProfile.entities);
-  const loading = useAppSelector(state => state.userProfile.loading);
   const links = useAppSelector(state => state.userProfile.links);
   const updateSuccess = useAppSelector(state => state.userProfile.updateSuccess);
 
-  const getAllEntities = () => {
-    dispatch(
-      getEntities({
-        page: paginationState.activePage - 1,
-        size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
-      }),
-    );
-  };
+  // Fetch user profile by username from the URL
+  useEffect(() => {
+    if (username) {
+      dispatch(getEntityByUsername(username));
+    }
+  }, [username]);
 
+  const userProfileEntity = useAppSelector(state => state.userProfile.entity); // Get the fetched user profile entity
+
+  // Check the fetched data in the console (optional, for debugging purposes)
+  useEffect(() => {
+    console.log('Fetched user profile entity:', userProfileEntity);
+  }, [userProfileEntity]);
+
+  // Reset all pagination state and refetch entities
   const resetAll = () => {
     dispatch(reset());
     setPaginationState({
@@ -51,21 +44,6 @@ export const ProfilePage = () => {
     });
     dispatch(getEntities({}));
   };
-
-  // Checking API fetching payload and state delete later
-
-  useEffect(() => {
-    console.log('User profile entity:', userProfileEntity); // Check the state for the fetched entity
-  }, [userProfileEntity]);
-
-  useEffect(() => {
-    if (username) {
-      dispatch(getEntityByUsername(username)).then(response => {
-        console.log((response.payload as any).data); // Log the response to check if data is being fetched
-      });
-    }
-  }, [username]);
-  // *****************************************************************************************************
 
   useEffect(() => {
     resetAll();
@@ -78,11 +56,17 @@ export const ProfilePage = () => {
   }, [updateSuccess]);
 
   useEffect(() => {
-    getAllEntities();
+    dispatch(
+      getEntities({
+        page: paginationState.activePage - 1,
+        size: paginationState.itemsPerPage,
+        sort: `${paginationState.sort},${paginationState.order}`,
+      }),
+    );
   }, [paginationState.activePage]);
 
   const handleLoadMore = () => {
-    if ((window as any).pageYOffset > 0) {
+    if (window.pageYOffset > 0) {
       setPaginationState({
         ...paginationState,
         activePage: paginationState.activePage + 1,
@@ -92,7 +76,13 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (sorting) {
-      getAllEntities();
+      dispatch(
+        getEntities({
+          page: paginationState.activePage - 1,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`,
+        }),
+      );
       setSorting(false);
     }
   }, [sorting]);
@@ -102,24 +92,10 @@ export const ProfilePage = () => {
     setPaginationState({
       ...paginationState,
       activePage: 1,
-      order: paginationState.order === ASC ? DESC : ASC,
+      order: paginationState.order === 'ASC' ? 'DESC' : 'ASC',
       sort: p,
     });
     setSorting(true);
-  };
-
-  const handleSyncList = () => {
-    resetAll();
-  };
-
-  const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    } else {
-      return order === ASC ? faSortUp : faSortDown;
-    }
   };
 
   const [attainedSkills, setAttainedSkills] = useState(['.NET', 'Angular']);
@@ -181,14 +157,14 @@ export const ProfilePage = () => {
             />
             <h2>{username}</h2>
 
-            <p>
-              <strong>About Me:</strong> {userProfileEntity.aboutMe}
-            </p>
-            <p>
-              {userProfileEntity && userProfileEntity.user && userProfileEntity.user.login === username
-                ? userProfileEntity.aboutMe
-                : 'Loading...'}
-            </p>
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <p>
+                <strong>About Me:</strong> {userProfileEntity?.aboutMe || 'No profile data available'}
+              </p>
+            )}
+
             <div style={{ marginTop: '20px', textAlign: 'left' }}>
               <p>
                 <strong>Email:</strong> john.doe@example.com
@@ -217,19 +193,9 @@ export const ProfilePage = () => {
                 </a>
               </div>
             </div>
-            <button
-              style={{
-                backgroundColor: '#FF6347',
-                color: 'white',
-                border: 'none',
-                padding: '10px 20px',
-                cursor: 'pointer',
-                marginTop: '20px',
-                width: '100%',
-              }}
-            >
+            <Button color="danger" block>
               Edit Profile
-            </button>
+            </Button>
           </div>
 
           <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '20px' }}>
@@ -242,37 +208,16 @@ export const ProfilePage = () => {
                 placeholder="Type a Skill Here"
                 style={{ width: '100%', padding: '10px', marginBottom: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
               />
-              <button
-                style={{
-                  backgroundColor: '#FF6347',
-                  color: 'white',
-                  border: 'none',
-                  padding: '10px 20px',
-                  cursor: 'pointer',
-                  width: '100%',
-                  borderRadius: '5px',
-                }}
-                onClick={() => addSkill('attained')}
-              >
+              <Button color="primary" block onClick={() => addSkill('attained')}>
                 Add Skill
-              </button>
+              </Button>
               <ul style={{ paddingLeft: '20px', marginTop: '20px' }}>
                 {attainedSkills.map(skill => (
                   <li key={skill} style={{ margin: '10px 0', display: 'flex', justifyContent: 'space-between' }}>
                     <span>{skill}</span>
-                    <button
-                      style={{
-                        backgroundColor: '#FF6347',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        padding: '5px 10px',
-                      }}
-                      onClick={() => removeSkill('attained', skill)}
-                    >
+                    <Button color="danger" onClick={() => removeSkill('attained', skill)}>
                       Remove
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ul>
@@ -287,37 +232,16 @@ export const ProfilePage = () => {
                 placeholder="Type a Skill Here"
                 style={{ width: '100%', padding: '10px', marginBottom: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
               />
-              <button
-                style={{
-                  backgroundColor: '#FF6347',
-                  color: 'white',
-                  border: 'none',
-                  padding: '10px 20px',
-                  cursor: 'pointer',
-                  width: '100%',
-                  borderRadius: '5px',
-                }}
-                onClick={() => addSkill('goal')}
-              >
+              <Button color="primary" block onClick={() => addSkill('goal')}>
                 Add Skill
-              </button>
+              </Button>
               <ul style={{ paddingLeft: '20px', marginTop: '20px' }}>
                 {goalSkills.map(skill => (
                   <li key={skill} style={{ margin: '10px 0', display: 'flex', justifyContent: 'space-between' }}>
                     <span>{skill}</span>
-                    <button
-                      style={{
-                        backgroundColor: '#FF6347',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        padding: '5px 10px',
-                      }}
-                      onClick={() => removeSkill('goals', skill)}
-                    >
+                    <Button color="danger" onClick={() => removeSkill('goal', skill)}>
                       Remove
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ul>
