@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface UserSkillRepository extends JpaRepository<UserSkill, Long> {}
+public interface UserSkillRepository extends JpaRepository<UserSkill, Long>, JpaSpecificationExecutor<UserSkill> {}

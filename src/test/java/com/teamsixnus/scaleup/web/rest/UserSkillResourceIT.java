@@ -9,6 +9,9 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.teamsixnus.scaleup.IntegrationTest;
+//import com.teamsixnus.scaleup.domain.CodeTables;
+//import com.teamsixnus.scaleup.domain.Skill;
+//import com.teamsixnus.scaleup.domain.UserProfile;
 //import com.teamsixnus.scaleup.domain.UserSkill;
 //import com.teamsixnus.scaleup.repository.UserSkillRepository;
 //import com.teamsixnus.scaleup.service.dto.UserSkillDTO;
@@ -36,6 +39,7 @@
 //
 //    private static final Integer DEFAULT_YEARS_OF_EXPERIENCE = 1;
 //    private static final Integer UPDATED_YEARS_OF_EXPERIENCE = 2;
+//    private static final Integer SMALLER_YEARS_OF_EXPERIENCE = 1 - 1;
 //
 //    private static final String ENTITY_API_URL = "/api/user-skills";
 //    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -184,6 +188,218 @@
 //            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 //            .andExpect(jsonPath("$.id").value(userSkill.getId().intValue()))
 //            .andExpect(jsonPath("$.yearsOfExperience").value(DEFAULT_YEARS_OF_EXPERIENCE));
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getUserSkillsByIdFiltering() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        Long id = userSkill.getId();
+//
+//        defaultUserSkillFiltering("id.equals=" + id, "id.notEquals=" + id);
+//
+//        defaultUserSkillFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+//
+//        defaultUserSkillFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByYearsOfExperienceIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        // Get all the userSkillList where yearsOfExperience equals to
+//        defaultUserSkillFiltering(
+//            "yearsOfExperience.equals=" + DEFAULT_YEARS_OF_EXPERIENCE,
+//            "yearsOfExperience.equals=" + UPDATED_YEARS_OF_EXPERIENCE
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByYearsOfExperienceIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        // Get all the userSkillList where yearsOfExperience in
+//        defaultUserSkillFiltering(
+//            "yearsOfExperience.in=" + DEFAULT_YEARS_OF_EXPERIENCE + "," + UPDATED_YEARS_OF_EXPERIENCE,
+//            "yearsOfExperience.in=" + UPDATED_YEARS_OF_EXPERIENCE
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByYearsOfExperienceIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        // Get all the userSkillList where yearsOfExperience is not null
+//        defaultUserSkillFiltering("yearsOfExperience.specified=true", "yearsOfExperience.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByYearsOfExperienceIsGreaterThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        // Get all the userSkillList where yearsOfExperience is greater than or equal to
+//        defaultUserSkillFiltering(
+//            "yearsOfExperience.greaterThanOrEqual=" + DEFAULT_YEARS_OF_EXPERIENCE,
+//            "yearsOfExperience.greaterThanOrEqual=" + UPDATED_YEARS_OF_EXPERIENCE
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByYearsOfExperienceIsLessThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        // Get all the userSkillList where yearsOfExperience is less than or equal to
+//        defaultUserSkillFiltering(
+//            "yearsOfExperience.lessThanOrEqual=" + DEFAULT_YEARS_OF_EXPERIENCE,
+//            "yearsOfExperience.lessThanOrEqual=" + SMALLER_YEARS_OF_EXPERIENCE
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByYearsOfExperienceIsLessThanSomething() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        // Get all the userSkillList where yearsOfExperience is less than
+//        defaultUserSkillFiltering(
+//            "yearsOfExperience.lessThan=" + UPDATED_YEARS_OF_EXPERIENCE,
+//            "yearsOfExperience.lessThan=" + DEFAULT_YEARS_OF_EXPERIENCE
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByYearsOfExperienceIsGreaterThanSomething() throws Exception {
+//        // Initialize the database
+//        insertedUserSkill = userSkillRepository.saveAndFlush(userSkill);
+//
+//        // Get all the userSkillList where yearsOfExperience is greater than
+//        defaultUserSkillFiltering(
+//            "yearsOfExperience.greaterThan=" + SMALLER_YEARS_OF_EXPERIENCE,
+//            "yearsOfExperience.greaterThan=" + DEFAULT_YEARS_OF_EXPERIENCE
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsByUserProfileIsEqualToSomething() throws Exception {
+//        UserProfile userProfile;
+//        if (TestUtil.findAll(em, UserProfile.class).isEmpty()) {
+//            userSkillRepository.saveAndFlush(userSkill);
+//            userProfile = UserProfileResourceIT.createEntity(em);
+//        } else {
+//            userProfile = TestUtil.findAll(em, UserProfile.class).get(0);
+//        }
+//        em.persist(userProfile);
+//        em.flush();
+//        userSkill.setUserProfile(userProfile);
+//        userSkillRepository.saveAndFlush(userSkill);
+//        Long userProfileId = userProfile.getId();
+//        // Get all the userSkillList where userProfile equals to userProfileId
+//        defaultUserSkillShouldBeFound("userProfileId.equals=" + userProfileId);
+//
+//        // Get all the userSkillList where userProfile equals to (userProfileId + 1)
+//        defaultUserSkillShouldNotBeFound("userProfileId.equals=" + (userProfileId + 1));
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsBySkillIsEqualToSomething() throws Exception {
+//        Skill skill;
+//        if (TestUtil.findAll(em, Skill.class).isEmpty()) {
+//            userSkillRepository.saveAndFlush(userSkill);
+//            skill = SkillResourceIT.createEntity(em);
+//        } else {
+//            skill = TestUtil.findAll(em, Skill.class).get(0);
+//        }
+//        em.persist(skill);
+//        em.flush();
+//        userSkill.setSkill(skill);
+//        userSkillRepository.saveAndFlush(userSkill);
+//        Long skillId = skill.getId();
+//        // Get all the userSkillList where skill equals to skillId
+//        defaultUserSkillShouldBeFound("skillId.equals=" + skillId);
+//
+//        // Get all the userSkillList where skill equals to (skillId + 1)
+//        defaultUserSkillShouldNotBeFound("skillId.equals=" + (skillId + 1));
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllUserSkillsBySkillTypeIsEqualToSomething() throws Exception {
+//        CodeTables skillType;
+//        if (TestUtil.findAll(em, CodeTables.class).isEmpty()) {
+//            userSkillRepository.saveAndFlush(userSkill);
+//            skillType = CodeTablesResourceIT.createEntity(em);
+//        } else {
+//            skillType = TestUtil.findAll(em, CodeTables.class).get(0);
+//        }
+//        em.persist(skillType);
+//        em.flush();
+//        userSkill.setSkillType(skillType);
+//        userSkillRepository.saveAndFlush(userSkill);
+//        Long skillTypeId = skillType.getId();
+//        // Get all the userSkillList where skillType equals to skillTypeId
+//        defaultUserSkillShouldBeFound("skillTypeId.equals=" + skillTypeId);
+//
+//        // Get all the userSkillList where skillType equals to (skillTypeId + 1)
+//        defaultUserSkillShouldNotBeFound("skillTypeId.equals=" + (skillTypeId + 1));
+//    }
+//
+//    private void defaultUserSkillFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+//        defaultUserSkillShouldBeFound(shouldBeFound);
+//        defaultUserSkillShouldNotBeFound(shouldNotBeFound);
+//    }
+//
+//    /**
+//     * Executes the search, and checks that the default entity is returned.
+//     */
+//    private void defaultUserSkillShouldBeFound(String filter) throws Exception {
+//        restUserSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(jsonPath("$.[*].id").value(hasItem(userSkill.getId().intValue())))
+//            .andExpect(jsonPath("$.[*].yearsOfExperience").value(hasItem(DEFAULT_YEARS_OF_EXPERIENCE)));
+//
+//        // Check, that the count call also returns 1
+//        restUserSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(content().string("1"));
+//    }
+//
+//    /**
+//     * Executes the search, and checks that the default entity is not returned.
+//     */
+//    private void defaultUserSkillShouldNotBeFound(String filter) throws Exception {
+//        restUserSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(jsonPath("$").isArray())
+//            .andExpect(jsonPath("$").isEmpty());
+//
+//        // Check, that the count call also returns 0
+//        restUserSkillMockMvc
+//            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(content().string("0"));
 //    }
 //
 //    @Test

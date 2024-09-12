@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ActivityInviteRepository extends JpaRepository<ActivityInvite, Long> {}
+public interface ActivityInviteRepository extends JpaRepository<ActivityInvite, Long>, JpaSpecificationExecutor<ActivityInvite> {}

@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.ActivityRepository;
+import com.teamsixnus.scaleup.service.ActivityQueryService;
 import com.teamsixnus.scaleup.service.ActivityService;
+import com.teamsixnus.scaleup.service.criteria.ActivityCriteria;
 import com.teamsixnus.scaleup.service.dto.ActivityDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,16 @@ public class ActivityResource {
 
     private final ActivityRepository activityRepository;
 
-    public ActivityResource(ActivityService activityService, ActivityRepository activityRepository) {
+    private final ActivityQueryService activityQueryService;
+
+    public ActivityResource(
+        ActivityService activityService,
+        ActivityRepository activityRepository,
+        ActivityQueryService activityQueryService
+    ) {
         this.activityService = activityService;
         this.activityRepository = activityRepository;
+        this.activityQueryService = activityQueryService;
     }
 
     /**
@@ -139,14 +148,31 @@ public class ActivityResource {
      * {@code GET  /activities} : get all the activities.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of activities in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<ActivityDTO>> getAllActivities(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Activities");
-        Page<ActivityDTO> page = activityService.findAll(pageable);
+    public ResponseEntity<List<ActivityDTO>> getAllActivities(
+        ActivityCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get Activities by criteria: {}", criteria);
+
+        Page<ActivityDTO> page = activityQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /activities/count} : count all the activities.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countActivities(ActivityCriteria criteria) {
+        log.debug("REST request to count Activities by criteria: {}", criteria);
+        return ResponseEntity.ok().body(activityQueryService.countByCriteria(criteria));
     }
 
     /**

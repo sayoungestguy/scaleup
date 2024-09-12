@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.NotificationRepository;
+import com.teamsixnus.scaleup.service.NotificationQueryService;
 import com.teamsixnus.scaleup.service.NotificationService;
+import com.teamsixnus.scaleup.service.criteria.NotificationCriteria;
 import com.teamsixnus.scaleup.service.dto.NotificationDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -40,9 +42,16 @@ public class NotificationResource {
 
     private final NotificationRepository notificationRepository;
 
-    public NotificationResource(NotificationService notificationService, NotificationRepository notificationRepository) {
+    private final NotificationQueryService notificationQueryService;
+
+    public NotificationResource(
+        NotificationService notificationService,
+        NotificationRepository notificationRepository,
+        NotificationQueryService notificationQueryService
+    ) {
         this.notificationService = notificationService;
         this.notificationRepository = notificationRepository;
+        this.notificationQueryService = notificationQueryService;
     }
 
     /**
@@ -137,14 +146,31 @@ public class NotificationResource {
      * {@code GET  /notifications} : get all the notifications.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of notifications in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<NotificationDTO>> getAllNotifications(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Notifications");
-        Page<NotificationDTO> page = notificationService.findAll(pageable);
+    public ResponseEntity<List<NotificationDTO>> getAllNotifications(
+        NotificationCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get Notifications by criteria: {}", criteria);
+
+        Page<NotificationDTO> page = notificationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /notifications/count} : count all the notifications.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countNotifications(NotificationCriteria criteria) {
+        log.debug("REST request to count Notifications by criteria: {}", criteria);
+        return ResponseEntity.ok().body(notificationQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -52,7 +52,8 @@ public class UserProfileAsserts {
             .satisfies(e -> assertThat(e.getNickname()).as("check nickname").isEqualTo(actual.getNickname()))
             .satisfies(e -> assertThat(e.getJobRole()).as("check jobRole").isEqualTo(actual.getJobRole()))
             .satisfies(e -> assertThat(e.getAboutMe()).as("check aboutMe").isEqualTo(actual.getAboutMe()))
-            .satisfies(e -> assertThat(e.getProfilePicture()).as("check profilePicture").isEqualTo(actual.getProfilePicture()));
+            .satisfies(e -> assertThat(e.getProfilePicture()).as("check profilePicture").isEqualTo(actual.getProfilePicture()))
+            .satisfies(e -> assertThat(e.getSocialLinks()).as("check socialLinks").isEqualTo(actual.getSocialLinks()));
     }
 
     /**

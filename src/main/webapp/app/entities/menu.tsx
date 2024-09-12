@@ -6,9 +6,9 @@ const EntitiesMenu = () => {
   return (
     <>
       {/* prettier-ignore */}
-      <MenuItem icon="asterisk" to="/code-tables">
-        Code Tables
-      </MenuItem>
+      {/*<MenuItem icon="asterisk" to="/code-tables">*/}
+      {/*  Code Tables*/}
+      {/*</MenuItem>*/}
       <MenuItem icon="asterisk" to="/user-profile">
         User Profile
       </MenuItem>

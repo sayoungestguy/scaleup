@@ -31,11 +31,13 @@ export const NotificationUpdate = () => {
   const updateSuccess = useAppSelector(state => state.notification.updateSuccess);
 
   const handleClose = () => {
-    navigate('/notification');
+    navigate('/notification' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
 

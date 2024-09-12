@@ -25,7 +25,7 @@ export const ActivityInviteDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.activityInvite.updateSuccess);
 
   const handleClose = () => {
-    navigate('/activity-invite');
+    navigate('/activity-invite' + pageLocation.search);
   };
 
   useEffect(() => {

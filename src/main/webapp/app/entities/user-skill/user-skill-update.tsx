@@ -37,11 +37,13 @@ export const UserSkillUpdate = () => {
   const updateSuccess = useAppSelector(state => state.userSkill.updateSuccess);
 
   const handleClose = () => {
-    navigate('/user-skill');
+    navigate('/user-skill' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
 

@@ -34,11 +34,13 @@ export const ActivityInviteUpdate = () => {
   const updateSuccess = useAppSelector(state => state.activityInvite.updateSuccess);
 
   const handleClose = () => {
-    navigate('/activity-invite');
+    navigate('/activity-invite' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
 

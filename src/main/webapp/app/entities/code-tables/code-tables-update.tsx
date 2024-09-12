@@ -25,11 +25,13 @@ export const CodeTablesUpdate = () => {
   const updateSuccess = useAppSelector(state => state.codeTables.updateSuccess);
 
   const handleClose = () => {
-    navigate('/code-tables');
+    navigate('/code-tables' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
   }, []);
