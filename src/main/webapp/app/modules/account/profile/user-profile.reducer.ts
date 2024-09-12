@@ -18,8 +18,6 @@ const initialState: EntityState<IUserProfile> = {
 
 const apiUrl = 'api/user-profiles';
 
-//const apiUrl = 'api/account/profile';
-
 // Actions
 
 export const getEntities = createAsyncThunk(
@@ -43,7 +41,8 @@ export const getEntity = createAsyncThunk(
 export const getEntityByUsername = createAsyncThunk(
   'userProfile/fetch_entity_by_username',
   async (username: string) => {
-    const requestUrl = `${apiUrl}/${username}`;
+    const requestUrl = `${apiUrl}?username=${username}`; // Adjust the URL to query by username
+    //const requestUrl = `${apiUrl}/${username}`;
     return axios.get<IUserProfile>(requestUrl);
   },
   { serializeError: serializeAxiosError },

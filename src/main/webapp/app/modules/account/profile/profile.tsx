@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { getPaginationState } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntities, reset } from './profile.reducer';
+import { getEntities, reset } from './user-profile.reducer';
 import { getEntityByUsername } from './user-profile.reducer';
 
 export const ProfilePage = () => {

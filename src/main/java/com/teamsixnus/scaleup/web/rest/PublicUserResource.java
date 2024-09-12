@@ -49,15 +49,6 @@ public class PublicUserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    // //added service method
-    // @GetMapping("/account/profile/{login}")
-    // public ResponseEntity<UserDTO> getUserProfileByLogin(@PathVariable String login) {
-    //     log.debug("REST request to get User profile by login: {}", login);
-    //     Optional<UserDTO> userDTO = userService.getUserProfileByLogin(login);
-    //     return userDTO.map(response -> ResponseEntity.ok().body(response))
-    //                   .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    // }
-
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
     }
