@@ -40,7 +40,7 @@ export const createEntity = createAsyncThunk(
   'skill/create_entity',
   async (entity: ISkill, thunkAPI) => {
     const result = await axios.post<ISkill>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -50,7 +50,7 @@ export const updateEntity = createAsyncThunk(
   'skill/update_entity',
   async (entity: ISkill, thunkAPI) => {
     const result = await axios.put<ISkill>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -60,7 +60,7 @@ export const partialUpdateEntity = createAsyncThunk(
   'skill/partial_update_entity',
   async (entity: ISkill, thunkAPI) => {
     const result = await axios.patch<ISkill>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -71,7 +71,7 @@ export const deleteEntity = createAsyncThunk(
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<ISkill>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },

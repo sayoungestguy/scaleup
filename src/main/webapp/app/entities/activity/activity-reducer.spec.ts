@@ -5,7 +5,15 @@ import sinon from 'sinon';
 
 import { EntityState } from 'app/shared/reducers/reducer.utils';
 import { IActivity, defaultValue } from 'app/shared/model/activity.model';
-import reducer, { createEntity, deleteEntity, getEntities, getEntity, updateEntity, partialUpdateEntity, reset } from './activity.reducer';
+import reducer, {
+  createEntity,
+  deleteEntity,
+  getAllActivity,
+  getActivityById,
+  updateEntity,
+  partialUpdateEntity,
+  reset,
+} from './activity.reducer';
 
 describe('Entities reducer tests', () => {
   function isEmpty(element): boolean {
@@ -51,7 +59,7 @@ describe('Entities reducer tests', () => {
 
   describe('Requests', () => {
     it('should set state to loading', () => {
-      testMultipleTypes([getEntities.pending.type, getEntity.pending.type], {}, state => {
+      testMultipleTypes([getAllActivity.pending.type, getActivityById.pending.type], {}, state => {
         expect(state).toMatchObject({
           errorMessage: null,
           updateSuccess: false,
@@ -85,8 +93,8 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          getEntities.rejected.type,
-          getEntity.rejected.type,
+          getAllActivity.rejected.type,
+          getActivityById.rejected.type,
           createEntity.rejected.type,
           updateEntity.rejected.type,
           partialUpdateEntity.rejected.type,
@@ -112,7 +120,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }], headers: { 'x-total-count': 123 } };
       expect(
         reducer(undefined, {
-          type: getEntities.fulfilled.type,
+          type: getAllActivity.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -127,7 +135,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: { 1: 'fake1' } };
       expect(
         reducer(undefined, {
-          type: getEntity.fulfilled.type,
+          type: getActivityById.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -186,21 +194,21 @@ describe('Entities reducer tests', () => {
     it('dispatches FETCH_ACTIVITY_LIST actions', async () => {
       const arg = {};
 
-      const result = await getEntities(arg)(dispatch, getState, extra);
+      const result = await getAllActivity(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntities.fulfilled.match(result)).toBe(true);
+      expect(getAllActivity.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches FETCH_ACTIVITY actions', async () => {
       const arg = 42666;
 
-      const result = await getEntity(arg)(dispatch, getState, extra);
+      const result = await getActivityById(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntity.fulfilled.match(result)).toBe(true);
+      expect(getActivityById.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches CREATE_ACTIVITY actions', async () => {

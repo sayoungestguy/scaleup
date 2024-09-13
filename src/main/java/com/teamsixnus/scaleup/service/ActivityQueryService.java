@@ -3,18 +3,23 @@ package com.teamsixnus.scaleup.service;
 import com.teamsixnus.scaleup.domain.*; // for static metamodels
 import com.teamsixnus.scaleup.domain.Activity;
 import com.teamsixnus.scaleup.repository.ActivityRepository;
+import com.teamsixnus.scaleup.security.AuthoritiesConstants;
+import com.teamsixnus.scaleup.security.SecurityUtils;
 import com.teamsixnus.scaleup.service.criteria.ActivityCriteria;
 import com.teamsixnus.scaleup.service.dto.ActivityDTO;
 import com.teamsixnus.scaleup.service.mapper.ActivityMapper;
 import jakarta.persistence.criteria.JoinType;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.LongFilter;
 
 /**
  * Service for executing complex queries for {@link Activity} entities in the database.
@@ -31,10 +36,12 @@ public class ActivityQueryService extends QueryService<Activity> {
     private final ActivityRepository activityRepository;
 
     private final ActivityMapper activityMapper;
+    private final UserService userService;
 
-    public ActivityQueryService(ActivityRepository activityRepository, ActivityMapper activityMapper) {
+    public ActivityQueryService(ActivityRepository activityRepository, ActivityMapper activityMapper, UserService userService) {
         this.activityRepository = activityRepository;
         this.activityMapper = activityMapper;
+        this.userService = userService;
     }
 
     /**
@@ -46,6 +53,17 @@ public class ActivityQueryService extends QueryService<Activity> {
     @Transactional(readOnly = true)
     public Page<ActivityDTO> findByCriteria(ActivityCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
+        User currentUser = userService.getUserById().orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        boolean isAdmin = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN);
+        if (currentUser != null && !isAdmin) {
+            // Set the creatorProfileId in the criteria to match the current user
+            if (criteria == null) {
+                criteria = new ActivityCriteria();
+            }
+            LongFilter userFilter = new LongFilter();
+            userFilter.setEquals(currentUser.getId());
+            criteria.setCreatorProfileId(userFilter);
+        }
         final Specification<Activity> specification = createSpecification(criteria);
         return activityRepository.findAll(specification, page).map(activityMapper::toDto);
     }

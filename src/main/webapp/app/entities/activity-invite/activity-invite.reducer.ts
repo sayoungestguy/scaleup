@@ -20,8 +20,9 @@ const apiUrl = 'api/activity-invites';
 
 export const getEntities = createAsyncThunk(
   'activityInvite/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
+  async ({ query, page, size, sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+
     return axios.get<IActivityInvite[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },

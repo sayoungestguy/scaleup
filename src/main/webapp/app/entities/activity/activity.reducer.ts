@@ -20,8 +20,8 @@ const apiUrl = 'api/activities';
 
 export const getAllActivity = createAsyncThunk(
   'activity/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ query, page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}?${query ? `${query}&` : ''}${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
     return axios.get<IActivity[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -40,7 +40,7 @@ export const createEntity = createAsyncThunk(
   'activity/create_entity',
   async (entity: IActivity, thunkAPI) => {
     const result = await axios.post<IActivity>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivity({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -50,7 +50,7 @@ export const updateEntity = createAsyncThunk(
   'activity/update_entity',
   async (entity: IActivity, thunkAPI) => {
     const result = await axios.put<IActivity>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivity({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -60,7 +60,7 @@ export const partialUpdateEntity = createAsyncThunk(
   'activity/partial_update_entity',
   async (entity: IActivity, thunkAPI) => {
     const result = await axios.patch<IActivity>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivity({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -71,7 +71,7 @@ export const deleteEntity = createAsyncThunk(
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<IActivity>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivity({}));
     return result;
   },
   { serializeError: serializeAxiosError },

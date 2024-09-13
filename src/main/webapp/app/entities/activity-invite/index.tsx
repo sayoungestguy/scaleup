@@ -8,7 +8,7 @@ import ActivityInviteDetail from './activity-invite-detail';
 import ActivityInviteUpdate from './activity-invite-update';
 import ActivityInviteDeleteDialog from './activity-invite-delete-dialog';
 
-const ActivityInviteRoutes = () => (
+const ActivityInviteRoutes = (props: any) => (
   <ErrorBoundaryRoutes>
     <Route index element={<ActivityInvite />} />
     <Route path="new" element={<ActivityInviteUpdate />} />

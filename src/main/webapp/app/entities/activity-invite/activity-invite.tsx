@@ -21,13 +21,17 @@ export const ActivityInvite = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
+  const currentUser = useAppSelector(state => state.authentication.account);
+
   const activityInviteList = useAppSelector(state => state.activityInvite.entities);
   const loading = useAppSelector(state => state.activityInvite.loading);
   const totalItems = useAppSelector(state => state.activityInvite.totalItems);
 
+  //console.log(props.activityId);
   const getAllEntities = () => {
     dispatch(
       getEntities({
+        //query: `activityId.equals=${props.activityId}`,
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
         sort: `${paginationState.sort},${paginationState.order}`,
@@ -115,18 +119,7 @@ export const ActivityInvite = () => {
                 <th className="hand" onClick={sort('willParticipate')}>
                   Will Participate <FontAwesomeIcon icon={getSortIconByFieldName('willParticipate')} />
                 </th>
-                <th className="hand" onClick={sort('createdBy')}>
-                  Created By <FontAwesomeIcon icon={getSortIconByFieldName('createdBy')} />
-                </th>
-                <th className="hand" onClick={sort('createdDate')}>
-                  Created Date <FontAwesomeIcon icon={getSortIconByFieldName('createdDate')} />
-                </th>
-                <th className="hand" onClick={sort('lastModifiedBy')}>
-                  Last Modified By <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedBy')} />
-                </th>
-                <th className="hand" onClick={sort('lastModifiedDate')}>
-                  Last Modified Date <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
-                </th>
+
                 <th>
                   Activity <FontAwesomeIcon icon="sort" />
                 </th>
@@ -148,18 +141,6 @@ export const ActivityInvite = () => {
                     </Button>
                   </td>
                   <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
-                  <td>{activityInvite.createdBy}</td>
-                  <td>
-                    {activityInvite.createdDate ? (
-                      <TextFormat type="date" value={activityInvite.createdDate} format={APP_DATE_FORMAT} />
-                    ) : null}
-                  </td>
-                  <td>{activityInvite.lastModifiedBy}</td>
-                  <td>
-                    {activityInvite.lastModifiedDate ? (
-                      <TextFormat type="date" value={activityInvite.lastModifiedDate} format={APP_DATE_FORMAT} />
-                    ) : null}
-                  </td>
                   <td>
                     {activityInvite.activity ? (
                       <Link to={`/activity/${activityInvite.activity.id}`}>{activityInvite.activity.id}</Link>

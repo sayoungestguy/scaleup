@@ -15,6 +15,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getSkillById } from 'app/entities/skill/skill.reducer';
 import { getEntity } from 'app/entities/user-profile/user-profile.reducer';
+import ActivityInvite from 'app/entities/activity-invite';
 
 export const ActivityDetail = () => {
   const dispatch = useAppDispatch();
@@ -183,125 +184,8 @@ export const ActivityDetail = () => {
           )}
         </Col>
       </Row>
-      <Row className="p-5">
-        <div className="activity-invite-segment border border-2 border-black p-3">
-          <h4 id="activity-invite-heading" data-cy="ActivityInviteHeading">
-            Activity Invites
-            <div className="d-flex justify-content-end">
-              <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
-                <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
-              </Button>
-              <Link
-                to="/activity-invite/new"
-                className="btn btn-primary jh-create-entity"
-                id="jh-create-entity"
-                data-cy="entityCreateButton"
-              >
-                <FontAwesomeIcon icon="plus" />
-                &nbsp; Create a new Activity Invite
-              </Link>
-            </div>
-          </h4>
-          <div className="table-responsive">
-            <InfiniteScroll
-              dataLength={activityInviteList ? activityInviteList.length : 0}
-              next={handleLoadMore}
-              hasMore={paginationState.activePage - 1 < links.next}
-              loader={<div className="loader">Loading ...</div>}
-            >
-              {activityInviteList && activityInviteList.length > 0 ? (
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th className="hand" onClick={sort('id')}>
-                        ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                      </th>
-                      <th className="hand" onClick={sort('willParticipate')}>
-                        Will Participate <FontAwesomeIcon icon={getSortIconByFieldName('willParticipate')} />
-                      </th>
-
-                      <th>
-                        Activity <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        Invitee Profile <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        Status <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {activityInviteList.map((activityInvite, i) => (
-                      <tr key={`entity-${i}`} data-cy="entityTable">
-                        <td>
-                          <Button tag={Link} to={`/activity-invite/${activityInvite.id}`} color="link" size="sm">
-                            {activityInvite.id}
-                          </Button>
-                        </td>
-                        <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
-                        <td>
-                          {activityInvite.activity ? (
-                            <Link to={`/activity/${activityInvite.activity.id}`}>{activityInvite.activity.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {activityInvite.inviteeProfile ? (
-                            <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>{activityInvite.inviteeProfile.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {activityInvite.status ? (
-                            <Link to={`/code-tables/${activityInvite.status.id}`}>{activityInvite.status.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td className="text-end">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button
-                              tag={Link}
-                              to={`/activity-invite/${activityInvite.id}`}
-                              color="info"
-                              size="sm"
-                              data-cy="entityDetailsButton"
-                            >
-                              <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                            </Button>
-                            <Button
-                              tag={Link}
-                              to={`/activity-invite/${activityInvite.id}/edit`}
-                              color="primary"
-                              size="sm"
-                              data-cy="entityEditButton"
-                            >
-                              <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                            </Button>
-                            <Button
-                              onClick={() => (window.location.href = `/activity-invite/${activityInvite.id}/delete`)}
-                              color="danger"
-                              size="sm"
-                              data-cy="entityDeleteButton"
-                            >
-                              <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              ) : (
-                !loading && <div className="alert alert-warning">No Activity Invites found</div>
-              )}
-            </InfiniteScroll>
-          </div>
-        </div>
+      <Row>
+        <ActivityInvite />
       </Row>
     </>
   );
