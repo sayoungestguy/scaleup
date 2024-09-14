@@ -20,8 +20,8 @@ const apiUrl = 'api/user-skills';
 
 export const getEntities = createAsyncThunk(
   'userSkill/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ query, page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}?${query}${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}`;
     return axios.get<IUserSkill[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
