@@ -150,8 +150,8 @@ export const MessageUpdate = () => {
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                      <option value={otherEntity.user.id} key={otherEntity.user.id}>
+                        {otherEntity.user.id}
                       </option>
                     ))
                   : null}
@@ -166,8 +166,8 @@ export const MessageUpdate = () => {
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                      <option value={otherEntity.user.id} key={otherEntity.user.id}>
+                        {otherEntity.user.id}
                       </option>
                     ))
                   : null}
