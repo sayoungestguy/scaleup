@@ -99,7 +99,7 @@ export const MessageUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="message-id" label="ID" validate={{ required: true }} /> : null}
+              {!isNew ? <ValidatedField name="id" id="message-id" label="ID" readOnly validate={{ required: true }} /> : null}
               <ValidatedField
                 label="Content"
                 id="message-content"
@@ -110,7 +110,7 @@ export const MessageUpdate = () => {
                   required: { value: true, message: 'This field is required.' },
                 }}
               />
-              <ValidatedField
+              {/* <ValidatedField
                 label="Sent At"
                 id="message-sentAt"
                 name="sentAt"
@@ -120,32 +120,32 @@ export const MessageUpdate = () => {
                 validate={{
                   required: { value: true, message: 'This field is required.' },
                 }}
-              />
-              <ValidatedField label="Is Deleted" id="message-isDeleted" name="isDeleted" data-cy="isDeleted" check type="checkbox" />
-              <ValidatedField label="Created By" id="message-createdBy" name="createdBy" data-cy="createdBy" type="text" />
-              <ValidatedField
+              /> */}
+              {/* <ValidatedField label="Is Deleted" id="message-isDeleted" name="isDeleted" data-cy="isDeleted" check type="checkbox" /> */}
+              {/* <ValidatedField label="Created By" id="message-createdBy" name="createdBy" data-cy="createdBy" type="text" /> */}
+              {/* <ValidatedField
                 label="Created Date"
                 id="message-createdDate"
                 name="createdDate"
                 data-cy="createdDate"
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField
+              /> */}
+              {/* <ValidatedField
                 label="Last Modified By"
                 id="message-lastModifiedBy"
                 name="lastModifiedBy"
                 data-cy="lastModifiedBy"
                 type="text"
-              />
-              <ValidatedField
+              /> */}
+              {/* <ValidatedField
                 label="Last Modified Date"
                 id="message-lastModifiedDate"
                 name="lastModifiedDate"
                 data-cy="lastModifiedDate"
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
-              />
+              /> */}
               <ValidatedField id="message-senderProfile" name="senderProfile" data-cy="senderProfile" label="Sender Profile" type="select">
                 <option value="" key="0" />
                 {userProfiles

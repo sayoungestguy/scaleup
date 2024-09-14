@@ -1,7 +1,9 @@
 package com.teamsixnus.scaleup.web.rest;
 
+import com.teamsixnus.scaleup.domain.User;
 import com.teamsixnus.scaleup.repository.MessageRepository;
 import com.teamsixnus.scaleup.service.MessageService;
+import com.teamsixnus.scaleup.service.UserService; // Ensure this import matches your actual UserService package
 import com.teamsixnus.scaleup.service.dto.MessageDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -18,6 +20,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -42,9 +47,12 @@ public class MessageResource {
 
     private final MessageRepository messageRepository;
 
-    public MessageResource(MessageService messageService, MessageRepository messageRepository) {
+    private final UserService userService;
+
+    public MessageResource(MessageService messageService, MessageRepository messageRepository, UserService userService) {
         this.messageService = messageService;
         this.messageRepository = messageRepository;
+        this.userService = userService;
     }
 
     /**
@@ -141,13 +149,13 @@ public class MessageResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of messages in body.
      */
-    @GetMapping("")
-    public ResponseEntity<List<MessageDTO>> getAllMessages(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Messages");
-        Page<MessageDTO> page = messageService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
+    // @GetMapping("")
+    // public ResponseEntity<List<MessageDTO>> getAllMessages(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    //     log.debug("REST request to get a page of Messages");
+    //     Page<MessageDTO> page = messageService.findAll(pageable);
+    //     HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    //     return ResponseEntity.ok().headers(headers).body(page.getContent());
+    // }
 
     /**
      * {@code GET  /messages/:id} : get the "id" message.
@@ -175,5 +183,23 @@ public class MessageResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<MessageDTO>> getAllMessages(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Messages");
+
+        // Get the current user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Get the user details from the user service
+        User user = userService.getUserByLogin(username);
+        Long userId = user.getId();
+
+        // Fetch messages for the current user
+        Page<MessageDTO> page = messageService.findAllForUser(userId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }

@@ -90,6 +90,19 @@ public class MessageService {
     }
 
     /**
+     * Get all messages for a user.
+     *
+     * @param userId the ID of the user.
+     * @param pageable the pagination information.
+     * @return the list of messages.
+     */
+    @Transactional(readOnly = true)
+    public Page<MessageDTO> findAllForUser(Long userId, Pageable pageable) {
+        log.debug("Request to get all Messages for user : {}", userId);
+        return messageRepository.findBySenderProfileIdOrReceiverProfileId(userId, userId, pageable).map(messageMapper::toDto);
+    }
+
+    /**
      * Get one message by id.
      *
      * @param id the id of the entity.
