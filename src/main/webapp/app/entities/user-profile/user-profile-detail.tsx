@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
-import { TextFormat } from 'react-jhipster';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Button, Row, Col, Table } from 'reactstrap';
+import { getPaginationState, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
+import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
+import { getEntities } from '../../entities/user-skill/user-skill.reducer';
 import { getEntity } from './user-profile.reducer';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 
 export const UserProfileDetail = () => {
   const dispatch = useAppDispatch();
@@ -17,9 +20,84 @@ export const UserProfileDetail = () => {
 
   const { id } = useParams<'id'>();
 
+  const userSkillList = useAppSelector(state => state.userSkill.entities);
+
+  const pageLocation = useLocation();
+  const navigate = useNavigate();
+
+  const [paginationState, setPaginationState] = useState(
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
+  );
+
   useEffect(() => {
     dispatch(getEntity(id));
   }, []);
+
+  const getAllUserSkillsByUserId = () => {
+    dispatch(
+      getEntities({
+        query: `userProfileId.equals=${id}&skillTypeId.equals=3`,
+        //query: `skillTypeId.equals=4`,
+      }),
+    );
+  };
+
+  const sortEntities = () => {
+    getAllUserSkillsByUserId();
+    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
+    }
+  };
+
+  useEffect(() => {
+    sortEntities();
+  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(pageLocation.search);
+    const page = params.get('page');
+    const sort = params.get(SORT);
+    if (page && sort) {
+      const sortSplit = sort.split(',');
+      setPaginationState({
+        ...paginationState,
+        activePage: +page,
+        sort: sortSplit[0],
+        order: sortSplit[1],
+      });
+    }
+  }, [pageLocation.search]);
+
+  const sort = p => () => {
+    setPaginationState({
+      ...paginationState,
+      order: paginationState.order === ASC ? DESC : ASC,
+      sort: p,
+    });
+  };
+
+  const handlePagination = currentPage =>
+    setPaginationState({
+      ...paginationState,
+      activePage: currentPage,
+    });
+
+  const handleSyncList = () => {
+    sortEntities();
+  };
+
+  const getSortIconByFieldName = (fieldName: string) => {
+    const sortFieldName = paginationState.sort;
+    const order = paginationState.order;
+    if (sortFieldName !== fieldName) {
+      return faSort;
+    } else {
+      return order === ASC ? faSortUp : faSortDown;
+    }
+  };
+
+  const userSkillEntity = useAppSelector(state => state.userSkill.entity);
 
   const userProfileEntity = useAppSelector(state => state.userProfile.entity);
 
@@ -132,7 +210,7 @@ export const UserProfileDetail = () => {
           <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '20px' }}>
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <h3 style={{ marginBottom: '20px' }}>Skills Attained</h3>
-              <input
+              {/* <input
                 type="text"
                 value={newAttainedSkill}
                 onChange={e => setNewAttainedSkill(e.target.value)}
@@ -151,7 +229,85 @@ export const UserProfileDetail = () => {
                     </Button>
                   </li>
                 ))}
-              </ul>
+              </ul> */}
+
+              <div className="table-responsive">
+                {userSkillList && userSkillList.length > 0 ? (
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th className="hand" onClick={sort('id')}>
+                          ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                        </th>
+                        <th className="hand" onClick={sort('yearsOfExperience')}>
+                          Years Of Experience <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
+                        </th>
+                        <th>
+                          User Profile <FontAwesomeIcon icon="sort" />
+                        </th>
+                        <th>
+                          Skill <FontAwesomeIcon icon="sort" />
+                        </th>
+                        <th>
+                          Skill Type <FontAwesomeIcon icon="sort" />
+                        </th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {userSkillList.map((userSkill, i) => (
+                        <tr key={`entity-${i}`} data-cy="entityTable">
+                          <td>
+                            <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
+                              {userSkill.id}
+                            </Button>
+                          </td>
+                          <td>{userSkill.yearsOfExperience}</td>
+                          <td>
+                            {userSkill.userProfile ? (
+                              <Link to={`/user-profile/${userSkill.userProfile.id}`}>{userSkill.userProfile.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                          <td>{userSkill.skill ? <Link to={`/skill/${userSkill.skill.id}`}>{userSkill.skill.id}</Link> : ''}</td>
+                          <td>
+                            {userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}
+                          </td>
+                          <td className="text-end">
+                            <div className="btn-group flex-btn-group-container">
+                              <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                              </Button>
+                              <Button
+                                tag={Link}
+                                to={`/user-skill/${userSkill.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                                color="primary"
+                                size="sm"
+                                data-cy="entityEditButton"
+                              >
+                                <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                              </Button>
+                              <Button
+                                onClick={() =>
+                                  (window.location.href = `/user-skill/${userSkill.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                                }
+                                color="danger"
+                                size="sm"
+                                data-cy="entityDeleteButton"
+                              >
+                                <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                ) : (
+                  !loading && <div className="alert alert-warning">No User Skills found</div>
+                )}
+              </div>
             </div>
 
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
