@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
-import { useAppSelector } from 'app/config/store'; // Import the selector to get account
+import { useAppDispatch, useAppSelector } from 'app/config/store'; // Import the selector to get account
 
 import { NavDropdown } from './menu-components';
+import { getEntityByCreatedBy } from 'app/modules/account/profile/user-profile.reducer';
 
 const accountMenuItemsAuthenticated = () => {
+  const dispatch = useAppDispatch();
   const account = useAppSelector(state => state.authentication.account); // Get account information
+
+  useEffect(() => {
+    dispatch(
+      getEntityByCreatedBy({
+        query: `createdBy.equals=${account.login}`,
+      }),
+    );
+  }, []);
+
+  const userProfileEntity = useAppSelector(state => state.userProfile.entity);
 
   return (
     <>
       <MenuItem icon="asterisk" to={`/account/profile/${account.login}`} data-cy="profile">
         Profile
       </MenuItem>
+
+      <MenuItem icon="asterisk" to={`/user-profile/${userProfileEntity.id}`} data-cy="profile">
+        User Profile
+      </MenuItem>
+
       <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
         Settings
       </MenuItem>

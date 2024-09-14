@@ -9,7 +9,7 @@ const initialState: EntityState<IUserProfile> = {
   loading: false,
   errorMessage: null,
   entities: [],
-  entity: defaultValue,
+  entity: {} as IUserProfile,
   links: { next: 0 },
   updating: false,
   totalItems: 0,
@@ -22,8 +22,8 @@ const apiUrl = 'api/user-profiles';
 
 export const getEntities = createAsyncThunk(
   'userProfile/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ query, page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}?${query}&${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
     return axios.get<IUserProfile[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -31,18 +31,17 @@ export const getEntities = createAsyncThunk(
 
 export const getEntity = createAsyncThunk(
   'userProfile/fetch_entity',
-  async (id: string | number) => {
-    const requestUrl = `${apiUrl}/${id}`;
+  async ({ query }: IQueryParams) => {
+    const requestUrl = ` ${apiUrl}?${query}`;
     return axios.get<IUserProfile>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
 
-export const getEntityByUsername = createAsyncThunk(
-  'userProfile/fetch_entity_by_username',
-  async (username: string) => {
-    const requestUrl = `${apiUrl}?username=${username}`; // Adjust the URL to query by username
-    //const requestUrl = `${apiUrl}/${username}`;
+export const getEntityByCreatedBy = createAsyncThunk(
+  'userProfile/fetch_entity',
+  async ({ query }: IQueryParams) => {
+    const requestUrl = ` ${apiUrl}?${query}`;
     return axios.get<IUserProfile>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -92,8 +91,7 @@ export const UserProfileSlice = createEntitySlice({
         state.loading = false;
         state.entity = action.payload.data;
       })
-      .addCase(getEntityByUsername.fulfilled, (state, action) => {
-        // Handling the new action
+      .addCase(getEntityByCreatedBy.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
@@ -120,13 +118,7 @@ export const UserProfileSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
-        state.errorMessage = null;
-        state.updateSuccess = false;
-        state.loading = true;
-      })
-      .addMatcher(isPending(getEntities, getEntityByUsername), state => {
-        // Handle pending state for getEntityByUsername
+      .addMatcher(isPending(getEntities, getEntity, getEntityByCreatedBy), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;

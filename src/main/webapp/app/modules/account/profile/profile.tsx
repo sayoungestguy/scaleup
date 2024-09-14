@@ -3,8 +3,8 @@ import { useLocation, useParams } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { getPaginationState } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntities, reset } from './user-profile.reducer';
-import { getEntityByUsername, getEntity } from './user-profile.reducer';
+import { getEntities, getEntityByCreatedBy, reset } from './user-profile.reducer';
+import { getEntity } from './user-profile.reducer';
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
@@ -12,95 +12,28 @@ export const ProfilePage = () => {
   const loading = useAppSelector(state => state.userProfile.loading); // Get the loading state
   const { username } = useParams<'username'>(); // Get the username from the URL
 
-  const pageLocation = useLocation();
-
-  const [paginationState, setPaginationState] = useState(getPaginationState(pageLocation, 20, 'id'));
-  const [sorting, setSorting] = useState(false);
-
-  const userProfileList = useAppSelector(state => state.userProfile.entities);
-  const links = useAppSelector(state => state.userProfile.links);
-  const updateSuccess = useAppSelector(state => state.userProfile.updateSuccess);
-
-  // Fetch user profile by username from the URL
-  // useEffect(() => {
-  //   if (username) {
-  //     dispatch(getEntityByUsername(username));
-  //   }
-  // }, [username]);
+  const userProfileEntity = useAppSelector(state => state.userProfile.entity); // Get the fetched user profile entity
 
   useEffect(() => {
-    dispatch(getEntity(username));
-  }, []);
+    dispatch(
+      getEntityByCreatedBy({
+        query: `createdBy.equals=${account.login}`,
+      }),
+    );
+  }, [dispatch, account.login]);
 
-  const userProfileEntity = useAppSelector(state => state.userProfile.entity); // Get the fetched user profile entity
+  useEffect(() => {
+    dispatch(
+      getEntity({
+        query: `createdBy.equals=${account.login}`,
+      }),
+    );
+  }, []);
 
   // Check the fetched data in the console (optional, for debugging purposes)
   useEffect(() => {
     console.log('Fetched user profile entity:', userProfileEntity);
   }, [userProfileEntity]);
-
-  // Reset all pagination state and refetch entities
-  const resetAll = () => {
-    dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-    });
-    dispatch(getEntities({}));
-  };
-
-  useEffect(() => {
-    resetAll();
-  }, []);
-
-  useEffect(() => {
-    if (updateSuccess) {
-      resetAll();
-    }
-  }, [updateSuccess]);
-
-  useEffect(() => {
-    dispatch(
-      getEntities({
-        page: paginationState.activePage - 1,
-        size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
-      }),
-    );
-  }, [paginationState.activePage]);
-
-  const handleLoadMore = () => {
-    if (window.pageYOffset > 0) {
-      setPaginationState({
-        ...paginationState,
-        activePage: paginationState.activePage + 1,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (sorting) {
-      dispatch(
-        getEntities({
-          page: paginationState.activePage - 1,
-          size: paginationState.itemsPerPage,
-          sort: `${paginationState.sort},${paginationState.order}`,
-        }),
-      );
-      setSorting(false);
-    }
-  }, [sorting]);
-
-  const sort = p => () => {
-    dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-      order: paginationState.order === 'ASC' ? 'DESC' : 'ASC',
-      sort: p,
-    });
-    setSorting(true);
-  };
 
   const [attainedSkills, setAttainedSkills] = useState(['.NET', 'Angular']);
   const [goalSkills, setGoalSkills] = useState(['JavaScript', 'React', 'Java', 'Python']);
@@ -159,7 +92,16 @@ export const ProfilePage = () => {
               alt="Profile Picture"
               style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
             />
-            <h2>{username}</h2>
+
+            <h2>User Profile Name: {userProfileEntity.user ? userProfileEntity.user.login : ''}</h2>
+
+            <h2>User Profile ID: {userProfileEntity.id}</h2>
+
+            <h2>Account Name: {account.login}</h2>
+
+            <h2>Account ID: {account.id}</h2>
+
+            <h2>User Profile Login Name:{userProfileEntity.login}</h2>
 
             {loading ? (
               <p>Loading...</p>
@@ -171,7 +113,8 @@ export const ProfilePage = () => {
 
             <div style={{ marginTop: '20px', textAlign: 'left' }}>
               <p>
-                <strong>Email:</strong> john.doe@example.com
+                <strong>Email:</strong>
+                {userProfileEntity.email}
               </p>
               <p>
                 <strong>Phone:</strong> (123) 456-7890
