@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from './activity-invite.reducer';
+import { getActivityInviteById, deleteEntity } from './activity-invite.reducer';
 
 export const ActivityInviteDeleteDialog = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export const ActivityInviteDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getActivityInviteById(id));
     setLoadModal(true);
   }, []);
 

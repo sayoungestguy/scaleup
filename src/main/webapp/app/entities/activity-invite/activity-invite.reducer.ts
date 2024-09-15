@@ -18,17 +18,17 @@ const apiUrl = 'api/activity-invites';
 
 // Actions
 
-export const getEntities = createAsyncThunk(
+export const getAllActivityInvites = createAsyncThunk(
   'activityInvite/fetch_entity_list',
   async ({ query, page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    const requestUrl = `${apiUrl}?${query ? `${query}&` : ''}${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
 
     return axios.get<IActivityInvite[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
 
-export const getEntity = createAsyncThunk(
+export const getActivityInviteById = createAsyncThunk(
   'activityInvite/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
@@ -41,7 +41,7 @@ export const createEntity = createAsyncThunk(
   'activityInvite/create_entity',
   async (entity: IActivityInvite, thunkAPI) => {
     const result = await axios.post<IActivityInvite>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivityInvites({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -51,7 +51,7 @@ export const updateEntity = createAsyncThunk(
   'activityInvite/update_entity',
   async (entity: IActivityInvite, thunkAPI) => {
     const result = await axios.put<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivityInvites({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -61,7 +61,7 @@ export const partialUpdateEntity = createAsyncThunk(
   'activityInvite/partial_update_entity',
   async (entity: IActivityInvite, thunkAPI) => {
     const result = await axios.patch<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivityInvites({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -72,7 +72,7 @@ export const deleteEntity = createAsyncThunk(
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<IActivityInvite>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllActivityInvites({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -85,7 +85,7 @@ export const ActivityInviteSlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getEntity.fulfilled, (state, action) => {
+      .addCase(getActivityInviteById.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
@@ -94,7 +94,7 @@ export const ActivityInviteSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getAllActivityInvites), (state, action) => {
         const { data, headers } = action.payload;
 
         return {
@@ -110,7 +110,7 @@ export const ActivityInviteSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getAllActivityInvites, getActivityInviteById), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;

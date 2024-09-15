@@ -8,7 +8,7 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getActivityById } from './activity.reducer';
-import { getEntities, reset } from 'app/entities/activity-invite/activity-invite.reducer';
+import { getAllActivityInvites, reset } from 'app/entities/activity-invite/activity-invite.reducer';
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -16,19 +16,15 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { getSkillById } from 'app/entities/skill/skill.reducer';
 import { getEntity } from 'app/entities/user-profile/user-profile.reducer';
 import ActivityInvite from 'app/entities/activity-invite';
+import ActivityInviteTable from 'app/entities/activity-invite/activity-invite-table';
 
 export const ActivityDetail = () => {
   const dispatch = useAppDispatch();
 
-  const pageLocation = useLocation();
   const { id } = useParams<'id'>();
-
-  console.log(pageLocation.state); // Check what is being passed
-  //const activityStatus = pageLocation.state?.isCurrent; // "current" or "past"
 
   const [searchParams] = useSearchParams();
   const activityStatus = searchParams.get('type') || 'unknown'; // Get the type from the query params
-  console.log(activityStatus);
 
   useEffect(() => {
     dispatch(getActivityById(id));
@@ -48,91 +44,6 @@ export const ActivityDetail = () => {
   // Get profile and skill data from the Redux state
   const creatorProfile = useAppSelector(state => (activityEntity.creatorProfile?.id ? state.userProfile.entity : null));
   const skill = useAppSelector(state => (activityEntity.skill?.id ? state.skill.entity : null));
-
-  const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
-  );
-  const [sorting, setSorting] = useState(false);
-
-  // Grab Activity Invite entities
-  const activityInviteList = useAppSelector(state => state.activityInvite.entities);
-  const loading = useAppSelector(state => state.activityInvite.loading);
-  const links = useAppSelector(state => state.activityInvite.links);
-  const updateSuccess = useAppSelector(state => state.activityInvite.updateSuccess);
-
-  const getAllEntities = () => {
-    dispatch(
-      getEntities({
-        page: paginationState.activePage - 1,
-        size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
-      }),
-    );
-  };
-
-  const resetAll = () => {
-    dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-    });
-    dispatch(getEntities({}));
-  };
-
-  useEffect(() => {
-    resetAll();
-  }, []);
-
-  useEffect(() => {
-    if (updateSuccess) {
-      resetAll();
-    }
-  }, [updateSuccess]);
-
-  useEffect(() => {
-    getAllEntities();
-  }, [paginationState.activePage]);
-
-  const handleLoadMore = () => {
-    if ((window as any).pageYOffset > 0) {
-      setPaginationState({
-        ...paginationState,
-        activePage: paginationState.activePage + 1,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (sorting) {
-      getAllEntities();
-      setSorting(false);
-    }
-  }, [sorting]);
-
-  const sort = p => () => {
-    dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-      order: paginationState.order === ASC ? DESC : ASC,
-      sort: p,
-    });
-    setSorting(true);
-  };
-
-  const handleSyncList = () => {
-    resetAll();
-  };
-
-  const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    } else {
-      return order === ASC ? faSortUp : faSortDown;
-    }
-  };
 
   return (
     <>
@@ -184,8 +95,20 @@ export const ActivityDetail = () => {
           )}
         </Col>
       </Row>
-      <Row>
-        <ActivityInvite />
+      <Row className="p-5">
+        <div className="activity-invite-tbl border border-5 p-3 m-2">
+          {/*<ActivityInviteTable*/}
+          {/*  activityInviteList={activityInviteList}*/}
+          {/*  sort={sort}*/}
+          {/*  getSortIconByFieldName={getSortIconByFieldName}*/}
+          {/*  loading={loading}*/}
+          {/*  paginationState={paginationState}*/}
+          {/*  totalItems={totalItems}*/}
+          {/*  handlePagination*/}
+          {/*  handleSyncList*/}
+          {/*/>*/}
+          <ActivityInviteTable activityId={id} />
+        </div>
       </Row>
     </>
   );

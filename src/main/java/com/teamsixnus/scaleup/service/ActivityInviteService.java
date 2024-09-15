@@ -97,9 +97,4 @@ public class ActivityInviteService {
         log.debug("Request to delete ActivityInvite : {}", id);
         activityInviteRepository.deleteById(id);
     }
-
-    // Fetch all invites for a specific activity
-    public List<ActivityInviteDTO> getInvitesByActivityId(Long activityId) {
-        return activityInviteRepository.findByActivity_Id(activityId);
-    }
 }

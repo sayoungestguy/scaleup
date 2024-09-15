@@ -201,9 +201,4 @@ public class ActivityInviteResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
-
-    @GetMapping("/{activityId}")
-    public List<ActivityInviteDTO> getActivityInvitesByActivityId(@PathVariable Long activityId) {
-        return activityInviteService.getInvitesByActivityId(activityId);
-    }
 }

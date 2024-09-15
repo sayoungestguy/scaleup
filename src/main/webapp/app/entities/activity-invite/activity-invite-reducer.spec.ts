@@ -8,8 +8,8 @@ import { IActivityInvite, defaultValue } from 'app/shared/model/activity-invite.
 import reducer, {
   createEntity,
   deleteEntity,
-  getEntities,
-  getEntity,
+  getAllActivityInvites,
+  getActivityInviteById,
   updateEntity,
   partialUpdateEntity,
   reset,
@@ -59,7 +59,7 @@ describe('Entities reducer tests', () => {
 
   describe('Requests', () => {
     it('should set state to loading', () => {
-      testMultipleTypes([getEntities.pending.type, getEntity.pending.type], {}, state => {
+      testMultipleTypes([getAllActivityInvites.pending.type, getActivityInviteById.pending.type], {}, state => {
         expect(state).toMatchObject({
           errorMessage: null,
           updateSuccess: false,
@@ -93,8 +93,8 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          getEntities.rejected.type,
-          getEntity.rejected.type,
+          getAllActivityInvites.rejected.type,
+          getActivityInviteById.rejected.type,
           createEntity.rejected.type,
           updateEntity.rejected.type,
           partialUpdateEntity.rejected.type,
@@ -120,7 +120,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }], headers: { 'x-total-count': 123 } };
       expect(
         reducer(undefined, {
-          type: getEntities.fulfilled.type,
+          type: getAllActivityInvites.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -135,7 +135,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: { 1: 'fake1' } };
       expect(
         reducer(undefined, {
-          type: getEntity.fulfilled.type,
+          type: getActivityInviteById.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -194,21 +194,21 @@ describe('Entities reducer tests', () => {
     it('dispatches FETCH_ACTIVITYINVITE_LIST actions', async () => {
       const arg = {};
 
-      const result = await getEntities(arg)(dispatch, getState, extra);
+      const result = await getAllActivityInvites(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntities.fulfilled.match(result)).toBe(true);
+      expect(getAllActivityInvites.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches FETCH_ACTIVITYINVITE actions', async () => {
       const arg = 42666;
 
-      const result = await getEntity(arg)(dispatch, getState, extra);
+      const result = await getActivityInviteById(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntity.fulfilled.match(result)).toBe(true);
+      expect(getActivityInviteById.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches CREATE_ACTIVITYINVITE actions', async () => {

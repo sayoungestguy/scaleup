@@ -13,7 +13,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ActivityInviteRepository extends JpaRepository<ActivityInvite, Long>, JpaSpecificationExecutor<ActivityInvite> {
-    // Fetch all invites for a specific activity by its ID
-    List<ActivityInviteDTO> findByActivity_Id(Long activityId);
-}
+public interface ActivityInviteRepository extends JpaRepository<ActivityInvite, Long>, JpaSpecificationExecutor<ActivityInvite> {}
