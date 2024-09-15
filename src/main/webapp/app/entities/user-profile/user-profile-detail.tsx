@@ -257,6 +257,9 @@ export const UserProfileDetail = () => {
                 ) : (
                   !loading && <div className="alert alert-warning">No User Skills found</div>
                 )}
+                <Button tag={Link} to={`/user-skill/new`} color="primary" block>
+                  Add Skill
+                </Button>
               </div>
               {/* User Skill Attained section ends here */}
             </div>
@@ -341,6 +344,9 @@ export const UserProfileDetail = () => {
                 ) : (
                   !loading && <div className="alert alert-warning">No User Skills found</div>
                 )}
+                <Button tag={Link} to={`/user-skill/new`} color="primary" block>
+                  Add Skill
+                </Button>
               </div>
               {/* User Skill Goals section ends here */}
             </div>
