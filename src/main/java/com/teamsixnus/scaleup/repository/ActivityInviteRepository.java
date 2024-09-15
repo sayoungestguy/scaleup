@@ -13,4 +13,12 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ActivityInviteRepository extends JpaRepository<ActivityInvite, Long>, JpaSpecificationExecutor<ActivityInvite> {}
+public interface ActivityInviteRepository extends JpaRepository<ActivityInvite, Long>, JpaSpecificationExecutor<ActivityInvite> {
+    /**
+     * Find all activities by the activity's ID.
+     *
+     * @param activityId the ID of the activity.
+     * @return a list of activities created by the given activity id.
+     */
+    List<ActivityInvite> findByActivityId(Long activityId);
+}

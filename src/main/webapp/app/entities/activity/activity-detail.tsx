@@ -86,7 +86,7 @@ export const ActivityDetail = () => {
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
           </Button>
           &nbsp;
-          {activityStatus == 'current' ? (
+          {activityStatus === 'current' ? (
             <Button tag={Link} to={`/activity/${activityEntity.id}/edit`} replace color="primary">
               <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
             </Button>

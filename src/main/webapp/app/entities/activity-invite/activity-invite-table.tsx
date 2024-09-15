@@ -10,17 +10,6 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { getAllActivityInvites } from 'app/entities/activity-invite/activity-invite.reducer';
 
 export const ActivityInviteTable = (props: any) => {
-  // const [
-  //   activityInviteList,
-  //   sort,
-  //   getSortIconByFieldName,
-  //   loading,
-  //   paginationState,
-  //   totalItems,
-  //   handlePagination,
-  //   handleSyncList
-  // ] = props;
-
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
@@ -101,10 +90,6 @@ export const ActivityInviteTable = (props: any) => {
     }
   };
 
-  // useEffect(() => {
-  //   sortEntities();
-  // }, [paginationState.activePage, paginationState.order, paginationState.sort]);
-
   return (
     <>
       <h2 id="activity-invite-heading" data-cy="ActivityInviteHeading">
@@ -132,9 +117,6 @@ export const ActivityInviteTable = (props: any) => {
                 </th>
 
                 <th>
-                  Activity <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
                   Invitee Profile <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
@@ -152,13 +134,6 @@ export const ActivityInviteTable = (props: any) => {
                     </Button>
                   </td>
                   <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
-                  <td>
-                    {activityInvite.activity ? (
-                      <Link to={`/activity/${activityInvite.activity.id}`}>{activityInvite.activity.id}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
                   <td>
                     {activityInvite.inviteeProfile ? (
                       <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>{activityInvite.inviteeProfile.id}</Link>

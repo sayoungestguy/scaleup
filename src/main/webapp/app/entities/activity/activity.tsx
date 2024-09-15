@@ -165,22 +165,39 @@ export const Activity = () => {
   }, [activityList]);
 
   useEffect(() => {
-    if (currentActivities.length > 0) {
-      currentActivities.forEach(async activity => {
+    const fetchSkillsForCurrentActivities = async () => {
+      const promises = currentActivities.map(activity => {
         if (activity.skill?.id && !currentSkills[activity.skill.id]) {
-          await fetchSkill(activity.skill.id, true);
+          return fetchSkill(activity.skill.id, true);
         }
       });
+      await Promise.all(promises);
+    };
+
+    const fetchSkillsForPastActivities = async () => {
+      const promises = pastActivities.map(activity => {
+        if (activity.skill?.id && !pastSkills[activity.skill.id]) {
+          return fetchSkill(activity.skill.id, false);
+        }
+      });
+      await Promise.all(promises);
+    };
+
+    // Call the async functions
+    if (currentActivities.length > 0) {
+      fetchSkillsForCurrentActivities();
     }
 
     if (pastActivities.length > 0) {
-      pastActivities.forEach(async activity => {
-        if (activity.skill?.id && !pastSkills[activity.skill.id]) {
-          await fetchSkill(activity.skill.id, false);
-        }
-      });
+      fetchSkillsForPastActivities();
     }
   }, [currentActivities, pastActivities]);
+
+  // Assuming the user's roles are stored in the authentication state
+  const currentUser = useAppSelector(state => state.authentication.account);
+
+  // Check if the current user has the "admin" role
+  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
 
   return (
     <div>
@@ -239,12 +256,12 @@ export const Activity = () => {
               <tbody>
                 {currentActivitiesPaginated.map((activity, i) => (
                   <tr key={`entity-${i}`} data-cy="entityTable">
+                    <td>{(currentPaginationState.activePage - 1) * currentPaginationState.itemsPerPage + i + 1}</td>
                     <td>
                       <Button tag={Link} to={`/activity/${activity.id}`} color="link" size="sm">
-                        {(currentPaginationState.activePage - 1) * currentPaginationState.itemsPerPage + i + 1}
+                        {activity.activityName}
                       </Button>
                     </td>
-                    <td>{activity.activityName}</td>
                     <td>
                       {activity.activityTime ? <TextFormat type="date" value={activity.activityTime} format={APP_DATE_FORMAT} /> : null}
                     </td>
@@ -348,12 +365,13 @@ export const Activity = () => {
               <tbody>
                 {pastActivitiesPaginated.map((activity, i) => (
                   <tr key={`entity-${i}`} data-cy="entityTable">
+                    <td>{(pastPaginationState.activePage - 1) * pastPaginationState.itemsPerPage + i + 1}</td>
                     <td>
+                      {' '}
                       <Button tag={Link} to={`/activity/${activity.id}`} color="link" size="sm">
-                        {(pastPaginationState.activePage - 1) * pastPaginationState.itemsPerPage + i + 1}
+                        {activity.activityName}
                       </Button>
                     </td>
-                    <td>{activity.activityName}</td>
                     <td>
                       {activity.activityTime ? <TextFormat type="date" value={activity.activityTime} format={APP_DATE_FORMAT} /> : null}
                     </td>
@@ -372,25 +390,30 @@ export const Activity = () => {
                         <Button tag={Link} to={`/activity/${activity.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                           <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                         </Button>
-                        {/*<Button*/}
-                        {/*  tag={Link}*/}
-                        {/*  to={`/activity/${activity.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}*/}
-                        {/*  color="primary"*/}
-                        {/*  size="sm"*/}
-                        {/*  data-cy="entityEditButton"*/}
-                        {/*>*/}
-                        {/*  <FontAwesomeIcon icon="pencil-alt"/> <span className="d-none d-md-inline">Edit</span>*/}
-                        {/*</Button>*/}
-                        {/*<Button*/}
-                        {/*  onClick={() =>*/}
-                        {/*    (window.location.href = `/activity/${activity.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)*/}
-                        {/*  }*/}
-                        {/*  color="danger"*/}
-                        {/*  size="sm"*/}
-                        {/*  data-cy="entityDeleteButton"*/}
-                        {/*>*/}
-                        {/*  <FontAwesomeIcon icon="trash"/> <span className="d-none d-md-inline">Delete</span>*/}
-                        {/*</Button>*/}
+                        {isAdmin && (
+                          <Button
+                            tag={Link}
+                            to={`/activity/${activity.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                            color="primary"
+                            size="sm"
+                            data-cy="entityEditButton"
+                          >
+                            <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                          </Button>
+                        )}
+
+                        {isAdmin && (
+                          <Button
+                            onClick={() =>
+                              (window.location.href = `/activity/${activity.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                            }
+                            color="danger"
+                            size="sm"
+                            data-cy="entityDeleteButton"
+                          >
+                            <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                          </Button>
+                        )}
                       </div>
                     </td>
                   </tr>

@@ -97,4 +97,33 @@ public class ActivityInviteService {
         log.debug("Request to delete ActivityInvite : {}", id);
         activityInviteRepository.deleteById(id);
     }
+
+    /**
+     * Delete all activity invites linked to a specific activity ID.
+     *
+     * @param activityId the ID of the activity whose invites need to be deleted.
+     * @return true if all invites were deleted, false if there was an issue.
+     */
+    public boolean deleteAllInvitesByActivityId(Long activityId) {
+        // Step 1: Retrieve all activity invites linked to the activity ID
+        List<ActivityInvite> invitesToDelete = activityInviteRepository.findByActivityId(activityId);
+
+        // Step 2: Check if the list is empty
+        if (invitesToDelete.isEmpty()) {
+            // No invites found, return true (nothing to delete)
+            return true;
+        }
+
+        // Step 3: Loop through the list and delete each invite one by one
+        try {
+            for (ActivityInvite invite : invitesToDelete) {
+                activityInviteRepository.delete(invite);
+            }
+            return true; // Successfully deleted all invites
+        } catch (Exception e) {
+            // If there's any issue with deletion, log it and return false
+            log.error("Error deleting activity invites for activity ID: {}", activityId, e);
+            return false;
+        }
+    }
 }

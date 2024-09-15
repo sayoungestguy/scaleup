@@ -1,10 +1,12 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.repository.ActivityRepository;
+import com.teamsixnus.scaleup.service.ActivityInviteService;
 import com.teamsixnus.scaleup.service.ActivityQueryService;
 import com.teamsixnus.scaleup.service.ActivityService;
 import com.teamsixnus.scaleup.service.criteria.ActivityCriteria;
 import com.teamsixnus.scaleup.service.dto.ActivityDTO;
+import com.teamsixnus.scaleup.service.dto.ActivityInviteDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,14 +49,18 @@ public class ActivityResource {
 
     private final ActivityQueryService activityQueryService;
 
+    private final ActivityInviteService activityInviteService;
+
     public ActivityResource(
         ActivityService activityService,
         ActivityRepository activityRepository,
-        ActivityQueryService activityQueryService
+        ActivityQueryService activityQueryService,
+        ActivityInviteService activityInviteService
     ) {
         this.activityService = activityService;
         this.activityRepository = activityRepository;
         this.activityQueryService = activityQueryService;
+        this.activityInviteService = activityInviteService;
     }
 
     /**
@@ -211,9 +218,25 @@ public class ActivityResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteActivity(@PathVariable("id") Long id) {
         log.debug("REST request to delete Activity : {}", id);
+
+        // Step 1: Delete all activity invites associated with this activity
+        boolean invitesDeleted = activityInviteService.deleteAllInvitesByActivityId(id);
+
+        if (!invitesDeleted) {
+            // If deletion of invites failed, return an error response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header("X-Error-Message", "Failed to delete activity invites for Activity ID: " + id)
+                .build();
+        }
+
         activityService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
+    //    private boolean deleteAllActivityInvite(Long id){
+    //        // Find if exist
+    //        List<ActivityInviteDTO> activityInvitesToDelete = activityInviteService
+    //        return true
+    //    }
 }

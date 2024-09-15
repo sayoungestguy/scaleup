@@ -69,7 +69,7 @@ export const ActivityUpdate = () => {
     const entity = {
       ...activityEntity,
       ...values,
-      creatorProfile: userProfiles.find(it => it.id.toString() == currentUser.id.toString()),
+      creatorProfile: userProfiles.find(it => it.id.toString() === currentUser.id.toString()),
       skill: skills.find(it => it.id.toString() === values.skill?.toString()),
     };
 
