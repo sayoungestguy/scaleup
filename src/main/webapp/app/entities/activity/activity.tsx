@@ -36,23 +36,14 @@ export const Activity = () => {
     order: ASC,
   });
 
-  const [sorting, setSorting] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = ITEMS_PER_PAGE; // Limit to 5 items per page
-
   const activityList = useAppSelector(state => state.activity.entities);
   const loading = useAppSelector(state => state.activity.loading);
-  const totalItems = useAppSelector(state => state.activity.totalItems);
 
   const [currentActivities, setCurrentActivities] = useState([]);
   const [pastActivities, setPastActivities] = useState([]);
 
   const [currentSkills, setCurrentSkills] = React.useState<{ [key: number]: string }>({});
   const [pastSkills, setPastSkills] = React.useState<{ [key: number]: string }>({});
-
-  // Get activities for the current page
-  // const currentPageActivities = currentActivities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  // const pastPageActivities = pastActivities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const getAllActivities = () => {
     dispatch(
@@ -90,17 +81,35 @@ export const Activity = () => {
     return skillName;
   };
 
-  // Paginate current and past activities
-  const indexOfLastCurrentActivity = currentPaginationState.activePage * currentPaginationState.itemsPerPage;
-  const indexOfFirstCurrentActivity = indexOfLastCurrentActivity - currentPaginationState.itemsPerPage;
-  const currentActivitiesPaginated = currentActivities.slice(indexOfFirstCurrentActivity, indexOfLastCurrentActivity);
+  // Filter
+  const [searchQuery, setSearchQuery] = useState(''); // To hold the search input value
 
-  const indexOfLastPastActivity = pastPaginationState.activePage * pastPaginationState.itemsPerPage;
-  const indexOfFirstPastActivity = indexOfLastPastActivity - pastPaginationState.itemsPerPage;
-  const pastActivitiesPaginated = pastActivities.slice(indexOfFirstPastActivity, indexOfLastPastActivity);
+  const filterActivities = activities => {
+    return activities.filter(activity => {
+      const activityNameMatch = activity.activityName?.toLowerCase().includes(searchQuery.toLowerCase());
+      const activityVenueMatch = activity.venue?.toLowerCase().includes(searchQuery.toLowerCase());
+
+      return activityNameMatch || activityVenueMatch; // Return true if any field matches
+    });
+  };
+
+  // Filtered activities
+  const filteredCurrentActivities = filterActivities(currentActivities);
+  const filteredPastActivities = filterActivities(pastActivities);
+
+  // Paginate current and past activities
+  const currentActivitiesPaginated = filteredCurrentActivities.slice(
+    (currentPaginationState.activePage - 1) * currentPaginationState.itemsPerPage,
+    currentPaginationState.activePage * currentPaginationState.itemsPerPage,
+  );
+
+  const pastActivitiesPaginated = filteredPastActivities.slice(
+    (pastPaginationState.activePage - 1) * pastPaginationState.itemsPerPage,
+    pastPaginationState.activePage * pastPaginationState.itemsPerPage,
+  );
 
   // Handle pagination for current activities
-  const handlePaginationCurrentActivities = currentPage => {
+  const handlePaginationCurrentActivities = (currentPage: any) => {
     setCurrentPaginationState({
       ...currentPaginationState,
       activePage: currentPage, // Update only the current activities page
@@ -108,7 +117,7 @@ export const Activity = () => {
   };
 
   // Handle pagination for past activities
-  const handlePaginationPastActivities = currentPage => {
+  const handlePaginationPastActivities = (currentPage: any) => {
     setPastPaginationState({
       ...pastPaginationState,
       activePage: currentPage, // Update only the past activities page
@@ -119,21 +128,6 @@ export const Activity = () => {
     sortEntities();
   }, [currentPaginationState.activePage, currentPaginationState.order, currentPaginationState.sort]);
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(pageLocation.search);
-  //   const page = params.get('page');
-  //   const sort = params.get(SORT);
-  //   if (page && sort) {
-  //     const sortSplit = sort.split(',');
-  //     setPaginationState({
-  //       ...paginationState,
-  //       activePage: +page,
-  //       sort: sortSplit[0],
-  //       order: sortSplit[1],
-  //     });
-  //   }
-  // }, [pageLocation.search]);
-
   const sort = p => () => {
     setPaginationState({
       ...paginationState,
@@ -141,12 +135,6 @@ export const Activity = () => {
       sort: p,
     });
   };
-
-  const handlePagination = currentPage =>
-    setPaginationState({
-      ...paginationState,
-      activePage: currentPage,
-    });
 
   const handleSyncList = () => {
     sortEntities();
@@ -199,6 +187,13 @@ export const Activity = () => {
       <h2 id="activity-heading" data-cy="ActivityHeading">
         Activities
         <div className="d-flex justify-content-end">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by Activity Name or Venue"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)} // Update search query on input change
+          />
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
           </Button>
@@ -298,12 +293,12 @@ export const Activity = () => {
           )}
         </div>
 
-        {currentActivities ? (
-          <div className={currentActivities && currentActivities.length > 0 ? '' : 'd-none'}>
+        {filteredCurrentActivities ? (
+          <div className={filteredCurrentActivities && filteredCurrentActivities.length > 0 ? '' : 'd-none'}>
             <div className="justify-content-center d-flex">
               <JhiItemCount
                 page={currentPaginationState.activePage}
-                total={currentActivities.length}
+                total={filteredCurrentActivities.length}
                 itemsPerPage={currentPaginationState.itemsPerPage}
               />
             </div>
@@ -313,7 +308,7 @@ export const Activity = () => {
                 onSelect={handlePaginationCurrentActivities} // Independent pagination handler for current activities
                 itemsPerPage={currentPaginationState.itemsPerPage}
                 maxButtons={5}
-                totalItems={currentActivities.length} // Total number of current activities
+                totalItems={filteredCurrentActivities.length} // Total number of current activities
               />
             </div>
           </div>
@@ -407,12 +402,12 @@ export const Activity = () => {
           )}
         </div>
 
-        {pastActivities ? (
-          <div className={pastActivities && pastActivities.length > 0 ? '' : 'd-none'}>
+        {filteredPastActivities ? (
+          <div className={filteredPastActivities && filteredPastActivities.length > 0 ? '' : 'd-none'}>
             <div className="justify-content-center d-flex">
               <JhiItemCount
                 page={pastPaginationState.activePage}
-                total={pastActivities.length}
+                total={filteredPastActivities.length}
                 itemsPerPage={pastPaginationState.itemsPerPage}
               />
             </div>
@@ -422,7 +417,7 @@ export const Activity = () => {
                 onSelect={handlePaginationPastActivities} // Independent pagination handler for past activities
                 itemsPerPage={pastPaginationState.itemsPerPage}
                 maxButtons={5}
-                totalItems={pastActivities.length} // Total number of past activities
+                totalItems={filteredPastActivities.length} // Total number of past activities
               />
             </div>
           </div>
