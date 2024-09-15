@@ -33,6 +33,8 @@ export const UserProfileDetail = () => {
     dispatch(getEntity(id));
   }, []);
 
+  const userProfileEntity = useAppSelector(state => state.userProfile.entity);
+
   const getAllUserSkillsByUserId = () => {
     dispatch(
       getEntities({
@@ -99,8 +101,6 @@ export const UserProfileDetail = () => {
 
   const userSkillEntity = useAppSelector(state => state.userSkill.entity);
 
-  const userProfileEntity = useAppSelector(state => state.userProfile.entity);
-
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f4f4f4', margin: 0, padding: 0, minHeight: '100vh', width: '100%' }}>
       <header style={{ backgroundColor: '#3A83C7', color: 'white', padding: '15px', textAlign: 'left', width: '100%' }}>
@@ -135,12 +135,6 @@ export const UserProfileDetail = () => {
             />
             <h2>{userProfileEntity.user ? userProfileEntity.user.login : ''}</h2>
 
-            <h2>{userProfileEntity.id}</h2>
-
-            <h2>{account.id}</h2>
-
-            <h2>{userProfileEntity.login}</h2>
-
             {loading ? (
               <p>Loading...</p>
             ) : (
@@ -154,7 +148,7 @@ export const UserProfileDetail = () => {
                 <strong>Email:</strong> {account.email}
               </p>
               <p>
-                <strong>Phone:</strong> (123) 456-7890
+                <strong>Socials:</strong> {userProfileEntity?.socialLinks}
               </p>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                 <a href="#facebook" style={{ textDecoration: 'none', margin: '0 10px', fontSize: '1.5em', color: '#555' }}>
@@ -177,7 +171,7 @@ export const UserProfileDetail = () => {
                 </a>
               </div>
             </div>
-            <Button color="danger" block>
+            <Button tag={Link} to={`/user-profile/${userProfileEntity.id}/edit`} color="danger" block>
               Edit Profile
             </Button>
           </div>

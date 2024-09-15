@@ -25,18 +25,31 @@ const accountMenuItemsAuthenticated = () => {
   //   (profile) => profile.createdBy === account.login
   // );
 
-  return (
-    <>
-      {/* <MenuItem icon="asterisk" to={`/account/profile/${account.login}`} data-cy="profile">
-        Profile
-      </MenuItem> */}
-
-      {/* Check if loggedInUserProfile exists and route to that profile */}
-      {loggedInUserProfile && (
-        <MenuItem icon="asterisk" to={`/user-profile/${loggedInUserProfile.id}`} data-cy="profile">
+  //if user doesn't have a user profile created, the profile option will route to the create a new profile page
+  if (!loggedInUserProfile?.id) {
+    return (
+      <>
+        <MenuItem icon="asterisk" to="/user-profile/new" data-cy="profile">
           Profile
         </MenuItem>
-      )}
+        <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
+          Settings
+        </MenuItem>
+        <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
+          Password
+        </MenuItem>
+        <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
+          Sign out
+        </MenuItem>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <MenuItem icon="asterisk" to={`/user-profile/${loggedInUserProfile?.id}`} data-cy="profile">
+        Profile
+      </MenuItem>
 
       <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
         Settings
@@ -49,26 +62,6 @@ const accountMenuItemsAuthenticated = () => {
       </MenuItem>
     </>
   );
-
-  // <>
-  //   <MenuItem icon="asterisk" to={`/account/profile/${account.login}`} data-cy="profile">
-  //     Profile
-  //   </MenuItem>
-
-  //   <MenuItem icon="asterisk" to={`/user-profile/${userProfileEntity.id}`} data-cy="profile">
-  //     User Profile
-  //   </MenuItem>
-
-  //   <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
-  //     Settings
-  //   </MenuItem>
-  //   <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
-  //     Password
-  //   </MenuItem>
-  //   <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
-  //     Sign out
-  //   </MenuItem>
-  // </>
 };
 
 const accountMenuItems = () => (
