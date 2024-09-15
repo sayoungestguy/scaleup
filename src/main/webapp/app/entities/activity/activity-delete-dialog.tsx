@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from './activity.reducer';
+import { getActivityById, deleteEntity } from './activity.reducer';
 
 export const ActivityDeleteDialog = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export const ActivityDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getActivityById(id));
     setLoadModal(true);
   }, []);
 
@@ -25,7 +25,7 @@ export const ActivityDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.activity.updateSuccess);
 
   const handleClose = () => {
-    navigate('/activity');
+    navigate('/activity' + pageLocation.search);
   };
 
   useEffect(() => {

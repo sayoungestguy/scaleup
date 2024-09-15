@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
-import { getEntities as getSkills } from 'app/entities/skill/skill.reducer';
+import { getAllSkills as getSkills } from 'app/entities/skill/skill.reducer';
 import { ICodeTables } from 'app/shared/model/code-tables.model';
 import { getEntities as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
 import { IUserSkill } from 'app/shared/model/user-skill.model';
@@ -34,11 +34,13 @@ export const UserSkillUpdate = () => {
   const updateSuccess = useAppSelector(state => state.userSkill.updateSuccess);
 
   const handleClose = () => {
-    navigate('/user-skill');
+    navigate('/user-skill' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
 

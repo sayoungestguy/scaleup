@@ -43,6 +43,9 @@ export const AdminMenu = ({ showOpenAPI, showDatabase }) => (
     {showOpenAPI && openAPIItem()}
 
     {showDatabase && databaseItem()}
+    <MenuItem icon="asterisk" to="/code-tables">
+      Code Tables
+    </MenuItem>
   </NavDropdown>
 );
 

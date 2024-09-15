@@ -25,7 +25,7 @@ export const NotificationDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.notification.updateSuccess);
 
   const handleClose = () => {
-    navigate('/notification');
+    navigate('/notification' + pageLocation.search);
   };
 
   useEffect(() => {

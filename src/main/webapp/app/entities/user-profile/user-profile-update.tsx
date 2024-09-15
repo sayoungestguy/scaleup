@@ -28,11 +28,13 @@ export const UserProfileUpdate = () => {
   const updateSuccess = useAppSelector(state => state.userProfile.updateSuccess);
 
   const handleClose = () => {
-    navigate('/user-profile');
+    navigate('/user-profile' + location.search);
   };
 
   useEffect(() => {
-    if (!isNew) {
+    if (isNew) {
+      dispatch(reset());
+    } else {
       dispatch(getEntity(id));
     }
 
@@ -130,6 +132,16 @@ export const UserProfileUpdate = () => {
                 id="user-profile-profilePicture"
                 name="profilePicture"
                 data-cy="profilePicture"
+                type="text"
+                validate={{
+                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                }}
+              />
+              <ValidatedField
+                label="Social Links"
+                id="user-profile-socialLinks"
+                name="socialLinks"
+                data-cy="socialLinks"
                 type="text"
                 validate={{
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },

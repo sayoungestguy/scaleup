@@ -26,6 +26,9 @@
             <column name="profile_picture" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="social_links" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false" />
             </column>
@@ -68,6 +71,7 @@
             <column name="job_role" type="string"/>
             <column name="about_me" type="string"/>
             <column name="profile_picture" type="string"/>
+            <column name="social_links" type="string"/>
             <column name="created_by" type="string"/>
             <column name="created_date" type="date"/>
             <column name="last_modified_by" type="string"/>

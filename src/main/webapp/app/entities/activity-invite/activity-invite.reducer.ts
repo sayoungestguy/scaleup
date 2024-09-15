@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
-import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IActivityInvite, defaultValue } from 'app/shared/model/activity-invite.model';
@@ -10,7 +9,6 @@ const initialState: EntityState<IActivityInvite> = {
   errorMessage: null,
   entities: [],
   entity: defaultValue,
-  links: { next: 0 },
   updating: false,
   totalItems: 0,
   updateSuccess: false,
@@ -20,16 +18,17 @@ const apiUrl = 'api/activity-invites';
 
 // Actions
 
-export const getEntities = createAsyncThunk(
+export const getAllActivityInvites = createAsyncThunk(
   'activityInvite/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ query, page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}?${query ? `${query}&` : ''}${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+
     return axios.get<IActivityInvite[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
 
-export const getEntity = createAsyncThunk(
+export const getActivityInviteById = createAsyncThunk(
   'activityInvite/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
@@ -41,7 +40,9 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   'activityInvite/create_entity',
   async (entity: IActivityInvite, thunkAPI) => {
-    return axios.post<IActivityInvite>(apiUrl, cleanEntity(entity));
+    const result = await axios.post<IActivityInvite>(apiUrl, cleanEntity(entity));
+    thunkAPI.dispatch(getAllActivityInvites({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -49,7 +50,9 @@ export const createEntity = createAsyncThunk(
 export const updateEntity = createAsyncThunk(
   'activityInvite/update_entity',
   async (entity: IActivityInvite, thunkAPI) => {
-    return axios.put<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    const result = await axios.put<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getAllActivityInvites({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -57,7 +60,9 @@ export const updateEntity = createAsyncThunk(
 export const partialUpdateEntity = createAsyncThunk(
   'activityInvite/partial_update_entity',
   async (entity: IActivityInvite, thunkAPI) => {
-    return axios.patch<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    const result = await axios.patch<IActivityInvite>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getAllActivityInvites({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -66,7 +71,9 @@ export const deleteEntity = createAsyncThunk(
   'activityInvite/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
-    return await axios.delete<IActivityInvite>(requestUrl);
+    const result = await axios.delete<IActivityInvite>(requestUrl);
+    thunkAPI.dispatch(getAllActivityInvites({}));
+    return result;
   },
   { serializeError: serializeAxiosError },
 );
@@ -78,7 +85,7 @@ export const ActivityInviteSlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getEntity.fulfilled, (state, action) => {
+      .addCase(getActivityInviteById.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
@@ -87,15 +94,13 @@ export const ActivityInviteSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getAllActivityInvites), (state, action) => {
         const { data, headers } = action.payload;
-        const links = parseHeaderForLinks(headers.link);
 
         return {
           ...state,
           loading: false,
-          links,
-          entities: loadMoreDataWhenScrolled(state.entities, data, links),
+          entities: data,
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
@@ -105,7 +110,7 @@ export const ActivityInviteSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getAllActivityInvites, getActivityInviteById), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;

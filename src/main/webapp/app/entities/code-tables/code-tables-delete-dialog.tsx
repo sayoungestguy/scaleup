@@ -25,7 +25,7 @@ export const CodeTablesDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.codeTables.updateSuccess);
 
   const handleClose = () => {
-    navigate('/code-tables');
+    navigate('/code-tables' + pageLocation.search);
   };
 
   useEffect(() => {

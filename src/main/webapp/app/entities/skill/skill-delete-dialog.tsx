@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from './skill.reducer';
+import { getSkillById, deleteEntity } from './skill.reducer';
 
 export const SkillDeleteDialog = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export const SkillDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getSkillById(id));
     setLoadModal(true);
   }, []);
 
@@ -25,7 +25,7 @@ export const SkillDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.skill.updateSuccess);
 
   const handleClose = () => {
-    navigate('/skill');
+    navigate('/skill' + pageLocation.search);
   };
 
   useEffect(() => {

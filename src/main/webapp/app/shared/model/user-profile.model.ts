@@ -7,6 +7,7 @@ export interface IUserProfile {
   jobRole?: string | null;
   aboutMe?: string | null;
   profilePicture?: string | null;
+  socialLinks?: string | null;
   createdBy?: string;
   createdDate?: dayjs.Dayjs;
   lastModifiedBy?: string;

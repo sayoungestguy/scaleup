@@ -9,7 +9,9 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.teamsixnus.scaleup.IntegrationTest;
+//import com.teamsixnus.scaleup.domain.CodeTables;
 //import com.teamsixnus.scaleup.domain.Notification;
+//import com.teamsixnus.scaleup.domain.UserProfile;
 //import com.teamsixnus.scaleup.repository.NotificationRepository;
 //import com.teamsixnus.scaleup.service.dto.NotificationDTO;
 //import com.teamsixnus.scaleup.service.mapper.NotificationMapper;
@@ -188,6 +190,176 @@
 //
 //    @Test
 //    @Transactional
+//    void getNotificationsByIdFiltering() throws Exception {
+//        // Initialize the database
+//        insertedNotification = notificationRepository.saveAndFlush(notification);
+//
+//        Long id = notification.getId();
+//
+//        defaultNotificationFiltering("id.equals=" + id, "id.notEquals=" + id);
+//
+//        defaultNotificationFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+//
+//        defaultNotificationFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByNotificationRefIdIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        insertedNotification = notificationRepository.saveAndFlush(notification);
+//
+//        // Get all the notificationList where notificationRefId equals to
+//        defaultNotificationFiltering(
+//            "notificationRefId.equals=" + DEFAULT_NOTIFICATION_REF_ID,
+//            "notificationRefId.equals=" + UPDATED_NOTIFICATION_REF_ID
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByNotificationRefIdIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        insertedNotification = notificationRepository.saveAndFlush(notification);
+//
+//        // Get all the notificationList where notificationRefId in
+//        defaultNotificationFiltering(
+//            "notificationRefId.in=" + DEFAULT_NOTIFICATION_REF_ID + "," + UPDATED_NOTIFICATION_REF_ID,
+//            "notificationRefId.in=" + UPDATED_NOTIFICATION_REF_ID
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByNotificationRefIdIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        insertedNotification = notificationRepository.saveAndFlush(notification);
+//
+//        // Get all the notificationList where notificationRefId is not null
+//        defaultNotificationFiltering("notificationRefId.specified=true", "notificationRefId.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByIsReadIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        insertedNotification = notificationRepository.saveAndFlush(notification);
+//
+//        // Get all the notificationList where isRead equals to
+//        defaultNotificationFiltering("isRead.equals=" + DEFAULT_IS_READ, "isRead.equals=" + UPDATED_IS_READ);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByIsReadIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        insertedNotification = notificationRepository.saveAndFlush(notification);
+//
+//        // Get all the notificationList where isRead in
+//        defaultNotificationFiltering("isRead.in=" + DEFAULT_IS_READ + "," + UPDATED_IS_READ, "isRead.in=" + UPDATED_IS_READ);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByIsReadIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        insertedNotification = notificationRepository.saveAndFlush(notification);
+//
+//        // Get all the notificationList where isRead is not null
+//        defaultNotificationFiltering("isRead.specified=true", "isRead.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByUserProfileIsEqualToSomething() throws Exception {
+//        UserProfile userProfile;
+//        if (TestUtil.findAll(em, UserProfile.class).isEmpty()) {
+//            notificationRepository.saveAndFlush(notification);
+//            userProfile = UserProfileResourceIT.createEntity(em);
+//        } else {
+//            userProfile = TestUtil.findAll(em, UserProfile.class).get(0);
+//        }
+//        em.persist(userProfile);
+//        em.flush();
+//        notification.setUserProfile(userProfile);
+//        notificationRepository.saveAndFlush(notification);
+//        Long userProfileId = userProfile.getId();
+//        // Get all the notificationList where userProfile equals to userProfileId
+//        defaultNotificationShouldBeFound("userProfileId.equals=" + userProfileId);
+//
+//        // Get all the notificationList where userProfile equals to (userProfileId + 1)
+//        defaultNotificationShouldNotBeFound("userProfileId.equals=" + (userProfileId + 1));
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNotificationsByTypeIsEqualToSomething() throws Exception {
+//        CodeTables type;
+//        if (TestUtil.findAll(em, CodeTables.class).isEmpty()) {
+//            notificationRepository.saveAndFlush(notification);
+//            type = CodeTablesResourceIT.createEntity(em);
+//        } else {
+//            type = TestUtil.findAll(em, CodeTables.class).get(0);
+//        }
+//        em.persist(type);
+//        em.flush();
+//        notification.setType(type);
+//        notificationRepository.saveAndFlush(notification);
+//        Long typeId = type.getId();
+//        // Get all the notificationList where type equals to typeId
+//        defaultNotificationShouldBeFound("typeId.equals=" + typeId);
+//
+//        // Get all the notificationList where type equals to (typeId + 1)
+//        defaultNotificationShouldNotBeFound("typeId.equals=" + (typeId + 1));
+//    }
+//
+//    private void defaultNotificationFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+//        defaultNotificationShouldBeFound(shouldBeFound);
+//        defaultNotificationShouldNotBeFound(shouldNotBeFound);
+//    }
+//
+//    /**
+//     * Executes the search, and checks that the default entity is returned.
+//     */
+//    private void defaultNotificationShouldBeFound(String filter) throws Exception {
+//        restNotificationMockMvc
+//            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(jsonPath("$.[*].id").value(hasItem(notification.getId().intValue())))
+//            .andExpect(jsonPath("$.[*].notificationRefId").value(hasItem(DEFAULT_NOTIFICATION_REF_ID.toString())))
+//            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
+//            .andExpect(jsonPath("$.[*].isRead").value(hasItem(DEFAULT_IS_READ.booleanValue())));
+//
+//        // Check, that the count call also returns 1
+//        restNotificationMockMvc
+//            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(content().string("1"));
+//    }
+//
+//    /**
+//     * Executes the search, and checks that the default entity is not returned.
+//     */
+//    private void defaultNotificationShouldNotBeFound(String filter) throws Exception {
+//        restNotificationMockMvc
+//            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(jsonPath("$").isArray())
+//            .andExpect(jsonPath("$").isEmpty());
+//
+//        // Check, that the count call also returns 0
+//        restNotificationMockMvc
+//            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(content().string("0"));
+//    }
+//
+//    @Test
+//    @Transactional
 //    void getNonExistingNotification() throws Exception {
 //        // Get the notification
 //        restNotificationMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
@@ -295,7 +467,7 @@
 //        Notification partialUpdatedNotification = new Notification();
 //        partialUpdatedNotification.setId(notification.getId());
 //
-//        partialUpdatedNotification.notificationRefId(UPDATED_NOTIFICATION_REF_ID).content(UPDATED_CONTENT);
+//        partialUpdatedNotification.notificationRefId(UPDATED_NOTIFICATION_REF_ID);
 //
 //        restNotificationMockMvc
 //            .perform(

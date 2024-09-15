@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CodeTablesRepository extends JpaRepository<CodeTables, Long> {}
+public interface CodeTablesRepository extends JpaRepository<CodeTables, Long>, JpaSpecificationExecutor<CodeTables> {}
