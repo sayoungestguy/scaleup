@@ -25,11 +25,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Upload Node Modules as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules
 
   package:
     name: Package App
@@ -101,13 +96,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20.15.0
-      #      - name: Install Node.js Packages
-      #        uses: npm install
-      - name: Download Node Modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules
+      - name: Install Node.js Packages
+        run: npm install
       - name: Run frontend test
         run: npm run ci:frontend:test
       - name: Upload Frontend Test Report
