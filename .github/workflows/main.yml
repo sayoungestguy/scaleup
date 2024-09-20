@@ -84,7 +84,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backend-test-report
-          path: target/backend
+          path: target/surefire-reports/*.xml
           retention-days: 1
 
   frontend-test:
@@ -104,7 +104,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-test-report
-          path: target/frontend
+          path: target/test-reports/junit/*.xml
           retention-days: 1
 
   sonar:
