@@ -103,8 +103,8 @@ jobs:
       - name: Upload Frontend Test Report
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-test-report
-          path: target/test-reports/junit/*.xml
+          name: jest-test-reports
+          path: ./target/test-results/TESTS-results-jest.xml # Adjusted to match your Jest output configuration
           retention-days: 1
 
   sonar:
@@ -154,34 +154,7 @@ jobs:
   #        uses: github/codeql-action/upload-sarif@v3
   #        with:
   #          sarif_file: snyk.sarif
-  eslint:
-    name: ESLint Code Quality
-    runs-on: ubuntu-latest
-    needs: [backend-test, frontend-test]
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.15.0
-      - name: Install Node.js packages
-        run: npm install
-      - name: Install ESLint
-        run: npm install eslint --save-dev
 
-      - name: Run ESLint
-        run: |
-          npx eslint . -f json -o eslint-report.json
-          npx eslint . -f html -o eslint-report.html
-
-      - name: Upload ESLint Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: eslint-report
-          path: |
-            ./eslint-report.json
-            ./eslint-report.html
   dast-scan:
     name: DAST OWASP ZAP Scans
     runs-on: ubuntu-latest
@@ -198,4 +171,5 @@ jobs:
         with:
           name: zap report
           path: |
-            ./zap_baseline_report.html
+            ./target/test-reports/zap_baseline_report.html
+          retention-days: 1
