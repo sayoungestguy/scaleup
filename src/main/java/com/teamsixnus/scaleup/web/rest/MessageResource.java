@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -90,6 +91,20 @@ public class MessageResource {
         @Valid @RequestBody MessageDTO messageDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Message : {}, {}", id, messageDTO);
+
+        // Get the current user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Get the user details from the user service
+        User user = userService.getUserByLogin(username);
+        Long userId = user.getId();
+
+        // Check if the current user is the owner
+        if (!messageDTO.getSenderProfile().getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         if (messageDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -124,6 +139,22 @@ public class MessageResource {
         @NotNull @RequestBody MessageDTO messageDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Message partially : {}, {}", id, messageDTO);
+
+        // Check if the current user is the owner
+        //Long currentUserId = getCurrentUserId();
+
+        // Get the current user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Get the user details from the user service
+        User user = userService.getUserByLogin(username);
+        Long userId = user.getId();
+
+        if (!messageDTO.getSenderProfile().getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         if (messageDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -179,6 +210,29 @@ public class MessageResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable("id") Long id) {
         log.debug("REST request to delete Message : {}", id);
+
+        // Get the current user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Get the user details from the user service
+        User user = userService.getUserByLogin(username);
+        Long userId = user.getId();
+
+        // Fetch the message to check its sender
+        Optional<MessageDTO> optionalMessageDTO = messageService.findOne(id);
+
+        if (optionalMessageDTO.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        MessageDTO messageDTO = optionalMessageDTO.get();
+
+        // Check if the current user is the sender
+        if (!messageDTO.getSenderProfile().getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         messageService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
