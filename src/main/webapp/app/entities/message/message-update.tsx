@@ -146,12 +146,13 @@ export const MessageUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               /> */}
+              {/* allows user to select other user as sender, logically should not happen. */}
               <ValidatedField id="message-senderProfile" name="senderProfile" data-cy="senderProfile" label="Sender Profile" type="select">
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.user.id} key={otherEntity.user.id}>
-                        {otherEntity.user.id}
+                        {otherEntity.user.login}
                       </option>
                     ))
                   : null}
@@ -167,7 +168,7 @@ export const MessageUpdate = () => {
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.user.id} key={otherEntity.user.id}>
-                        {otherEntity.user.id}
+                        {otherEntity.user.login}
                       </option>
                     ))
                   : null}
