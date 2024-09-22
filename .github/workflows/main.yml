@@ -67,9 +67,13 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
       - name: Push to Docker registry
-        run: npm run java:jar:docker
-  #        run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD} -DskipTests
+        #        run: npm run java:jar:docker
+        run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD} -DskipTests
 
   backend-test:
     name: Backend Test Stage
