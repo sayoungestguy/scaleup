@@ -58,13 +58,16 @@ jobs:
           retention-days: 1 # Retain the build artifacts for 1 day
 
   # Push to Docker
-  #  jib-build:
-  #    name: containerize
-  #    runs-on: ubuntu-latest
-  #    needs: package
-  #    steps:
-  #      - name: Push to Docker registry
-  #        run: ./mvnw package -Pprod verify jib:build -Djib.to.image=<dockerhub-username>/<artifact-id>
+  jib-build:
+    name: containerize
+    runs-on: ubuntu-latest
+    needs: package
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    steps:
+      - name: Push to Docker registry
+        run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD}
 
   backend-test:
     name: Backend Test Stage

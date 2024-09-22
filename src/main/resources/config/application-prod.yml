@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/scaleup?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-    username: root
-    password:
+    url: jdbc:mysql://scaleup.cxq0oswgswef.ap-southeast-1.rds.amazonaws.com:3306/scaleup?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    username: admin
+    password: teamsixnusscaleup # send to secrets
     hikari:
       poolName: Hikari
       auto-commit: false
