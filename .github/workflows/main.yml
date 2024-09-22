@@ -66,6 +66,7 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     steps:
+      - uses: actions/checkout@v4
       - name: Push to Docker registry
         run: npm run java:jar:docker
   #        run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD} -DskipTests
