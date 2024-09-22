@@ -36,6 +36,7 @@
     "java:docker:prod": "npm run java:docker -- -Pprod",
     "java:jar": "./mvnw -ntp verify -DskipTests --batch-mode",
     "java:jar:dev": "npm run java:jar -- -Pdev,webapp",
+    "java:jar:docker": "./mvnw package -Pprod verify jib:build -Djib.to.image=${DOCKER_USERNAME}/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD} -DskipTests",
     "java:jar:prod": "npm run java:jar -- -Pprod",
     "java:war": "./mvnw -ntp verify -DskipTests --batch-mode -Pwar",
     "java:war:dev": "npm run java:war -- -Pdev,webapp",
