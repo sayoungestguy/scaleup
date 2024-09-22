@@ -8,7 +8,7 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntities } from '../../entities/user-skill/user-skill.reducer';
+import { getEntities as getUserSkills } from '../../entities/user-skill/user-skill.reducer';
 import { getEntity } from './user-profile.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 
@@ -20,14 +20,15 @@ export const UserProfileDetail = () => {
 
   const { id } = useParams<'id'>();
 
-  const userSkillList = useAppSelector(state => state.userSkill.entities);
-
   const pageLocation = useLocation();
   const navigate = useNavigate();
 
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
+
+  const [skillsAttained, setSkillsAttained] = useState([]);
+  const [skillsGoals, setSkillsGoals] = useState([]);
 
   useEffect(() => {
     dispatch(getEntity(id));
@@ -37,11 +38,20 @@ export const UserProfileDetail = () => {
 
   const getAllUserSkillsByUserId = () => {
     dispatch(
-      getEntities({
+      getUserSkills({
         query: `userProfileId.equals=${id}&skillTypeId.equals=3`,
-        //query: `skillTypeId.equals=4`,
       }),
-    );
+    ).then(response => {
+      setSkillsAttained((response.payload as any).data);
+    });
+
+    dispatch(
+      getUserSkills({
+        query: `userProfileId.equals=${id}&skillTypeId.equals=4`,
+      }),
+    ).then(response => {
+      setSkillsGoals((response.payload as any).data);
+    });
   };
 
   const sortEntities = () => {
@@ -98,8 +108,6 @@ export const UserProfileDetail = () => {
       return order === ASC ? faSortUp : faSortDown;
     }
   };
-
-  const userSkillEntity = useAppSelector(state => state.userSkill.entity);
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f4f4f4', margin: 0, padding: 0, minHeight: '100vh', width: '100%' }}>
@@ -182,7 +190,7 @@ export const UserProfileDetail = () => {
 
               {/* This section is the User Skill Attained section */}
               <div className="table-responsive">
-                {userSkillList && userSkillList.length > 0 ? (
+                {skillsAttained && skillsAttained.length > 0 ? (
                   <Table responsive>
                     <thead>
                       <tr>
@@ -205,7 +213,7 @@ export const UserProfileDetail = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {userSkillList.map((userSkill, i) => (
+                      {skillsAttained.map((userSkill, i) => (
                         <tr key={`entity-${i}`} data-cy="entityTable">
                           <td>
                             <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
@@ -269,7 +277,7 @@ export const UserProfileDetail = () => {
 
               {/* This section is the User Skill Goals section */}
               <div className="table-responsive">
-                {userSkillList && userSkillList.length > 0 ? (
+                {skillsGoals && skillsGoals.length > 0 ? (
                   <Table responsive>
                     <thead>
                       <tr>
@@ -292,7 +300,7 @@ export const UserProfileDetail = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {userSkillList.map((userSkill, i) => (
+                      {skillsGoals.map((userSkill, i) => (
                         <tr key={`entity-${i}`} data-cy="entityTable">
                           <td>
                             <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
