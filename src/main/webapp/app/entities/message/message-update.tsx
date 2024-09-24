@@ -152,7 +152,6 @@ export const MessageUpdate = () => {
     const entity = {
       ...messageEntity,
       ...values,
-      //senderProfile: currentUserId, // Set senderProfile to the current user's ID
       senderProfile: {
         id: currentUserId, // Wrap currentUserId in an object
       },
@@ -179,7 +178,6 @@ export const MessageUpdate = () => {
           sentAt: convertDateTimeFromServer(messageEntity.sentAt),
           createdDate: convertDateTimeFromServer(messageEntity.createdDate),
           lastModifiedDate: convertDateTimeFromServer(messageEntity.lastModifiedDate),
-          //senderProfile: currentUserId || messageEntity?.senderProfile?.id, // Use currentUserId or existing senderProfile ID
           senderProfile: messageEntity?.senderProfile?.id, // Safely access senderProfile
           receiverProfile: messageEntity?.receiverProfile?.id,
         };
@@ -246,17 +244,6 @@ export const MessageUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               /> */}
-              {/* allows user to select other user as sender, logically should not happen. */}
-              {/* <ValidatedField id="message-senderProfile" name="senderProfile" data-cy="senderProfile" label="Sender Profile" type="select">
-                <option value="" key="0" />
-                {userProfiles
-                  ? userProfiles.map(otherEntity => (
-                      <option value={otherEntity.user.id} key={otherEntity.user.id}>
-                        {otherEntity.user.login}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField> */}
               <ValidatedField
                 id="message-senderProfile"
                 name="senderProfile"
