@@ -182,3 +182,54 @@ jobs:
           path: |
             ./target/test-reports/zap_baseline_report.html
           retention-days: 1
+
+  # Create SIT
+  #  create-sit-servers:
+  #    name: Create SIT Servers
+  #    needs: jib-build
+  #    runs-on: ubuntu-latest
+  #    if: github.ref == 'refs/heads/testing-sit' # Only apply changes on main branch
+  #    env:
+  #      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  #      EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+  #      TF_WORKING_DIR: ./terraform/sit # Adjust to your Terraform directory
+  #    steps:
+  #      - name: Checkout Cocde
+  #        uses: actions/checkout@v4
+  #      - name: Setup Terraform
+  #        uses: hashicorp/setup-terraform@v2
+  #      - name: Terraform Init
+  #        working-directory: ${{ env.TF_WORKING_DIR }}
+  #        run: terraform init
+  #      - name: Terraform Apply
+  #        working-directory: ${{ env.TF_WORKING_DIR }}
+  #        run: terraform apply -auto-approve
+
+  deploy-to-sit:
+    name: Deploy to SIT
+    needs: jib-build
+    runs-on: aws-ec2 #use ubuntu-latest if have time
+    if: github.ref == 'refs/heads/testing-sit' # Only apply changes on main branch
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    #      EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull ${DOCKER_USERNAME}/scaleup:latest
+      - name: Delete Old Container
+        run: docker rm -f scaleUp
+      - name: Run docker container
+        run: docker run -d -p 80:8080 --name scaleUp ${DOCKER_USERNAME}/scaleup:latest
+#    steps:
+#      - uses: appleboy/ssh-action@master
+#        with:
+#          host: www.com
+#          username: ubuntu
+#          key: ${EC2_PRIVATE_KEY}
+#          script: |
+#            docker login
+#            docker pull ${DOCKER_USERNAME}/scaleup:latest
+#            docker stop app
+#            docker rm app
+#            docker run -d --name -p 80:8080 ${DOCKER_USERNAME}/scaleup:latest
+
