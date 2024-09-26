@@ -220,16 +220,3 @@ jobs:
         run: docker rm -f scaleUp
       - name: Run docker container
         run: docker run -d -p 80:8080 --name scaleUp ${DOCKER_USERNAME}/scaleup:latest
-#    steps:
-#      - uses: appleboy/ssh-action@master
-#        with:
-#          host: www.com
-#          username: ubuntu
-#          key: ${EC2_PRIVATE_KEY}
-#          script: |
-#            docker login
-#            docker pull ${DOCKER_USERNAME}/scaleup:latest
-#            docker stop app
-#            docker rm app
-#            docker run -d --name -p 80:8080 ${DOCKER_USERNAME}/scaleup:latest
-
