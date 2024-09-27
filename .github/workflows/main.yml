@@ -71,9 +71,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Push to Docker registry
-        #        run: npm run java:jar:docker
+      - name: Push to Docker registry w/o IT
         run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD} -DskipTests
+        if: github.ref != 'refs/heads/main' || github.ref != 'refs/heads/testing-uat'
+      - name: Push to Docker registry w IT
+        run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD}
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/testing-uat'
 
   backend-test:
     name: Backend Test Stage
@@ -180,7 +183,7 @@ jobs:
         with:
           name: zap report
           path: |
-            ./target/test-reports/zap_baseline_report.html
+            ./zap_baseline_report.html
           retention-days: 1
 
   # Create SIT
@@ -218,17 +221,5 @@ jobs:
 #      - name: Delete Old Container
 #        run: docker rm -f scaleUp
 #      - name: Run docker container
-#        run: docker run -d -p 80:8080 --name scaleUp ${DOCKER_USERNAME}/scaleup:latest
-#    steps:
-#      - uses: appleboy/ssh-action@master
-#        with:
-#          host: www.com
-#          username: ubuntu
-#          key: ${EC2_PRIVATE_KEY}
-#          script: |
-#            docker login
-#            docker pull ${DOCKER_USERNAME}/scaleup:latest
-#            docker stop app
-#            docker rm app
-#            docker run -d --name -p 80:8080 ${DOCKER_USERNAME}/scaleup:latest
+#        run: docker run -d -p 8080:8080 --name scaleUp ${DOCKER_USERNAME}/scaleup:latest
 
