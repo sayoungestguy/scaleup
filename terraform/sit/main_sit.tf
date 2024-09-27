@@ -1,24 +1,7 @@
-// Here is where we are defining
-// our Terraform settings
-# terraform {
-#     required_providers {
-#         // The only required provider we need
-#         // is aws, and we want version 4.0.0
-#         aws = {
-#             source  = "hashicorp/aws"
-#             version = "4.0.0"
-#         }
-#     }
-#
-#     // This is the required version of Terraform
-#     required_version = "~> 1.9.6"
-# }
 
-// Here we are configuring our aws provider.
-// We are setting the region to the region of
-// our variable "aws_region"
 provider "aws" {
     region = var.aws_region
+
 }
 
 // This data object is going to be
@@ -255,36 +238,36 @@ resource "aws_security_group" "scaleup_sit_web_sg" {
 }
 
 // Create a security group for the RDS instances called "scaleup_sit_db_sg"
-resource "aws_security_group" "scaleup_sit_db_sg" {
-    // Basic details like the name and description of the SG
-    name        = "scaleup_sit_db_sg"
-    description = "Security group for scaleup_sit databases"
-    // We want the SG to be in the "scaleup_sit_vpc" VPC
-    vpc_id      = aws_vpc.scaleup_sit_vpc.id
-
-    // The third requirement was "RDS should be on a private subnet and
-    // inaccessible via the internet." To accomplish that, we will
-    // not add any inbound or outbound rules for outside traffic.
-
-    // The fourth and finally requirement was "Only the EC2 instances
-    // should be able to communicate with RDS." So we will create an
-    // inbound rule that allows traffic from the EC2 security group
-    // through TCP port 3306, which is the port that MySQL
-    // communicates through
-    ingress {
-        description     = "Allow MySQL traffic from only the web sg"
-        from_port       = "3306"
-        to_port         = "3306"
-        protocol        = "tcp"
-        //security_groups = [aws_security_group.scaleup_sit_web_sg.id]
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    // Here we are tagging the SG with the name "scaleup_sit_db_sg"
-    tags = {
-        Name = "scaleup_sit_db_sg"
-    }
-}
+# resource "aws_security_group" "scaleup_sit_db_sg" {
+#     // Basic details like the name and description of the SG
+#     name        = "scaleup_sit_db_sg"
+#     description = "Security group for scaleup_sit databases"
+#     // We want the SG to be in the "scaleup_sit_vpc" VPC
+#     vpc_id      = aws_vpc.scaleup_sit_vpc.id
+#
+#     // The third requirement was "RDS should be on a private subnet and
+#     // inaccessible via the internet." To accomplish that, we will
+#     // not add any inbound or outbound rules for outside traffic.
+#
+#     // The fourth and finally requirement was "Only the EC2 instances
+#     // should be able to communicate with RDS." So we will create an
+#     // inbound rule that allows traffic from the EC2 security group
+#     // through TCP port 3306, which is the port that MySQL
+#     // communicates through
+#     ingress {
+#         description     = "Allow MySQL traffic from only the web sg"
+#         from_port       = "3306"
+#         to_port         = "3306"
+#         protocol        = "tcp"
+#         //security_groups = [aws_security_group.scaleup_sit_web_sg.id]
+#         cidr_blocks = ["0.0.0.0/0"]
+#     }
+#
+#     // Here we are tagging the SG with the name "scaleup_sit_db_sg"
+#     tags = {
+#         Name = "scaleup_sit_db_sg"
+#     }
+# }
 
 // Create a db subnet group named "scaleup_sit_db_subnet_group"
 resource "aws_db_subnet_group" "scaleup_sit_db_subnet_group" {
@@ -330,12 +313,12 @@ resource "aws_db_instance" "scaleup_sit_database" {
     password               = var.db_password
 
     // This is the DB subnet group "scaleup_sit_db_subnet_group"
-    db_subnet_group_name   = aws_db_subnet_group.scaleup_sit_db_subnet_group.id
+    // db_subnet_group_name   = aws_db_subnet_group.scaleup_sit_db_subnet_group.id
 
     // This is the security group for the database. It takes a list, but since
     // we only have 1 security group for our db, we are just passing in the
     // "scaleup_sit_db_sg" security group
-    vpc_security_group_ids = [aws_security_group.scaleup_sit_db_sg.id]
+    // vpc_security_group_ids = [aws_security_group.scaleup_sit_db_sg.id]
 
     // This refers to the skipping final snapshot of the database. It is a
     // boolean that is set by the settings.database.skip_final_snapshot

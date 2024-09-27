@@ -34,7 +34,7 @@ variable "settings" {
             allocated_storage   = 20            // storage in gigabytes
             engine              = "mysql"       // engine type
             engine_version      = "8.0.35"      // engine version
-            instance_class      = "db.t3.micro" // rds instance type
+            instance_class      = "db.t4g.micro" // rds instance type
             db_name             = "scaleup"    // database name
             skip_final_snapshot = true
         },
