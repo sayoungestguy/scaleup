@@ -8,6 +8,7 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import axios from 'axios';
 
 import { getEntities } from './message.reducer';
 
@@ -24,6 +25,7 @@ export const Message = () => {
   const messageList = useAppSelector(state => state.message.entities);
   const loading = useAppSelector(state => state.message.loading);
   const totalItems = useAppSelector(state => state.message.totalItems);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const getAllEntities = () => {
     dispatch(
@@ -42,6 +44,24 @@ export const Message = () => {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
+
+  const resetAll = () => {
+    setPaginationState(overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search));
+  };
+
+  // Fetch current user ID
+  useEffect(() => {
+    const fetchCurrentUserId = async () => {
+      try {
+        const response = await axios.get('/api/current-user');
+        setCurrentUserId(response.data);
+      } catch (error) {
+        console.error('Error fetching current user ID:', error);
+      }
+    };
+    fetchCurrentUserId();
+    resetAll();
+  }, []);
 
   useEffect(() => {
     sortEntities();
@@ -180,6 +200,7 @@ export const Message = () => {
                         color="primary"
                         size="sm"
                         data-cy="entityEditButton"
+                        disabled={currentUserId === message.receiverProfile?.id} // Disable if current user is receiver
                       >
                         <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                       </Button>
@@ -190,6 +211,7 @@ export const Message = () => {
                         color="danger"
                         size="sm"
                         data-cy="entityDeleteButton"
+                        disabled={currentUserId === message.receiverProfile?.id} // Disable if current user is receiver
                       >
                         <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
                       </Button>

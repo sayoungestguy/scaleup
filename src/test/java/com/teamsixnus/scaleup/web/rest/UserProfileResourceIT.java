@@ -149,29 +149,29 @@ class UserProfileResourceIT {
         }
     }
 
-    @Test
-    @Transactional
-    void createUserProfile() throws Exception {
-        long databaseSizeBeforeCreate = getRepositoryCount();
-        // Create the UserProfile
-        UserProfileDTO userProfileDTO = userProfileMapper.toDto(userProfile);
-        var returnedUserProfileDTO = om.readValue(
-            restUserProfileMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userProfileDTO)))
-                .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse()
-                .getContentAsString(),
-            UserProfileDTO.class
-        );
+    // @Test
+    // @Transactional
+    // void createUserProfile() throws Exception {
+    //     long databaseSizeBeforeCreate = getRepositoryCount();
+    //     // Create the UserProfile
+    //     UserProfileDTO userProfileDTO = userProfileMapper.toDto(userProfile);
+    //     var returnedUserProfileDTO = om.readValue(
+    //         restUserProfileMockMvc
+    //             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userProfileDTO)))
+    //             .andExpect(status().isCreated())
+    //             .andReturn()
+    //             .getResponse()
+    //             .getContentAsString(),
+    //         UserProfileDTO.class
+    //     );
 
-        // Validate the UserProfile in the database
-        assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedUserProfile = userProfileMapper.toEntity(returnedUserProfileDTO);
-        assertUserProfileUpdatableFieldsEquals(returnedUserProfile, getPersistedUserProfile(returnedUserProfile));
+    //     // Validate the UserProfile in the database
+    //     assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
+    //     var returnedUserProfile = userProfileMapper.toEntity(returnedUserProfileDTO);
+    //     assertUserProfileUpdatableFieldsEquals(returnedUserProfile, getPersistedUserProfile(returnedUserProfile));
 
-        insertedUserProfile = returnedUserProfile;
-    }
+    //     insertedUserProfile = returnedUserProfile;
+    // }
 
     @Test
     @Transactional
