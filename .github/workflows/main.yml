@@ -193,14 +193,13 @@ jobs:
     if: github.ref == 'refs/heads/testing-sit' # Only apply changes on main branch
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
     steps:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ec2-52-77-34-58.ap-southeast-1.compute.amazonaws.com
           username: ubuntu
-          key: ${EC2_PRIVATE_KEY}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: 22
           script: |
             sudo docker pull ${DOCKER_USERNAME}/scaleup:latest
