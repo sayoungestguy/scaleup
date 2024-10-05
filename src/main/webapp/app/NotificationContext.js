@@ -8,7 +8,7 @@ export const NotificationProvider = ({ children }) => {
   const addNotification = message => {
     setNotifications(prev => [...prev, message]);
     // Optionally, remove the notification after a few seconds
-    setTimeout(() => removeNotification(message), 3000);
+    // setTimeout(() => removeNotification(message), 3000);
   };
 
   const removeNotification = message => {
