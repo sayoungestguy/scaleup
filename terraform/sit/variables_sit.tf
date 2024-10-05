@@ -41,6 +41,10 @@ variable "settings" {
         "web_app" = {
             count         = 1          // the number of EC2 instances
             instance_type = "t2.micro" // the EC2 instance
+        },
+        "sql_manager" = {
+            count         = 1          // the number of EC2 instances
+            instance_type = "t2.micro" // the EC2 instance
         }
     }
 }
@@ -96,6 +100,18 @@ variable "db_username" {
 // We will be storing this in a secrets file
 variable "db_password" {
     description = "Database master user password"
+    type        = string
+    sensitive   = true
+}
+
+variable "access_key" {
+    description = "Access Key"
+    type        = string
+    sensitive   = true
+}
+
+variable "secret_key" {
+    description = "Secret Key"
     type        = string
     sensitive   = true
 }
