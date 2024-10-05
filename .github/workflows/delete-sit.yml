@@ -1,7 +1,6 @@
 name: Destroy SIT
 
-on:
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   terraform-destroy:
@@ -12,6 +11,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       AWS_DEFAULT_REGION: ap-southeast-1 # Replace with your AWS region
       TF_WORKING_DIR: ./terraform/sit # Adjust to your Terraform directory
 
@@ -35,4 +35,4 @@ jobs:
 
       - name: Terraform Destroy
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform destroy -auto-approve -var='access-key=${AWS_ACCESS_KEY_ID}' -var='secret-key=${AWS_SECRET_ACCESS_KEY}' -var='db_username=admin' -var='db_password=${DB_PASSWORD}' -var='my_ip='${IP_ADDR}'
+        run: terraform destroy -auto-approve -var='access-key=${AWS_ACCESS_KEY_ID}' -var='secret-key=${AWS_SECRET_ACCESS_KEY}' -var='db_username=admin' -var='db_password=${DB_PASSWORD}' -var='my_ip='192.168.0.147'
