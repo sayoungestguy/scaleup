@@ -52,7 +52,7 @@ spring:
     #   port: 25
     #   username:
     #   password:
-    mail:
+  mail:
     host: mail.smtp2go.com
     port: 2525
     username: 2000990@sit.singaporetech.edu.sg
