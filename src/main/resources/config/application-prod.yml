@@ -47,16 +47,16 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
-  #  mail:
-  #    host: localhost
-  #    port: 25
-  #    username:
-  #    password:
-  mail:
-    host: smtp.mailersend.net
-    port: 587
-    username: MS_hwQpFm@trial-k68zxl2o29egj905.mlsender.net
-    password: zTuZ0pxazgHfOWPK
+    # mail:
+    #   host: localhost
+    #   port: 25
+    #   username:
+    #   password:
+    mail:
+    host: mail.smtp2go.com
+    port: 2525
+    username: 2000990@sit.singaporetech.edu.sg
+    password: OGmMUeE1XRXbsn7j
     properties:
       mail:
         smtp:
@@ -64,8 +64,6 @@ spring:
           starttls:
             enable: true
             required: true
-  messages:
-    cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
     cache: true
 
