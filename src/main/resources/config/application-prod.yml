@@ -33,7 +33,7 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://terraform-20241003180209764100000005.cxq0oswgswef.ap-southeast-1.rds.amazonaws.com:3306/scaleup?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    url: jdbc:mysql://terraform-20241004101126193600000005.cxq0oswgswef.ap-southeast-1.rds.amazonaws.com:3306/scaleup?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: admin
     password: teamsixnusscaleup # send to secrets
     hikari:
