@@ -1,24 +1,8 @@
-// Here is where we are defining
-// our Terraform settings
-# terraform {
-#     required_providers {
-#         // The only required provider we need
-#         // is aws, and we want version 4.0.0
-#         aws = {
-#             source  = "hashicorp/aws"
-#             version = "4.0.0"
-#         }
-#     }
-#
-#     // This is the required version of Terraform
-#     required_version = "~> 1.9.6"
-# }
 
-// Here we are configuring our aws provider.
-// We are setting the region to the region of
-// our variable "aws_region"
 provider "aws" {
     region = var.aws_region
+    access_key = var.access_key
+    secret_key = var.secret_key
 }
 
 // This data object is going to be
@@ -218,22 +202,18 @@ resource "aws_security_group" "scaleup_sit_web_sg" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 
-    // The second requirement we need to meet is "Only you should be
-    // "able to access the EC2 instances via SSH." So we will create an
-    // inbound rule that allows SSH traffic ONLY from your IP address
-#     ingress {
-#         description = "Allow SSH from my computer"
-#         from_port   = "22"
-#         to_port     = "22"
-#         protocol    = "tcp"
-#         // This is using the variable "my_ip"
-#         cidr_blocks = ["${var.my_ip}/32"]
-#     }
-
     ingress {
         description = "Allow SSH from all"
         from_port   = "22"
         to_port     = "22"
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        description = "Allow all traffic through HTTP via 8080"
+        from_port   = "8080"
+        to_port     = "8080"
         protocol    = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
@@ -251,6 +231,41 @@ resource "aws_security_group" "scaleup_sit_web_sg" {
     // Here we are tagging the SG with the name "scaleup_sit_web_sg"
     tags = {
         Name = "scaleup_sit_web_sg"
+    }
+}
+
+## SQL Manager Security Group
+resource "aws_security_group" "scaleup_sit_sql_manager_sg" {
+    name        = "scaleup_sit_sql_manager_sg"
+    description = "Security group for scaleup_sit SQL manager"
+    vpc_id      = aws_vpc.scaleup_sit_vpc.id
+
+    ingress {
+        description = "Allow SSH"
+        from_port   = "22"
+        to_port     = "22"
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        description = "Allow all traffic through HTTP"
+        from_port   = "80"
+        to_port     = "80"
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        description = "Allow all outbound traffic"
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        Name = "scaleup_sit_sql_manager_sg"
     }
 }
 
@@ -276,7 +291,7 @@ resource "aws_security_group" "scaleup_sit_db_sg" {
         from_port       = "3306"
         to_port         = "3306"
         protocol        = "tcp"
-        //security_groups = [aws_security_group.scaleup_sit_web_sg.id]
+        security_groups = [aws_security_group.scaleup_sit_web_sg.id]
         cidr_blocks = ["0.0.0.0/0"]
     }
 
@@ -416,5 +431,31 @@ resource "aws_eip" "scaleup_sit_web_eip" {
     // "scaleup_sit_web_eip_" followed by the count index
     tags = {
         Name = "scaleup_sit_web_eip_${count.index}"
+    }
+}
+
+# EC2 Instance for Managing SQL
+resource "aws_instance" "scaleup_sit_sql_manager" {
+    ami                    = data.aws_ami.ubuntu.id
+    instance_type          = var.settings.sql_manager.instance_type
+    subnet_id              = aws_subnet.scaleup_sit_public_subnet[0].id
+    key_name               = aws_key_pair.scaleup_sit_kp.key_name
+    vpc_security_group_ids = [aws_security_group.scaleup_sit_sql_manager_sg.id]
+    associate_public_ip_address = true
+
+    tags = {
+        Name = "scaleup_sit_sql_manager"
+    }
+
+    user_data = file("installSql.sh")
+}
+
+# Elastic IP for SQL Manager Instance
+resource "aws_eip" "scaleup_sit_sql_manager_eip" {
+    instance = aws_instance.scaleup_sit_sql_manager.id
+    vpc      = true
+
+    tags = {
+        Name = "scaleup_sit_sql_manager_eip"
     }
 }

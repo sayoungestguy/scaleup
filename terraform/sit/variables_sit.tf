@@ -34,11 +34,15 @@ variable "settings" {
             allocated_storage   = 20            // storage in gigabytes
             engine              = "mysql"       // engine type
             engine_version      = "8.0.35"      // engine version
-            instance_class      = "db.t3.micro" // rds instance type
+            instance_class      = "db.t4g.micro" // rds instance type
             db_name             = "scaleup"    // database name
             skip_final_snapshot = true
         },
         "web_app" = {
+            count         = 1          // the number of EC2 instances
+            instance_type = "t2.micro" // the EC2 instance
+        },
+        "sql_manager" = {
             count         = 1          // the number of EC2 instances
             instance_type = "t2.micro" // the EC2 instance
         }
@@ -96,6 +100,18 @@ variable "db_username" {
 // We will be storing this in a secrets file
 variable "db_password" {
     description = "Database master user password"
+    type        = string
+    sensitive   = true
+}
+
+variable "access_key" {
+    description = "Access Key"
+    type        = string
+    sensitive   = true
+}
+
+variable "secret_key" {
+    description = "Secret Key"
     type        = string
     sensitive   = true
 }

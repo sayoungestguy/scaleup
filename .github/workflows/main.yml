@@ -71,9 +71,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Push to Docker registry
-        #        run: npm run java:jar:docker
+      - name: Push to Docker registry w/o IT
         run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD} -DskipTests
+        if: github.ref != 'refs/heads/main' || github.ref != 'refs/heads/testing-uat'
+      - name: Push to Docker registry w IT
+        run: ./mvnw package -Pprod verify jib:build -Djib.to.image=shenanquek97/scaleup -Djib.to.auth.username=${DOCKER_USERNAME} -Djib.to.auth.password=${DOCKER_PASSWORD}
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/testing-uat'
 
   backend-test:
     name: Backend Test Stage
@@ -180,30 +183,8 @@ jobs:
         with:
           name: zap report
           path: |
-            ./target/test-reports/zap_baseline_report.html
+            ./zap_baseline_report.html
           retention-days: 1
-
-  # Create SIT
-  #  create-sit-servers:
-  #    name: Create SIT Servers
-  #    needs: jib-build
-  #    runs-on: ubuntu-latest
-  #    if: github.ref == 'refs/heads/testing-sit' # Only apply changes on main branch
-  #    env:
-  #      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  #      EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
-  #      TF_WORKING_DIR: ./terraform/sit # Adjust to your Terraform directory
-  #    steps:
-  #      - name: Checkout Cocde
-  #        uses: actions/checkout@v4
-  #      - name: Setup Terraform
-  #        uses: hashicorp/setup-terraform@v2
-  #      - name: Terraform Init
-  #        working-directory: ${{ env.TF_WORKING_DIR }}
-  #        run: terraform init
-  #      - name: Terraform Apply
-  #        working-directory: ${{ env.TF_WORKING_DIR }}
-  #        run: terraform apply -auto-approve
 
   deploy-to-sit:
     name: Deploy to SIT
@@ -212,11 +193,17 @@ jobs:
     if: github.ref == 'refs/heads/testing-sit' # Only apply changes on main branch
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    #      EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+      EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
     steps:
+      - name: Get PEM File
+        run: echo "$EC2_PRIVATE_KEY" > private_key && chmod 600 private_key
+      - name: SSH into EC2
+        run: ssh -i private_key ubuntu@ec2-52-77-34-58.ap-southeast-1.compute.amazonaws.com
       - name: Pull image from docker hub
-        run: docker pull ${DOCKER_USERNAME}/scaleup:latest
+        run: sudo docker pull ${DOCKER_USERNAME}/scaleup:latest
       - name: Delete Old Container
-        run: docker rm -f scaleUp
+        run: |
+          sudo docker stop scaleUp || true
+          sudo docker rm -f scaleUp || true
       - name: Run docker container
-        run: docker run -d -p 80:8080 --name scaleUp ${DOCKER_USERNAME}/scaleup:latest
+        run: sudo docker run -d -p 8080:8080 --name scaleUp ${DOCKER_USERNAME}/scaleup:latest
