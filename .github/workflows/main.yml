@@ -189,7 +189,7 @@ jobs:
   deploy-to-sit:
     name: Deploy to SIT
     needs: jib-build
-    runs-on: aws-ec2 #use ubuntu-latest if have time
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/testing-sit' # Only apply changes on main branch
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
