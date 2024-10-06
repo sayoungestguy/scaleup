@@ -220,7 +220,7 @@ jobs:
 
   deploy-to-main:
     name: Deploy to Production
-    needs: [jib-build, dast-scan, synk, sonar]
+    needs: [jib-build, dast-scan, snyk, sonar]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' # Only apply changes on main branch
     env:
