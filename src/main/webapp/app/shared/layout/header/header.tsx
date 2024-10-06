@@ -3,6 +3,7 @@ import './header.scss';
 import React, { useState } from 'react';
 
 import { Navbar, Nav, NavbarToggler, Collapse } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import LoadingBar from 'react-redux-loading-bar';
 
 import { Home, Brand } from './header-components';
@@ -26,16 +27,20 @@ const Header = (props: IHeaderProps) => {
       </div>
     ) : null;
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const handleNavClick = () => {
+    if (menuOpen) {
+      setMenuOpen(false);
+    }
+  };
 
-  /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
+  const toggleMenu = () => setMenuOpen(!menuOpen);
 
   return (
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar className="loading-bar" />
       <Navbar data-cy="navbar" dark expand="md" fixed="top" className="jh-navbar">
-        <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
+        <NavbarToggler aria-label="Menu" onClick={toggleMenu} aria-expanded={menuOpen} />
         <Brand />
         <Collapse isOpen={menuOpen} navbar>
           <Nav id="header-tabs" className="ms-auto" navbar>
