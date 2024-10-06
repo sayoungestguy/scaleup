@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getUserSkills } from '../../entities/user-skill/user-skill.reducer';
 import { getEntities as getUserProfiles } from '../../entities/user-profile/user-profile.reducer';
 import { getEntity } from './user-profile.reducer';
+import { getEntity as getSkillName } from 'app/entities/skill/skill.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 
 export const UserProfileDetail = () => {
@@ -30,6 +31,7 @@ export const UserProfileDetail = () => {
 
   const [skillsAttained, setSkillsAttained] = useState([]);
   const [skillsGoals, setSkillsGoals] = useState([]);
+  const [skillNames, setSkillNames] = useState({});
 
   useEffect(() => {
     dispatch(getEntity(id));
@@ -54,8 +56,6 @@ export const UserProfileDetail = () => {
       setSkillsGoals((response.payload as any).data);
     });
   };
-
-  // Fetch Skill names from Skill Table using Skill ID from UserSkill data to match them
 
   const sortEntities = () => {
     getAllUserSkillsByUserId();
@@ -111,6 +111,30 @@ export const UserProfileDetail = () => {
       return order === ASC ? faSortUp : faSortDown;
     }
   };
+
+  //To Fetch skill names from Skill Table
+  // Fetch skill names for skillsAttained and skillsGoals
+  useEffect(() => {
+    const fetchSkillNames = async () => {
+      const newSkillNames = { ...skillNames };
+
+      // Fetch skill names for skillsAttained
+      for (const userSkill of [...skillsAttained, ...skillsGoals]) {
+        if (userSkill.skill && !newSkillNames[userSkill.skill.id]) {
+          const response = await dispatch(getSkillName(userSkill.skill.id));
+          newSkillNames[userSkill.skill.id] = (response.payload as { data: { skillName: string } }).data.skillName;
+        }
+      }
+
+      setSkillNames(newSkillNames);
+    };
+
+    if (skillsAttained.length > 0 || skillsGoals.length > 0) {
+      fetchSkillNames();
+    }
+  }, [skillsAttained, skillsGoals]);
+
+  //**************************************************************************** */
 
   {
     /*  This is the search bar for the user profile */
@@ -328,13 +352,7 @@ export const UserProfileDetail = () => {
                           Years Of Experience <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
                         </th>
                         <th>
-                          User Profile <FontAwesomeIcon icon="sort" />
-                        </th>
-                        <th>
                           Skill <FontAwesomeIcon icon="sort" />
-                        </th>
-                        <th>
-                          Skill Type <FontAwesomeIcon icon="sort" />
                         </th>
                         <th />
                       </tr>
@@ -348,17 +366,22 @@ export const UserProfileDetail = () => {
                             </Button>
                           </td>
                           <td>{userSkill.yearsOfExperience}</td>
-                          <td>
+                          {/* <td>
                             {userSkill.userProfile ? (
                               <Link to={`/user-profile/${userSkill.userProfile.id}`}>{userSkill.userProfile.id}</Link>
                             ) : (
                               ''
                             )}
-                          </td>
-                          <td>{userSkill.skill ? <Link to={`/skill/${userSkill.skill.id}`}>{userSkill.skill.id}</Link> : ''}</td>
+                          </td> */}
+                          {/* <td>{userSkill.skill ? <Link to={`/skill/${userSkill.skill.id}`}>{userSkill.skill.id}</Link> : ''}</td> */}
                           <td>
-                            {userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}
+                            {userSkill.skill ? (
+                              <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
+                            ) : (
+                              ''
+                            )}
                           </td>
+                          {/* <td>{userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}</td> */}
                           <td className="text-end">
                             <div className="btn-group flex-btn-group-container">
                               <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
@@ -412,16 +435,10 @@ export const UserProfileDetail = () => {
                           ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                         </th>
                         <th className="hand" onClick={sort('yearsOfExperience')}>
-                          Years Of Experience <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
-                        </th>
-                        <th>
-                          User Profile <FontAwesomeIcon icon="sort" />
+                          <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
                         </th>
                         <th>
                           Skill <FontAwesomeIcon icon="sort" />
-                        </th>
-                        <th>
-                          Skill Type <FontAwesomeIcon icon="sort" />
                         </th>
                         <th />
                       </tr>
@@ -434,18 +451,23 @@ export const UserProfileDetail = () => {
                               {userSkill.id}
                             </Button>
                           </td>
-                          <td>{userSkill.yearsOfExperience}</td>
-                          <td>
+                          <td>{}</td>
+                          {/* <td>
                             {userSkill.userProfile ? (
                               <Link to={`/user-profile/${userSkill.userProfile.id}`}>{userSkill.userProfile.id}</Link>
                             ) : (
                               ''
                             )}
-                          </td>
-                          <td>{userSkill.skill ? <Link to={`/skill/${userSkill.skill.id}`}>{userSkill.skill.id}</Link> : ''}</td>
+                          </td> */}
+
                           <td>
-                            {userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}
+                            {userSkill.skill ? (
+                              <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
+                            ) : (
+                              ''
+                            )}
                           </td>
+                          {/* <td>{userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}</td> */}
                           <td className="text-end">
                             <div className="btn-group flex-btn-group-container">
                               <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
