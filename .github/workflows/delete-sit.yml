@@ -3,7 +3,7 @@ name: Destroy SIT
 on:
   push:
     branches:
-      - testing-sit
+      - ci-cd
   workflow_dispatch:
 
 jobs:
