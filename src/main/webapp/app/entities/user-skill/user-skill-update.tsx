@@ -155,11 +155,13 @@ export const UserSkillUpdate = () => {
               <ValidatedField id="user-skill-skillType" name="skillType" data-cy="skillType" label="Skill Type" type="select">
                 <option value="" key="0" />
                 {codeTables
-                  ? codeTables.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.codeValue}
-                      </option>
-                    ))
+                  ? codeTables
+                      .filter(otherEntity => otherEntity.id === 3 || otherEntity.id === 4)
+                      .map(filteredEntity => (
+                        <option value={filteredEntity.id} key={filteredEntity.id}>
+                          {filteredEntity.codeValue}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/user-skill" replace color="info">
