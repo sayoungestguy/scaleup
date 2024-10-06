@@ -21,8 +21,13 @@ public class UserProfile extends AbstractAuditingEntity<Long> implements Seriali
 
     private static final long serialVersionUID = 1L;
 
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @Column(name = "id")
+    // private Long id;
+
+    //edited by wei jie, original function above
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -183,8 +188,16 @@ public class UserProfile extends AbstractAuditingEntity<Long> implements Seriali
         return this.user;
     }
 
+    // public void setUser(User user) {
+    //     this.user = user;
+    // }
+
+    //edited by weijie, original function above
     public void setUser(User user) {
         this.user = user;
+        if (user != null) {
+            this.id = user.getId(); // Set the profile id to the user's id
+        }
     }
 
     public UserProfile user(User user) {
