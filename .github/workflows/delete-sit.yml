@@ -1,10 +1,9 @@
 name: Destroy SIT
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - ci-cd
-  workflow_dispatch:
 
 jobs:
   terraform-destroy:
