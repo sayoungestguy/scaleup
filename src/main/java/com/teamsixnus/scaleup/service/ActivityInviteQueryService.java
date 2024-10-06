@@ -3,6 +3,9 @@ package com.teamsixnus.scaleup.service;
 import com.teamsixnus.scaleup.domain.*; // for static metamodels
 import com.teamsixnus.scaleup.domain.ActivityInvite;
 import com.teamsixnus.scaleup.repository.ActivityInviteRepository;
+import com.teamsixnus.scaleup.security.AuthoritiesConstants;
+import com.teamsixnus.scaleup.security.SecurityUtils;
+import com.teamsixnus.scaleup.service.criteria.ActivityCriteria;
 import com.teamsixnus.scaleup.service.criteria.ActivityInviteCriteria;
 import com.teamsixnus.scaleup.service.dto.ActivityInviteDTO;
 import com.teamsixnus.scaleup.service.mapper.ActivityInviteMapper;
@@ -12,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.LongFilter;
 
 /**
  * Service for executing complex queries for {@link ActivityInvite} entities in the database.
@@ -32,9 +37,16 @@ public class ActivityInviteQueryService extends QueryService<ActivityInvite> {
 
     private final ActivityInviteMapper activityInviteMapper;
 
-    public ActivityInviteQueryService(ActivityInviteRepository activityInviteRepository, ActivityInviteMapper activityInviteMapper) {
+    private final UserService userService;
+
+    public ActivityInviteQueryService(
+        ActivityInviteRepository activityInviteRepository,
+        ActivityInviteMapper activityInviteMapper,
+        UserService userService
+    ) {
         this.activityInviteRepository = activityInviteRepository;
         this.activityInviteMapper = activityInviteMapper;
+        this.userService = userService;
     }
 
     /**
@@ -46,6 +58,17 @@ public class ActivityInviteQueryService extends QueryService<ActivityInvite> {
     @Transactional(readOnly = true)
     public Page<ActivityInviteDTO> findByCriteria(ActivityInviteCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
+        User currentUser = userService.getUserById().orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        boolean isAdmin = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN);
+        if (currentUser != null && !isAdmin) {
+            // Set the creatorProfileId in the criteria to match the current user
+            if (criteria == null) {
+                criteria = new ActivityInviteCriteria();
+            }
+            LongFilter userFilter = new LongFilter();
+            userFilter.setEquals(currentUser.getId());
+            criteria.setInviteeProfileId(userFilter);
+        }
         final Specification<ActivityInvite> specification = createSpecification(criteria);
         return activityInviteRepository.findAll(specification, page).map(activityInviteMapper::toDto);
     }

@@ -380,7 +380,7 @@ export const Activity = () => {
                     <td>{activity.details}</td>
                     <td>
                       {activity.skill ? (
-                        <Link to={`/skill/${activity.skill.id}`}>{currentSkills[activity.skill.id] || 'Loading...'}</Link>
+                        <Link to={`/skill/${activity.skill.id}`}>{pastSkills[activity.skill.id] || 'Loading...'}</Link>
                       ) : (
                         ''
                       )}

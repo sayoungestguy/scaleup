@@ -95,21 +95,21 @@ export const ActivityDetail = () => {
           )}
         </Col>
       </Row>
-      <Row className="p-5">
-        <div className="activity-invite-tbl border border-5 p-3 m-2">
-          {/*<ActivityInviteTable*/}
-          {/*  activityInviteList={activityInviteList}*/}
-          {/*  sort={sort}*/}
-          {/*  getSortIconByFieldName={getSortIconByFieldName}*/}
-          {/*  loading={loading}*/}
-          {/*  paginationState={paginationState}*/}
-          {/*  totalItems={totalItems}*/}
-          {/*  handlePagination*/}
-          {/*  handleSyncList*/}
-          {/*/>*/}
-          <ActivityInviteTable activityId={id} />
-        </div>
-      </Row>
+      {/*<Row className="p-5">*/}
+      {/*  <div className="activity-invite-tbl border border-5 p-3 m-2">*/}
+      {/*    <ActivityInviteTable*/}
+      {/*      activityInviteList={activityInviteList}*/}
+      {/*      sort={sort}*/}
+      {/*      getSortIconByFieldName={getSortIconByFieldName}*/}
+      {/*      loading={loading}*/}
+      {/*      paginationState={paginationState}*/}
+      {/*      totalItems={totalItems}*/}
+      {/*      handlePagination*/}
+      {/*      handleSyncList*/}
+      {/*    />*/}
+      {/*    <ActivityInviteTable activityId={id} />*/}
+      {/*  </div>*/}
+      {/*</Row>*/}
     </>
   );
 };
