@@ -5,7 +5,6 @@ import com.teamsixnus.scaleup.domain.ActivityInvite;
 import com.teamsixnus.scaleup.repository.ActivityInviteRepository;
 import com.teamsixnus.scaleup.security.AuthoritiesConstants;
 import com.teamsixnus.scaleup.security.SecurityUtils;
-import com.teamsixnus.scaleup.service.criteria.ActivityCriteria;
 import com.teamsixnus.scaleup.service.criteria.ActivityInviteCriteria;
 import com.teamsixnus.scaleup.service.dto.ActivityInviteDTO;
 import com.teamsixnus.scaleup.service.mapper.ActivityInviteMapper;
