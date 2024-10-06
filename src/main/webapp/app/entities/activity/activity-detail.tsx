@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Button, Row, Col, Table } from 'reactstrap';
-import { byteSize, getPaginationState, TextFormat } from 'react-jhipster';
+import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getActivityById } from './activity.reducer';
-import { getAllActivityInvites, reset } from 'app/entities/activity-invite/activity-invite.reducer';
-import { ASC, DESC, ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getSkillById } from 'app/entities/skill/skill.reducer';
 import { getEntity } from 'app/entities/user-profile/user-profile.reducer';
-import ActivityInvite from 'app/entities/activity-invite';
-import ActivityInviteTable from 'app/entities/activity-invite/activity-invite-table';
 
 export const ActivityDetail = () => {
   const dispatch = useAppDispatch();
@@ -95,21 +88,21 @@ export const ActivityDetail = () => {
           )}
         </Col>
       </Row>
-      <Row className="p-5">
-        <div className="activity-invite-tbl border border-5 p-3 m-2">
-          {/*<ActivityInviteTable*/}
-          {/*  activityInviteList={activityInviteList}*/}
-          {/*  sort={sort}*/}
-          {/*  getSortIconByFieldName={getSortIconByFieldName}*/}
-          {/*  loading={loading}*/}
-          {/*  paginationState={paginationState}*/}
-          {/*  totalItems={totalItems}*/}
-          {/*  handlePagination*/}
-          {/*  handleSyncList*/}
-          {/*/>*/}
-          <ActivityInviteTable activityId={id} />
-        </div>
-      </Row>
+      {/*<Row className="p-5">*/}
+      {/*  <div className="activity-invite-tbl border border-5 p-3 m-2">*/}
+      {/*    <ActivityInviteTable*/}
+      {/*      activityInviteList={activityInviteList}*/}
+      {/*      sort={sort}*/}
+      {/*      getSortIconByFieldName={getSortIconByFieldName}*/}
+      {/*      loading={loading}*/}
+      {/*      paginationState={paginationState}*/}
+      {/*      totalItems={totalItems}*/}
+      {/*      handlePagination*/}
+      {/*      handleSyncList*/}
+      {/*    />*/}
+      {/*    <ActivityInviteTable activityId={id} />*/}
+      {/*  </div>*/}
+      {/*</Row>*/}
     </>
   );
 };
