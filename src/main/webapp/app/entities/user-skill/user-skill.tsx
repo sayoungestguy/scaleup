@@ -10,6 +10,9 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities } from './user-skill.reducer';
 
+// Assuming you have an API function to get skill details by id
+import { getEntity as getSkillName } from 'app/entities/skill/skill.reducer';
+
 export const UserSkill = () => {
   const dispatch = useAppDispatch();
 
@@ -23,6 +26,9 @@ export const UserSkill = () => {
   const userSkillList = useAppSelector(state => state.userSkill.entities);
   const loading = useAppSelector(state => state.userSkill.loading);
   const totalItems = useAppSelector(state => state.userSkill.totalItems);
+
+  // New state to hold the fetched skill names
+  const [skillNames, setSkillNames] = useState({});
 
   const getAllEntities = () => {
     dispatch(
@@ -78,6 +84,26 @@ export const UserSkill = () => {
   const handleSyncList = () => {
     sortEntities();
   };
+
+  // Fetch the skillName for each skill.id
+  useEffect(() => {
+    const fetchSkillNames = async () => {
+      const newSkillNames = { ...skillNames }; // Copy current state
+      for (const userSkill of userSkillList) {
+        if (userSkill.skill && !newSkillNames[userSkill.skill.id]) {
+          const response = (await dispatch(getSkillName(userSkill.skill.id))) as unknown as { payload: { data: { skillName: string } } }; // Dispatch the action to fetch skill by id
+          newSkillNames[userSkill.skill.id] = response.payload.data.skillName; // Update the state with the fetched skillName
+        }
+      }
+      setSkillNames(newSkillNames); // Set the state with the updated skill names
+    };
+
+    if (userSkillList.length > 0) {
+      fetchSkillNames();
+    }
+  }, [userSkillList]);
+
+  //**************************************************************************** */
 
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = paginationState.sort;
@@ -138,7 +164,13 @@ export const UserSkill = () => {
                   <td>
                     {userSkill.userProfile ? <Link to={`/user-profile/${userSkill.userProfile.id}`}>{userSkill.userProfile.id}</Link> : ''}
                   </td>
-                  <td>{userSkill.skill ? <Link to={`/skill/${userSkill.skill.id}`}>{userSkill.skill.id}</Link> : ''}</td>
+                  <td>
+                    {userSkill.skill ? (
+                      <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td>{userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
