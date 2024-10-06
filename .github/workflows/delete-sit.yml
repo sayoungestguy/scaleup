@@ -1,6 +1,10 @@
 name: Destroy SIT
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - testing-sit
+  workflow_dispatch:
 
 jobs:
   terraform-destroy:
