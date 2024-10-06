@@ -145,7 +145,7 @@ export const UserProfileDetail = () => {
     if (query) {
       dispatch(
         getUserProfiles({
-          query: `createdBy.contains=${query}`, // Assuming search by login (username)
+          query: `userProfileId.contains=${query}`, // Assuming search by login (username)
         }),
       ).then(response => {
         setFilteredUsers((response.payload as { data: any[] }).data); // Update filtered user profiles
@@ -164,7 +164,7 @@ export const UserProfileDetail = () => {
 
       {/*  This is the search bar for the user profile */}
       <div className="d-flex justify-content-end align-items-center mb-3" style={{ gap: '10px', position: 'relative' }}>
-        <input
+        {/* <input
           type="text"
           className="form-control"
           placeholder="Search User's Profile"
@@ -192,7 +192,7 @@ export const UserProfileDetail = () => {
           }}
         >
           <FontAwesomeIcon icon="search" spin={loading} /> Search
-        </Button>
+        </Button> */}
 
         {/* Scrollable dropdown for search results */}
         {searchQuery && filteredUsers.length === 0 && !loading && (
@@ -234,8 +234,8 @@ export const UserProfileDetail = () => {
             <ul className="list-group">
               {filteredUsers.map(user => (
                 <li key={user.id} className="list-group-item" style={{ cursor: 'pointer' }}>
-                  <Link to={`/user-profile/${user.id}`} onClick={() => setSearchQuery(user.login)}>
-                    {user.login}
+                  <Link to={`/user-profile/${user.id}`} onClick={() => setSearchQuery(user.id)}>
+                    {user.nickname}
                   </Link>
                 </li>
               ))}
@@ -243,22 +243,7 @@ export const UserProfileDetail = () => {
           </div>
         )}
       </div>
-
-      {/* <Button
-          className="me-2"
-          color="info"
-          onClick={() => handleSearch(searchQuery)}
-          disabled={loading}
-          style={{
-            borderRadius: '20px',
-            padding: '10px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-          }}
-        >
-          <FontAwesomeIcon icon="search" spin={loading} /> Search
-        </Button> */}
+      {/*  end of search bar for the user profile */}
 
       <main
         style={{
