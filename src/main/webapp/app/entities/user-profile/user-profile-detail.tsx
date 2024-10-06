@@ -282,10 +282,10 @@ export const UserProfileDetail = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                margin: '0 auto', // Ensures that the circle div is centered horizontally
+                margin: '0 auto',
               }}
             >
-              <FontAwesomeIcon icon="user" style={{ fontSize: '100px', color: '#555' }} /> {/* Increased the fontSize for larger icon */}
+              <FontAwesomeIcon icon="user" style={{ fontSize: '100px', color: '#555' }} />
             </div>
 
             <h2>{userProfileEntity.user ? userProfileEntity.user.login : ''}</h2>
@@ -303,7 +303,22 @@ export const UserProfileDetail = () => {
                 <strong>Email:</strong> {account.email}
               </p>
               <p>
-                <strong>Socials:</strong> {userProfileEntity?.socialLinks}
+                <strong>Socials:</strong>{' '}
+                {userProfileEntity?.socialLinks ? (
+                  <a
+                    href={
+                      userProfileEntity.socialLinks.startsWith('http')
+                        ? userProfileEntity.socialLinks
+                        : `https://${userProfileEntity.socialLinks}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {userProfileEntity.socialLinks}
+                  </a>
+                ) : (
+                  'No social links available'
+                )}
               </p>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                 <p>
@@ -316,177 +331,163 @@ export const UserProfileDetail = () => {
             </Button>
           </div>
 
+          {/* Skills Attained Section */}
           <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '10px' }}>
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <h3 style={{ marginBottom: '20px' }}>Skills Attained</h3>
 
-              {/* This section is the User Skill Attained section */}
-              <div className="table-responsive">
-                {skillsAttained && skillsAttained.length > 0 ? (
-                  <Table responsive>
-                    <thead>
-                      <tr>
-                        <th className="hand" onClick={sort('id')}>
-                          ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                        </th>
-                        <th className="hand" onClick={sort('yearsOfExperience')}>
-                          Years Of Experience <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
-                        </th>
-                        <th>
-                          Skill <FontAwesomeIcon icon="sort" />
-                        </th>
-                        <th />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {skillsAttained.map((userSkill, i) => (
-                        <tr key={`entity-${i}`} data-cy="entityTable">
-                          <td>
-                            <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
-                              {userSkill.id}
-                            </Button>
-                          </td>
-                          <td>{userSkill.yearsOfExperience}</td>
-                          {/* <td>
-                            {userSkill.userProfile ? (
-                              <Link to={`/user-profile/${userSkill.userProfile.id}`}>{userSkill.userProfile.id}</Link>
-                            ) : (
-                              ''
-                            )}
-                          </td> */}
-                          {/* <td>{userSkill.skill ? <Link to={`/skill/${userSkill.skill.id}`}>{userSkill.skill.id}</Link> : ''}</td> */}
-                          <td>
-                            {userSkill.skill ? (
-                              <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
-                            ) : (
-                              ''
-                            )}
-                          </td>
-                          {/* <td>{userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}</td> */}
-                          <td className="text-end">
-                            <div className="btn-group flex-btn-group-container">
-                              <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                                <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                              </Button>
-                              <Button
-                                tag={Link}
-                                to={`/user-skill/${userSkill.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                                color="primary"
-                                size="sm"
-                                data-cy="entityEditButton"
-                              >
-                                <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                              </Button>
-                              <Button
-                                onClick={() =>
-                                  (window.location.href = `/user-skill/${userSkill.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                                }
-                                color="danger"
-                                size="sm"
-                                data-cy="entityDeleteButton"
-                              >
-                                <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                              </Button>
-                            </div>
-                          </td>
+              {/* Scrollable Table Container */}
+              <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                <div className="table-responsive">
+                  {skillsAttained && skillsAttained.length > 0 ? (
+                    <Table responsive>
+                      <thead>
+                        <tr>
+                          <th className="hand" onClick={sort('id')}>
+                            ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                          </th>
+                          <th className="hand" onClick={sort('yearsOfExperience')}>
+                            Years Of Experience <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
+                          </th>
+                          <th>
+                            Skill <FontAwesomeIcon icon="sort" />
+                          </th>
+                          <th />
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                ) : (
-                  !loading && <div className="alert alert-warning">No User Skills found</div>
-                )}
-                <Button tag={Link} to={`/user-skill/new`} color="primary" block>
-                  Add Skill
-                </Button>
+                      </thead>
+                      <tbody>
+                        {skillsAttained.map((userSkill, i) => (
+                          <tr key={`entity-${i}`} data-cy="entityTable">
+                            <td>
+                              <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
+                                {userSkill.id}
+                              </Button>
+                            </td>
+                            <td>{userSkill.yearsOfExperience}</td>
+                            <td>
+                              {userSkill.skill ? (
+                                <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
+                              ) : (
+                                ''
+                              )}
+                            </td>
+                            <td className="text-end">
+                              <div className="btn-group flex-btn-group-container">
+                                <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                                </Button>
+                                <Button
+                                  tag={Link}
+                                  to={`/user-skill/${userSkill.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                                  color="primary"
+                                  size="sm"
+                                  data-cy="entityEditButton"
+                                >
+                                  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                                </Button>
+                                <Button
+                                  onClick={() =>
+                                    (window.location.href = `/user-skill/${userSkill.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                                  }
+                                  color="danger"
+                                  size="sm"
+                                  data-cy="entityDeleteButton"
+                                >
+                                  <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  ) : (
+                    !loading && <div className="alert alert-warning">No User Skills found</div>
+                  )}
+                </div>
               </div>
-              {/* User Skill Attained section ends here */}
+              <Button tag={Link} to={`/user-skill/new`} color="primary" block>
+                Add Skill
+              </Button>
             </div>
 
+            {/* Skills Goals Section */}
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <h3 style={{ marginBottom: '20px' }}>Skills Goals</h3>
 
-              {/* This section is the User Skill Goals section */}
-              <div className="table-responsive">
-                {skillsGoals && skillsGoals.length > 0 ? (
-                  <Table responsive>
-                    <thead>
-                      <tr>
-                        <th className="hand" onClick={sort('id')}>
-                          ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                        </th>
-                        <th className="hand" onClick={sort('yearsOfExperience')}>
-                          <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
-                        </th>
-                        <th>
-                          Skill <FontAwesomeIcon icon="sort" />
-                        </th>
-                        <th />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {skillsGoals.map((userSkill, i) => (
-                        <tr key={`entity-${i}`} data-cy="entityTable">
-                          <td>
-                            <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
-                              {userSkill.id}
-                            </Button>
-                          </td>
-                          <td>{}</td>
-                          {/* <td>
-                            {userSkill.userProfile ? (
-                              <Link to={`/user-profile/${userSkill.userProfile.id}`}>{userSkill.userProfile.id}</Link>
-                            ) : (
-                              ''
-                            )}
-                          </td> */}
-
-                          <td>
-                            {userSkill.skill ? (
-                              <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
-                            ) : (
-                              ''
-                            )}
-                          </td>
-                          {/* <td>{userSkill.skillType ? <Link to={`/code-tables/${userSkill.skillType.id}`}>{userSkill.skillType.id}</Link> : ''}</td> */}
-                          <td className="text-end">
-                            <div className="btn-group flex-btn-group-container">
-                              <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                                <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                              </Button>
-                              <Button
-                                tag={Link}
-                                to={`/user-skill/${userSkill.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                                color="primary"
-                                size="sm"
-                                data-cy="entityEditButton"
-                              >
-                                <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                              </Button>
-                              <Button
-                                onClick={() =>
-                                  (window.location.href = `/user-skill/${userSkill.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                                }
-                                color="danger"
-                                size="sm"
-                                data-cy="entityDeleteButton"
-                              >
-                                <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                              </Button>
-                            </div>
-                          </td>
+              {/* Scrollable Table Container */}
+              <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                <div className="table-responsive">
+                  {skillsGoals && skillsGoals.length > 0 ? (
+                    <Table responsive>
+                      <thead>
+                        <tr>
+                          <th className="hand" onClick={sort('id')}>
+                            ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                          </th>
+                          <th className="hand" onClick={sort('yearsOfExperience')}>
+                            <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
+                          </th>
+                          <th>
+                            Skill <FontAwesomeIcon icon="sort" />
+                          </th>
+                          <th />
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                ) : (
-                  !loading && <div className="alert alert-warning">No User Skills found</div>
-                )}
-                <Button tag={Link} to={`/user-skill/new`} color="primary" block>
-                  Add Skill
-                </Button>
+                      </thead>
+                      <tbody>
+                        {skillsGoals.map((userSkill, i) => (
+                          <tr key={`entity-${i}`} data-cy="entityTable">
+                            <td>
+                              <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
+                                {userSkill.id}
+                              </Button>
+                            </td>
+                            <td>{}</td>
+                            <td>
+                              {userSkill.skill ? (
+                                <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
+                              ) : (
+                                ''
+                              )}
+                            </td>
+                            <td className="text-end">
+                              <div className="btn-group flex-btn-group-container">
+                                <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                                </Button>
+                                <Button
+                                  tag={Link}
+                                  to={`/user-skill/${userSkill.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                                  color="primary"
+                                  size="sm"
+                                  data-cy="entityEditButton"
+                                >
+                                  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                                </Button>
+                                <Button
+                                  onClick={() =>
+                                    (window.location.href = `/user-skill/${userSkill.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                                  }
+                                  color="danger"
+                                  size="sm"
+                                  data-cy="entityDeleteButton"
+                                >
+                                  <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  ) : (
+                    !loading && <div className="alert alert-warning">No User Skills found</div>
+                  )}
+                </div>
               </div>
-              {/* User Skill Goals section ends here */}
+              <Button tag={Link} to={`/user-skill/new`} color="primary" block>
+                Add Skill
+              </Button>
             </div>
           </div>
         </div>
