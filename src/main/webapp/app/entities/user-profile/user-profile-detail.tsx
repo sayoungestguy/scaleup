@@ -136,10 +136,7 @@ export const UserProfileDetail = () => {
 
   //**************************************************************************** */
 
-  {
-    /*  This is the search bar for the user profile */
-  }
-
+  /*  This is the search bar for the user profile */
   const [searchQuery, setSearchQuery] = useState(''); // Track the search query
   const [filteredUsers, setFilteredUsers] = useState([]); // Store filtered user profiles
 
@@ -148,7 +145,7 @@ export const UserProfileDetail = () => {
     if (query) {
       dispatch(
         getUserProfiles({
-          query: `login.contains=${query}`, // Assuming search by login (username)
+          query: `createdBy.contains=${query}`, // Assuming search by login (username)
         }),
       ).then(response => {
         setFilteredUsers((response.payload as { data: any[] }).data); // Update filtered user profiles
@@ -157,10 +154,7 @@ export const UserProfileDetail = () => {
       setFilteredUsers([]); // Clear when input is empty
     }
   };
-
-  {
-    /************************************************************************/
-  }
+  /************************************************************************/
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f4f4f4', margin: 0, padding: 0, minHeight: '100vh', width: '100%' }}>
