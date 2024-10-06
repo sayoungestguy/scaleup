@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getUserSkills } from '../../entities/user-skill/user-skill.reducer';
 import { getEntities as getUserProfiles } from '../../entities/user-profile/user-profile.reducer';
 import { getEntity } from './user-profile.reducer';
-import { getEntity as getSkillName } from 'app/entities/skill/skill.reducer';
+import { getSkillById as getSkillName } from 'app/entities/skill/skill.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 
 export const UserProfileDetail = () => {
@@ -158,8 +158,8 @@ export const UserProfileDetail = () => {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f4f4f4', margin: 0, padding: 0, minHeight: '100vh', width: '100%' }}>
-      <header style={{ backgroundColor: '#3A83C7', color: 'white', padding: '15px', textAlign: 'left', width: '100%' }}>
-        <div style={{ display: 'inline-block', fontSize: '1.5em' }}>Scaleup</div>
+      <header style={{ backgroundColor: '#f4f4f4', color: 'white', padding: '15px', textAlign: 'left', width: '100%' }}>
+        <div style={{ display: 'inline-block', fontSize: '1.5em' }}></div>
       </header>
 
       {/*  This is the search bar for the user profile */}

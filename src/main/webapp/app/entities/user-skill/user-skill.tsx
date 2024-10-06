@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities } from './user-skill.reducer';
 
 // Assuming you have an API function to get skill details by id
-import { getEntity as getSkillName } from 'app/entities/skill/skill.reducer';
+import { getSkillById as getSkillName } from 'app/entities/skill/skill.reducer';
 
 export const UserSkill = () => {
   const dispatch = useAppDispatch();
