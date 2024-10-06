@@ -9,6 +9,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getUserSkills } from '../../entities/user-skill/user-skill.reducer';
+import { getEntities as getUserProfiles } from '../../entities/user-profile/user-profile.reducer';
 import { getEntity } from './user-profile.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 
@@ -53,6 +54,8 @@ export const UserProfileDetail = () => {
       setSkillsGoals((response.payload as any).data);
     });
   };
+
+  // Fetch Skill names from Skill Table using Skill ID from UserSkill data to match them
 
   const sortEntities = () => {
     getAllUserSkillsByUserId();
@@ -109,11 +112,135 @@ export const UserProfileDetail = () => {
     }
   };
 
+  {
+    /*  This is the search bar for the user profile */
+  }
+
+  const [searchQuery, setSearchQuery] = useState(''); // Track the search query
+  const [filteredUsers, setFilteredUsers] = useState([]); // Store filtered user profiles
+
+  const handleSearch = query => {
+    setSearchQuery(query);
+    if (query) {
+      dispatch(
+        getUserProfiles({
+          query: `login.contains=${query}`, // Assuming search by login (username)
+        }),
+      ).then(response => {
+        setFilteredUsers((response.payload as { data: any[] }).data); // Update filtered user profiles
+      });
+    } else {
+      setFilteredUsers([]); // Clear when input is empty
+    }
+  };
+
+  {
+    /************************************************************************/
+  }
+
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f4f4f4', margin: 0, padding: 0, minHeight: '100vh', width: '100%' }}>
       <header style={{ backgroundColor: '#3A83C7', color: 'white', padding: '15px', textAlign: 'left', width: '100%' }}>
         <div style={{ display: 'inline-block', fontSize: '1.5em' }}>Scaleup</div>
       </header>
+
+      {/*  This is the search bar for the user profile */}
+      <div className="d-flex justify-content-end align-items-center mb-3" style={{ gap: '10px', position: 'relative' }}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search User's Profile"
+          style={{
+            borderRadius: '20px',
+            padding: '10px 20px',
+            border: '1px solid #ced4da',
+            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.1)',
+            width: '300px',
+          }}
+          value={searchQuery}
+          onChange={e => handleSearch(e.target.value)} // Trigger search onChange
+        />
+        <Button
+          className="me-2"
+          color="info"
+          onClick={() => handleSearch(searchQuery)}
+          disabled={loading}
+          style={{
+            borderRadius: '20px',
+            padding: '10px 20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+          }}
+        >
+          <FontAwesomeIcon icon="search" spin={loading} /> Search
+        </Button>
+
+        {/* Scrollable dropdown for search results */}
+        {searchQuery && filteredUsers.length === 0 && !loading && (
+          <div
+            style={{
+              maxHeight: '200px',
+              overflowY: 'auto',
+              marginTop: '10px',
+              width: '300px',
+              border: '1px solid #ced4da',
+              borderRadius: '10px',
+              position: 'absolute',
+              top: '50px',
+              zIndex: 1000,
+              backgroundColor: 'white',
+              padding: '10px',
+              textAlign: 'center',
+            }}
+          >
+            <p>No Results</p>
+          </div>
+        )}
+
+        {filteredUsers.length > 0 && (
+          <div
+            style={{
+              maxHeight: '200px',
+              overflowY: 'auto',
+              marginTop: '10px',
+              width: '300px',
+              border: '1px solid #ced4da',
+              borderRadius: '10px',
+              position: 'absolute',
+              top: '50px',
+              zIndex: 1000,
+              backgroundColor: 'white',
+            }}
+          >
+            <ul className="list-group">
+              {filteredUsers.map(user => (
+                <li key={user.id} className="list-group-item" style={{ cursor: 'pointer' }}>
+                  <Link to={`/user-profile/${user.id}`} onClick={() => setSearchQuery(user.login)}>
+                    {user.login}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* <Button
+          className="me-2"
+          color="info"
+          onClick={() => handleSearch(searchQuery)}
+          disabled={loading}
+          style={{
+            borderRadius: '20px',
+            padding: '10px 20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+          }}
+        >
+          <FontAwesomeIcon icon="search" spin={loading} /> Search
+        </Button> */}
 
       <main
         style={{

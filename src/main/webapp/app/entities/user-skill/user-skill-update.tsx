@@ -127,7 +127,7 @@ export const UserSkillUpdate = () => {
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nickname}
                       </option>
                     ))
                   : null}
@@ -147,7 +147,7 @@ export const UserSkillUpdate = () => {
                 {skills
                   ? skills.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.skillName}
                       </option>
                     ))
                   : null}
@@ -157,7 +157,7 @@ export const UserSkillUpdate = () => {
                 {codeTables
                   ? codeTables.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.codeValue}
                       </option>
                     ))
                   : null}
