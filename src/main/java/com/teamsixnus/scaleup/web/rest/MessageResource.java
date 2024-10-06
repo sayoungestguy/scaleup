@@ -1,8 +1,10 @@
 package com.teamsixnus.scaleup.web.rest;
 
+import com.teamsixnus.scaleup.domain.User;
 import com.teamsixnus.scaleup.repository.MessageRepository;
-import com.teamsixnus.scaleup.service.MessageQueryService;
+//import com.teamsixnus.scaleup.service.MessageQueryService;
 import com.teamsixnus.scaleup.service.MessageService;
+import com.teamsixnus.scaleup.service.UserService; // Ensure this import matches your actual UserService package
 import com.teamsixnus.scaleup.service.criteria.MessageCriteria;
 import com.teamsixnus.scaleup.service.dto.MessageDTO;
 import com.teamsixnus.scaleup.web.rest.errors.BadRequestAlertException;
@@ -20,6 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -44,12 +49,20 @@ public class MessageResource {
 
     private final MessageRepository messageRepository;
 
-    private final MessageQueryService messageQueryService;
+    //private final MessageQueryService messageQueryService;
 
-    public MessageResource(MessageService messageService, MessageRepository messageRepository, MessageQueryService messageQueryService) {
+    private final UserService userService;
+
+    // public MessageResource(MessageService messageService, MessageRepository messageRepository, MessageQueryService messageQueryService) {
+    //     this.messageService = messageService;
+    //     this.messageRepository = messageRepository;
+    //     this.messageQueryService = messageQueryService;
+    // }
+
+    public MessageResource(MessageService messageService, MessageRepository messageRepository, UserService userService) {
         this.messageService = messageService;
         this.messageRepository = messageRepository;
-        this.messageQueryService = messageQueryService;
+        this.userService = userService;
     }
 
     /**
@@ -140,36 +153,51 @@ public class MessageResource {
         );
     }
 
-    /**
-     * {@code GET  /messages} : get all the messages.
-     *
-     * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of messages in body.
-     */
-    @GetMapping("")
-    public ResponseEntity<List<MessageDTO>> getAllMessages(
-        MessageCriteria criteria,
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
-    ) {
-        log.debug("REST request to get Messages by criteria: {}", criteria);
+    // /**
+    //  * {@code GET  /messages} : get all the messages.
+    //  *
+    //  * @param pageable the pagination information.
+    //  * @param criteria the criteria which the requested entities should match.
+    //  * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of messages in body.
+    //  */
+    // @GetMapping("")
+    // public ResponseEntity<List<MessageDTO>> getAllMessages(
+    //     MessageCriteria criteria,
+    //     @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    // ) {
+    //     log.debug("REST request to get Messages by criteria: {}", criteria);
 
-        Page<MessageDTO> page = messageQueryService.findByCriteria(criteria, pageable);
+    //     Page<MessageDTO> page = messageQueryService.findByCriteria(criteria, pageable);
+    //     HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    //     return ResponseEntity.ok().headers(headers).body(page.getContent());
+    // }
+
+    @GetMapping("")
+    public ResponseEntity<List<MessageDTO>> getAllMessages(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Messages");
+        // Get the current user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        // Get the user details from the user service
+        User user = userService.getUserByLogin(username);
+        Long userId = user.getId();
+        // Fetch messages for the current user
+        Page<MessageDTO> page = messageService.findAllForUser(userId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    /**
-     * {@code GET  /messages/count} : count all the messages.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
-    @GetMapping("/count")
-    public ResponseEntity<Long> countMessages(MessageCriteria criteria) {
-        log.debug("REST request to count Messages by criteria: {}", criteria);
-        return ResponseEntity.ok().body(messageQueryService.countByCriteria(criteria));
-    }
+    // /**
+    //  * {@code GET  /messages/count} : count all the messages.
+    //  *
+    //  * @param criteria the criteria which the requested entities should match.
+    //  * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+    //  */
+    // @GetMapping("/count")
+    // public ResponseEntity<Long> countMessages(MessageCriteria criteria) {
+    //     log.debug("REST request to count Messages by criteria: {}", criteria);
+    //     return ResponseEntity.ok().body(messageQueryService.countByCriteria(criteria));
+    // }
 
     /**
      * {@code GET  /messages/:id} : get the "id" message.

@@ -9,7 +9,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { ISkill } from 'app/shared/model/skill.model';
-import { getEntity, updateEntity, createEntity, reset } from './skill.reducer';
+import { getSkillById, updateEntity, createEntity, reset } from './skill.reducer';
 
 export const SkillUpdate = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ export const SkillUpdate = () => {
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getSkillById(id));
     }
   }, []);
 

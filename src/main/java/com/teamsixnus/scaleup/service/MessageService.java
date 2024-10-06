@@ -7,6 +7,8 @@ import com.teamsixnus.scaleup.service.mapper.MessageMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +75,19 @@ public class MessageService {
             })
             .map(messageRepository::save)
             .map(messageMapper::toDto);
+    }
+
+    /**
+     * Get all messages for a user.
+     *
+     * @param userId the ID of the user.
+     * @param pageable the pagination information.
+     * @return the list of messages.
+     */
+    @Transactional(readOnly = true)
+    public Page<MessageDTO> findAllForUser(Long userId, Pageable pageable) {
+        log.debug("Request to get all Messages for user : {}", userId);
+        return messageRepository.findBySenderProfileIdOrReceiverProfileId(userId, userId, pageable).map(messageMapper::toDto);
     }
 
     /**

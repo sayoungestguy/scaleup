@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { getPaginationState, JhiItemCount, JhiPagination } from 'react-jhipster';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { getAllActivityInvites } from 'app/entities/activity-invite/activity-invite.reducer';
 
-import { getAllActivityInvites } from './activity-invite.reducer';
-
-export const ActivityInvite = () => {
+export const ActivityInviteTable = (props: any) => {
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
@@ -29,7 +27,7 @@ export const ActivityInvite = () => {
   const getAllEntities = () => {
     dispatch(
       getAllActivityInvites({
-        //query: `activityId.equals=${props.activityId}`,
+        query: `activityId.equals=${props.activityId}`,
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
         sort: `${paginationState.sort},${paginationState.order}`,
@@ -93,7 +91,7 @@ export const ActivityInvite = () => {
   };
 
   return (
-    <div>
+    <>
       <h2 id="activity-invite-heading" data-cy="ActivityInviteHeading">
         Activity Invites
         <div className="d-flex justify-content-end">
@@ -119,9 +117,6 @@ export const ActivityInvite = () => {
                 </th>
 
                 <th>
-                  Activity <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
                   Invitee Profile <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
@@ -139,13 +134,6 @@ export const ActivityInvite = () => {
                     </Button>
                   </td>
                   <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
-                  <td>
-                    {activityInvite.activity ? (
-                      <Link to={`/activity/${activityInvite.activity.id}`}>{activityInvite.activity.id}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
                   <td>
                     {activityInvite.inviteeProfile ? (
                       <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>{activityInvite.inviteeProfile.id}</Link>
@@ -208,8 +196,8 @@ export const ActivityInvite = () => {
       ) : (
         ''
       )}
-    </div>
+    </>
   );
 };
 
-export default ActivityInvite;
+export default ActivityInviteTable;

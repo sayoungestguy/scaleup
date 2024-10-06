@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './skill.reducer';
+import { getSkillById } from './skill.reducer';
 
 export const SkillDetail = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ export const SkillDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getSkillById(id));
   }, []);
 
   const skillEntity = useAppSelector(state => state.skill.entity);

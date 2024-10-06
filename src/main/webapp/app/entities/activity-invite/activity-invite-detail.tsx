@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './activity-invite.reducer';
+import { getActivityInviteById } from './activity-invite.reducer';
 
 export const ActivityInviteDetail = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ export const ActivityInviteDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getActivityInviteById(id));
   }, []);
 
   const activityInviteEntity = useAppSelector(state => state.activityInvite.entity);

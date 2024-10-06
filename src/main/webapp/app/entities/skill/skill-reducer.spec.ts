@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 import { EntityState } from 'app/shared/reducers/reducer.utils';
 import { ISkill, defaultValue } from 'app/shared/model/skill.model';
-import reducer, { createEntity, deleteEntity, getEntities, getEntity, updateEntity, partialUpdateEntity, reset } from './skill.reducer';
+import reducer, { createEntity, deleteEntity, getAllSkills, getSkillById, updateEntity, partialUpdateEntity, reset } from './skill.reducer';
 
 describe('Entities reducer tests', () => {
   function isEmpty(element): boolean {
@@ -51,7 +51,7 @@ describe('Entities reducer tests', () => {
 
   describe('Requests', () => {
     it('should set state to loading', () => {
-      testMultipleTypes([getEntities.pending.type, getEntity.pending.type], {}, state => {
+      testMultipleTypes([getAllSkills.pending.type, getSkillById.pending.type], {}, state => {
         expect(state).toMatchObject({
           errorMessage: null,
           updateSuccess: false,
@@ -85,8 +85,8 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          getEntities.rejected.type,
-          getEntity.rejected.type,
+          getAllSkills.rejected.type,
+          getSkillById.rejected.type,
           createEntity.rejected.type,
           updateEntity.rejected.type,
           partialUpdateEntity.rejected.type,
@@ -112,7 +112,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }], headers: { 'x-total-count': 123 } };
       expect(
         reducer(undefined, {
-          type: getEntities.fulfilled.type,
+          type: getAllSkills.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -127,7 +127,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: { 1: 'fake1' } };
       expect(
         reducer(undefined, {
-          type: getEntity.fulfilled.type,
+          type: getSkillById.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -186,21 +186,21 @@ describe('Entities reducer tests', () => {
     it('dispatches FETCH_SKILL_LIST actions', async () => {
       const arg = {};
 
-      const result = await getEntities(arg)(dispatch, getState, extra);
+      const result = await getAllSkills(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntities.fulfilled.match(result)).toBe(true);
+      expect(getAllSkills.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches FETCH_SKILL actions', async () => {
       const arg = 42666;
 
-      const result = await getEntity(arg)(dispatch, getState, extra);
+      const result = await getSkillById(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntity.fulfilled.match(result)).toBe(true);
+      expect(getSkillById.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches CREATE_SKILL actions', async () => {

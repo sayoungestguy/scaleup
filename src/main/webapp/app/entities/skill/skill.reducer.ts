@@ -18,7 +18,7 @@ const apiUrl = 'api/skills';
 
 // Actions
 
-export const getEntities = createAsyncThunk(
+export const getAllSkills = createAsyncThunk(
   'skill/fetch_entity_list',
   async ({ query, page, size, sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}?${query}${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
@@ -27,7 +27,7 @@ export const getEntities = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const getEntity = createAsyncThunk(
+export const getSkillById = createAsyncThunk(
   'skill/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
@@ -40,7 +40,7 @@ export const createEntity = createAsyncThunk(
   'skill/create_entity',
   async (entity: ISkill, thunkAPI) => {
     const result = await axios.post<ISkill>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -50,7 +50,7 @@ export const updateEntity = createAsyncThunk(
   'skill/update_entity',
   async (entity: ISkill, thunkAPI) => {
     const result = await axios.put<ISkill>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -60,7 +60,7 @@ export const partialUpdateEntity = createAsyncThunk(
   'skill/partial_update_entity',
   async (entity: ISkill, thunkAPI) => {
     const result = await axios.patch<ISkill>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -71,7 +71,7 @@ export const deleteEntity = createAsyncThunk(
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<ISkill>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllSkills({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -84,7 +84,7 @@ export const SkillSlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getEntity.fulfilled, (state, action) => {
+      .addCase(getSkillById.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
@@ -93,7 +93,7 @@ export const SkillSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getAllSkills), (state, action) => {
         const { data, headers } = action.payload;
 
         return {
@@ -109,7 +109,7 @@ export const SkillSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getAllSkills, getSkillById), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;

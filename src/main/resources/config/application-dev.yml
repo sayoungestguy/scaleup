@@ -51,10 +51,10 @@ spring:
   #   username:
   #   password:
   mail:
-    host: smtp.mailersend.net
-    port: 587
-    username: MS_hwQpFm@trial-k68zxl2o29egj905.mlsender.net
-    password: zTuZ0pxazgHfOWPK
+    host: mail.smtp2go.com
+    port: 2525
+    username: 2000990@sit.singaporetech.edu.sg
+    password: OGmMUeE1XRXbsn7j
     properties:
       mail:
         smtp:

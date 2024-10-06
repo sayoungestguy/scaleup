@@ -47,6 +47,14 @@ spring:
         size: 20
   thymeleaf:
     mode: HTML
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:file:./target/h2db/db/scaleup;DB_CLOSE_DELAY=-1;MODE=MYSQL
+    username: scaleup
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
 
 server:
   port: 10344

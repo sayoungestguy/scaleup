@@ -1,5 +1,6 @@
 package com.teamsixnus.scaleup.web.rest;
 
+import com.teamsixnus.scaleup.domain.User;
 import com.teamsixnus.scaleup.service.UserService;
 import com.teamsixnus.scaleup.service.dto.UserDTO;
 import java.util.*;
@@ -47,6 +48,12 @@ public class PublicUserResource {
         final Page<UserDTO> page = userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<Long> getCurrentUserId() {
+        Optional<User> currentUser = userService.getCurrentUser();
+        return currentUser.map(user -> ResponseEntity.ok(user.getId())).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     private boolean onlyContainsAllowedProperties(Pageable pageable) {

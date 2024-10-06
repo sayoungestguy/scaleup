@@ -71,7 +71,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
             message.setTo(to);
-            String SenderMail = "MS_hwQpFm@trial-k68zxl2o29egj905.mlsender.net";
+            String SenderMail = "weijie899@hotmail.com";
             message.setFrom(SenderMail);
             message.setSubject(subject);
             message.setText(content, isHtml);

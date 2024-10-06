@@ -9,13 +9,13 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { IActivity } from 'app/shared/model/activity.model';
-import { getEntities as getActivities } from 'app/entities/activity/activity.reducer';
+import { getAllActivity as getActivities } from 'app/entities/activity/activity.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ICodeTables } from 'app/shared/model/code-tables.model';
 import { getEntities as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
 import { IActivityInvite } from 'app/shared/model/activity-invite.model';
-import { getEntity, updateEntity, createEntity, reset } from './activity-invite.reducer';
+import { getActivityInviteById, updateEntity, createEntity, reset } from './activity-invite.reducer';
 
 export const ActivityInviteUpdate = () => {
   const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ export const ActivityInviteUpdate = () => {
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getActivityInviteById(id));
     }
 
     dispatch(getActivities({}));
@@ -179,7 +179,7 @@ export const ActivityInviteUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/activity-invite" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/activity" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>
