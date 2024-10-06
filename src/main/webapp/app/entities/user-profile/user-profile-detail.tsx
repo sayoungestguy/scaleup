@@ -266,11 +266,28 @@ export const UserProfileDetail = () => {
               textAlign: 'center',
             }}
           >
-            <img
-              src="https://wallpapers-clan.com/wp-content/uploads/2022/05/meme-pfp-34.jpg"
-              alt="Profile Picture"
-              style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
-            />
+            {/* <img
+              src='https://cdn.discordapp.com/attachments/439427207421493250/1292478233824202783/462090046_8504951729620289_6140065532385310807_n.png?ex=6703e1a8&is=67029028&hm=b043a4aa5ab97b876149b6e0f7cb8a5769b827d9949cdd9b68bec452f34412de&'
+              alt={userProfileEntity?.profilePicture || 'Profile Picture'}
+              //style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
+            /> */}
+
+            <div
+              style={{
+                width: '150px',
+                height: '150px',
+                borderRadius: '50%',
+                marginBottom: '20px',
+                backgroundColor: '#f4f4f4',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: '0 auto', // Ensures that the circle div is centered horizontally
+              }}
+            >
+              <FontAwesomeIcon icon="user" style={{ fontSize: '100px', color: '#555' }} /> {/* Increased the fontSize for larger icon */}
+            </div>
+
             <h2>{userProfileEntity.user ? userProfileEntity.user.login : ''}</h2>
 
             {loading ? (
@@ -289,24 +306,9 @@ export const UserProfileDetail = () => {
                 <strong>Socials:</strong> {userProfileEntity?.socialLinks}
               </p>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-                <a href="#facebook" style={{ textDecoration: 'none', margin: '0 10px', fontSize: '1.5em', color: '#555' }}>
-                  FB
-                </a>
-                <a href="#twitter" style={{ textDecoration: 'none', margin: '0 10px', fontSize: '1.5em', color: '#555' }}>
-                  TW
-                </a>
-                <a href="#linkedin" style={{ textDecoration: 'none', margin: '0 10px', fontSize: '1.5em', color: '#555' }}>
-                  LI
-                </a>
-                <a href="#instagram" style={{ textDecoration: 'none', margin: '0 10px', fontSize: '1.5em', color: '#555' }}>
-                  IG
-                </a>
-                <a href="#google" style={{ textDecoration: 'none', margin: '0 10px', fontSize: '1.5em', color: '#555' }}>
-                  G+
-                </a>
-                <a href="#pinterest" style={{ textDecoration: 'none', margin: '0 10px', fontSize: '1.5em', color: '#555' }}>
-                  PT
-                </a>
+                <p>
+                  <strong>Job Role:</strong> {userProfileEntity?.jobRole}
+                </p>
               </div>
             </div>
             <Button tag={Link} to={`/user-profile/${userProfileEntity.id}/edit`} color="danger" block>
@@ -314,7 +316,7 @@ export const UserProfileDetail = () => {
             </Button>
           </div>
 
-          <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '20px' }}>
+          <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '10px' }}>
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <h3 style={{ marginBottom: '20px' }}>Skills Attained</h3>
 
