@@ -277,7 +277,7 @@ export const UserProfileDetail = () => {
                 width: '150px',
                 height: '150px',
                 borderRadius: '50%',
-                marginBottom: '20px',
+                marginBottom: '30px',
                 backgroundColor: '#f4f4f4',
                 display: 'flex',
                 justifyContent: 'center',
@@ -287,6 +287,8 @@ export const UserProfileDetail = () => {
             >
               <FontAwesomeIcon icon="user" style={{ fontSize: '100px', color: '#555' }} />
             </div>
+
+            <div style={{ padding: '15px', textAlign: 'left', width: '100%' }}></div>
 
             <h2>{userProfileEntity.user ? userProfileEntity.user.login : ''}</h2>
 
@@ -363,7 +365,7 @@ export const UserProfileDetail = () => {
                                 {userSkill.id}
                               </Button>
                             </td>
-                            <td>{userSkill.yearsOfExperience}</td>
+                            <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{userSkill.yearsOfExperience}</td>
                             <td>
                               {userSkill.skill ? (
                                 <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
@@ -425,9 +427,7 @@ export const UserProfileDetail = () => {
                           <th className="hand" onClick={sort('id')}>
                             ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                           </th>
-                          <th className="hand" onClick={sort('yearsOfExperience')}>
-                            <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
-                          </th>
+                          <th className="hand" onClick={sort('yearsOfExperience')}></th>
                           <th>
                             Skill <FontAwesomeIcon icon="sort" />
                           </th>
