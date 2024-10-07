@@ -30,11 +30,6 @@ export const ProfilePage = () => {
     );
   }, []);
 
-  // Check the fetched data in the console (optional, for debugging purposes)
-  useEffect(() => {
-    console.log('Fetched user profile entity:', userProfileEntity);
-  }, [userProfileEntity]);
-
   const [attainedSkills, setAttainedSkills] = useState(['.NET', 'Angular']);
   const [goalSkills, setGoalSkills] = useState(['JavaScript', 'React', 'Java', 'Python']);
   const [newAttainedSkill, setNewAttainedSkill] = useState(''); // State for Skills Attained input

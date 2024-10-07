@@ -21,11 +21,7 @@ const accountMenuItemsAuthenticated = () => {
 
   const loggedInUserProfile = userProfileEntitties.find((profile: IUserProfile) => profile.createdBy === account.login);
 
-  // const loggedInUserProfile = userProfileEntitties.find(
-  //   (profile) => profile.createdBy === account.login
-  // );
-
-  //if user doesn't have a user profile created, the profile option will route to the create a new profile page
+  // if user doesn't have a user profile created, the profile option will route to the create a new profile page
   if (!loggedInUserProfile?.id) {
     return (
       <>
