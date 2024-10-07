@@ -701,7 +701,7 @@ export const Message = () => {
                         color="primary"
                         size="sm"
                         data-cy="entityEditButton"
-                        disabled={currentUserId === message.receiverProfile?.id} // Disable if current user is receiver
+                        disabled={currentUserId !== message.senderProfile?.id} // Disable if current user is receiver
                       >
                         <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                       </Button>
@@ -712,7 +712,7 @@ export const Message = () => {
                         color="danger"
                         size="sm"
                         data-cy="entityDeleteButton"
-                        disabled={currentUserId === message.receiverProfile?.id} // Disable if current user is receiver
+                        disabled={currentUserId !== message.senderProfile?.id} // Disable if current user is receiver
                       >
                         <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
                       </Button>
