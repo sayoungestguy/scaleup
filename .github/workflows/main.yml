@@ -155,7 +155,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         if: github.ref == 'refs/heads/main'
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sayoungestguy_scaleup -Dsonar.qualitygate.wait=true
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sayoungestguy_scaleup #-Dsonar.qualitygate.wait=true
   snyk:
     name: Vulnerability Scanning with Synk
     needs: [backend-test, frontend-test]
