@@ -32,14 +32,14 @@ export const MessageDetail = () => {
             <span id="content">Content</span>
           </dt>
           <dd>{messageEntity.content}</dd>
-          <dt>
+          {/* <dt>
             <span id="sentAt">Sent At</span>
           </dt>
           <dd>{messageEntity.sentAt ? <TextFormat value={messageEntity.sentAt} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
           <dt>
             <span id="isDeleted">Is Deleted</span>
           </dt>
-          <dd>{messageEntity.isDeleted ? 'true' : 'false'}</dd>
+          <dd>{messageEntity.isDeleted ? 'true' : 'false'}</dd> */}
           <dt>
             <span id="createdBy">Created By</span>
           </dt>
@@ -50,7 +50,7 @@ export const MessageDetail = () => {
           <dd>
             {messageEntity.createdDate ? <TextFormat value={messageEntity.createdDate} type="date" format={APP_DATE_FORMAT} /> : null}
           </dd>
-          <dt>
+          {/* <dt>
             <span id="lastModifiedBy">Last Modified By</span>
           </dt>
           <dd>{messageEntity.lastModifiedBy}</dd>
@@ -61,7 +61,7 @@ export const MessageDetail = () => {
             {messageEntity.lastModifiedDate ? (
               <TextFormat value={messageEntity.lastModifiedDate} type="date" format={APP_DATE_FORMAT} />
             ) : null}
-          </dd>
+          </dd> */}
           <dt>Sender Profile</dt>
           <dd>{messageEntity.senderProfile ? messageEntity.senderProfile.id : ''}</dd>
           <dt>Receiver Profile</dt>
@@ -71,9 +71,9 @@ export const MessageDetail = () => {
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/message/${messageEntity.id}/edit`} replace color="primary">
+        {/* <Button tag={Link} to={`/message/${messageEntity.id}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-        </Button>
+        </Button> */}
       </Col>
     </Row>
   );
