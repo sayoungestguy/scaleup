@@ -1,20 +1,21 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { Provider } from 'react-redux'; // Import the Provider from react-redux
+import { Provider } from 'react-redux';
 import { AccountMenu } from './account';
-import { getStore } from './config/store'; // Import your store
+import { legacy_createStore as createStore } from 'redux';
+import rootReducer from './config/rootReducer';
 
 describe('AccountMenu', () => {
-  let mountedWrapper;
-  const store = getStore(); // Initialize the Redux store
+  let mountedWrapper: string = '';
+  const store = createStore(rootReducer, {
+    user: { isAuthenticated: true, account: { login: 'admin' } },
+  });
 
   const authenticatedWrapper = () => {
     if (!mountedWrapper) {
       const { container } = render(
         <Provider store={store}>
-          {' '}
-          {/* Wrap with Provider */}
           <MemoryRouter>
             <AccountMenu isAuthenticated />
           </MemoryRouter>
@@ -29,8 +30,6 @@ describe('AccountMenu', () => {
     if (!mountedWrapper) {
       const { container } = render(
         <Provider store={store}>
-          {' '}
-          {/* Wrap with Provider */}
           <MemoryRouter>
             <AccountMenu />
           </MemoryRouter>
@@ -42,10 +41,8 @@ describe('AccountMenu', () => {
   };
 
   beforeEach(() => {
-    mountedWrapper = undefined;
+    mountedWrapper = 'undefined';
   });
-
-  // All tests will go here
 
   it('Renders a authenticated AccountMenu component', () => {
     const html = authenticatedWrapper();
