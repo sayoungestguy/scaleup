@@ -164,7 +164,7 @@ export const UserSkillUpdate = () => {
                       ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/user-skill" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to={-1} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>
@@ -174,6 +174,11 @@ export const UserSkillUpdate = () => {
                 <FontAwesomeIcon icon="save" />
                 &nbsp; Save
               </Button>
+              &nbsp;&nbsp;
+              <Link to="/skill/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+                <FontAwesomeIcon icon="plus" />
+                &nbsp; Create a new Skill
+              </Link>
             </ValidatedForm>
           )}
         </Col>
