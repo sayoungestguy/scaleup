@@ -4,7 +4,6 @@ import com.teamsixnus.scaleup.domain.User;
 import com.teamsixnus.scaleup.service.UserService;
 import com.teamsixnus.scaleup.service.dto.UserDTO;
 import java.util.*;
-import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
