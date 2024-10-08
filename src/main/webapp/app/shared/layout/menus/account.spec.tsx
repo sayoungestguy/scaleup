@@ -1,4 +1,3 @@
-// src/main/webapp/app/shared/layout/menus/account.spec.tsx
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -9,8 +8,16 @@ import rootReducer from './config/rootReducer';
 
 describe('AccountMenu', () => {
   let mountedWrapper: string | null = null; // Set initial value to null
+
+  // Mocking store with authentication and userProfile state
   const store = createStore(rootReducer, {
-    user: { isAuthenticated: true, account: { login: 'admin' } },
+    user: {
+      isAuthenticated: true,
+      account: { login: 'admin' }, // Mock account data here
+    },
+    profile: {
+      entities: [], // Mock user profile data if needed
+    },
   });
 
   const authenticatedWrapper = () => {
