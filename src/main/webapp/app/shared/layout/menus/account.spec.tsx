@@ -1,3 +1,4 @@
+// src/main/webapp/app/shared/layout/menus/account.spec.tsx
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -7,7 +8,7 @@ import { legacy_createStore as createStore } from 'redux';
 import rootReducer from './config/rootReducer';
 
 describe('AccountMenu', () => {
-  let mountedWrapper: string = '';
+  let mountedWrapper: string | null = null; // Set initial value to null
   const store = createStore(rootReducer, {
     user: { isAuthenticated: true, account: { login: 'admin' } },
   });
@@ -41,10 +42,10 @@ describe('AccountMenu', () => {
   };
 
   beforeEach(() => {
-    mountedWrapper = 'undefined';
+    mountedWrapper = null; // Reset to null instead of 'undefined'
   });
 
-  it('Renders a authenticated AccountMenu component', () => {
+  it('Renders an authenticated AccountMenu component', () => {
     const html = authenticatedWrapper();
     expect(html).not.toContain('/login');
     expect(html).toContain('/logout');
