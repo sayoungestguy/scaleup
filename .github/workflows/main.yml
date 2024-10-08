@@ -229,7 +229,7 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ec2-52-77-34-58.ap-southeast-1.compute.amazonaws.com # Change to Prod host
+          host: ec2-54-255-11-22.ap-southeast-1.compute.amazonaws.com # Change to Prod host
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY_PROD }}
           port: 22
