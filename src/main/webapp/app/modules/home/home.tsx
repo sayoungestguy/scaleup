@@ -19,6 +19,8 @@ function SkillsPopover() {
     });
   };
 
+  // Add the following code to the Home component
+
   return (
     <ul>
       <li>
