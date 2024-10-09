@@ -1,13 +1,9 @@
 id;category;code_key;code_value;created_by;created_date;last_modified_by;last_modified_date
-1;notification_type;message;New Message;system;2024-08-24T15:43:24;system;2024-08-24T21:55:03
-2;notification_type;invite;New Invite;system;2024-08-24T16:57:46;system;2024-08-25T03:55:47
-3;skill_type;teach;Teach;system;2024-08-24T20:02:11;system;2024-08-25T03:16:56
-4;skill_type;learn;Learn;system;2024-08-25T03:24:15;system;2024-08-24T18:26:13
-5;invite_status;pending;Pending;system;2024-08-24T21:59:54;system;2024-08-25T08:02:16
-6;invite_status;accepted;Accepted;system;2024-08-25T07:18:04;system;2024-08-24T12:49:57
-7;invite_status;declined;Declined;system;2024-08-24T17:36:46;system;2024-08-24T21:52:44
-8;participation;yes;Will Participate;system;2024-08-24T17:41:43;system;2024-08-24T18:02:59
-9;participation;no;Will Not Participate;system;2024-08-24T13:36:47;system;2024-08-25T02:54:04
+1;skill_type;teach;Teach;system;2024-08-24T20:02:11;system;2024-08-25T03:16:56
+2;skill_type;learn;Learn;system;2024-08-25T03:24:15;system;2024-08-24T18:26:13
+3;invite_status;pending;Pending;system;2024-08-24T21:59:54;system;2024-08-25T08:02:16
+4;invite_status;accepted;Accepted;system;2024-08-25T07:18:04;system;2024-08-24T12:49:57
+5;invite_status;declined;Declined;system;2024-08-24T17:36:46;system;2024-08-24T21:52:44
 
 
 
