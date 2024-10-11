@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
+import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IUserProfile, defaultValue } from 'app/shared/model/user-profile.model';
@@ -8,7 +9,8 @@ const initialState: EntityState<IUserProfile> = {
   loading: false,
   errorMessage: null,
   entities: [],
-  entity: defaultValue,
+  entity: {} as IUserProfile,
+  links: { next: 0 },
   updating: false,
   totalItems: 0,
   updateSuccess: false,
@@ -21,7 +23,7 @@ const apiUrl = 'api/user-profiles';
 export const getEntities = createAsyncThunk(
   'userProfile/fetch_entity_list',
   async ({ query, page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${query}${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    const requestUrl = `${apiUrl}?${query}&${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
     return axios.get<IUserProfile[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -29,8 +31,17 @@ export const getEntities = createAsyncThunk(
 
 export const getEntity = createAsyncThunk(
   'userProfile/fetch_entity',
-  async (id: string | number) => {
-    const requestUrl = `${apiUrl}/${id}`;
+  async ({ query }: IQueryParams) => {
+    const requestUrl = ` ${apiUrl}?${query}`;
+    return axios.get<IUserProfile>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const getEntityByCreatedBy = createAsyncThunk(
+  'userProfile/fetch_entity',
+  async ({ query }: IQueryParams) => {
+    const requestUrl = ` ${apiUrl}?${query}`;
     return axios.get<IUserProfile>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -39,9 +50,7 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   'userProfile/create_entity',
   async (entity: IUserProfile, thunkAPI) => {
-    const result = await axios.post<IUserProfile>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
-    return result;
+    return axios.post<IUserProfile>(apiUrl, cleanEntity(entity));
   },
   { serializeError: serializeAxiosError },
 );
@@ -49,9 +58,7 @@ export const createEntity = createAsyncThunk(
 export const updateEntity = createAsyncThunk(
   'userProfile/update_entity',
   async (entity: IUserProfile, thunkAPI) => {
-    const result = await axios.put<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
-    return result;
+    return axios.put<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
   },
   { serializeError: serializeAxiosError },
 );
@@ -59,9 +66,7 @@ export const updateEntity = createAsyncThunk(
 export const partialUpdateEntity = createAsyncThunk(
   'userProfile/partial_update_entity',
   async (entity: IUserProfile, thunkAPI) => {
-    const result = await axios.patch<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
-    return result;
+    return axios.patch<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
   },
   { serializeError: serializeAxiosError },
 );
@@ -70,9 +75,7 @@ export const deleteEntity = createAsyncThunk(
   'userProfile/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
-    const result = await axios.delete<IUserProfile>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
-    return result;
+    return await axios.delete<IUserProfile>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
@@ -88,6 +91,10 @@ export const UserProfileSlice = createEntitySlice({
         state.loading = false;
         state.entity = action.payload.data;
       })
+      .addCase(getEntityByCreatedBy.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entity = action.payload.data;
+      })
       .addCase(deleteEntity.fulfilled, state => {
         state.updating = false;
         state.updateSuccess = true;
@@ -95,11 +102,13 @@ export const UserProfileSlice = createEntitySlice({
       })
       .addMatcher(isFulfilled(getEntities), (state, action) => {
         const { data, headers } = action.payload;
+        const links = parseHeaderForLinks(headers.link);
 
         return {
           ...state,
           loading: false,
-          entities: data,
+          links,
+          entities: loadMoreDataWhenScrolled(state.entities, data, links),
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
@@ -109,7 +118,7 @@ export const UserProfileSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getEntities, getEntity, getEntityByCreatedBy), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
