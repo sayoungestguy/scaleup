@@ -295,15 +295,25 @@ export const UserProfileDetail = () => {
                 margin: '0 auto',
               }}
             >
-              <img
-                src="https://images2.imgbox.com/58/df/QqnDcnpM_o.png"
-                alt="Profile Picture"
-                style={{
-                  width: '280px', // Increase image width
-                  height: '280px', // Increase image height
-                  borderRadius: '50%', // Make image circular
-                }}
-              />
+              {!userProfileEntity?.profilePicture ? (
+                // If no profile picture, show FontAwesomeIcon
+                <FontAwesomeIcon icon="user" style={{ fontSize: '100px', color: '#555' }} />
+              ) : (
+                // Otherwise, show the profile picture
+                <img
+                  src={
+                    userProfileEntity?.profilePicture === 'Male Profile Picture'
+                      ? 'https://images2.imgbox.com/58/df/QqnDcnpM_o.png'
+                      : 'https://images2.imgbox.com/b3/e3/eB7ZJyVa_o.png'
+                  }
+                  alt="Profile Picture"
+                  style={{
+                    width: '280px',
+                    height: '280px',
+                    borderRadius: '50%',
+                  }}
+                />
+              )}
             </div>
 
             <p>{userProfileEntity.profilePicture}</p>
