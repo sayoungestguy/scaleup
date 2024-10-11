@@ -1,0 +1,41 @@
+name: Destroy SIT
+
+on:
+  workflow_dispatch:
+    branches:
+      - ci-cd
+
+jobs:
+  terraform-destroy:
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+
+    # Environment variables for AWS credentials and region
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      AWS_DEFAULT_REGION: ap-southeast-1 # Replace with your AWS region
+      TF_WORKING_DIR: ./terraform/sit # Adjust to your Terraform directory
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false # Optional: disable wrapper script
+          terraform_version: 1.9.6 # Replace with your Terraform version
+
+      - name: Initialize Terraform
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
+
+      - name: Validate Terraform configuration
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Destroy
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform destroy -auto-approve -var='access-key=${AWS_ACCESS_KEY_ID}' -var='secret-key=${AWS_SECRET_ACCESS_KEY}' -var='db_username=admin' -var='db_password=${DB_PASSWORD}' -var='my_ip='192.168.0.147'
