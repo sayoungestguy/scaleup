@@ -255,7 +255,16 @@ export const UserProfileDetail = () => {
           width: '100%',
         }}
       >
-        <div style={{ width: '95%', maxWidth: '1400px', display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
+        <div
+          style={{
+            width: '95%',
+            maxWidth: '1400px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: '20px',
+          }}
+        >
           <div
             style={{
               flex: 1,
@@ -264,6 +273,7 @@ export const UserProfileDetail = () => {
               borderRadius: '100px',
               boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
               textAlign: 'center',
+              alignSelf: 'flex-start',
             }}
           >
             {/* <img
@@ -342,7 +352,7 @@ export const UserProfileDetail = () => {
           </div>
 
           {/* Skills Attained Section */}
-          <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '5px' }}>
+          <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <h3 style={{ marginBottom: '20px' }}>Skills Attained</h3>
 
