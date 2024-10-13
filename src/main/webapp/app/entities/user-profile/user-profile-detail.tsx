@@ -42,7 +42,7 @@ export const UserProfileDetail = () => {
   const getAllUserSkillsByUserId = () => {
     dispatch(
       getUserSkills({
-        query: `userProfileId.equals=${id}&skillTypeId.equals=3`,
+        query: `userProfileId.equals=${id}&skillTypeId.equals=1`,
       }),
     ).then(response => {
       setSkillsAttained((response.payload as any).data);
@@ -50,7 +50,7 @@ export const UserProfileDetail = () => {
 
     dispatch(
       getUserSkills({
-        query: `userProfileId.equals=${id}&skillTypeId.equals=4`,
+        query: `userProfileId.equals=${id}&skillTypeId.equals=2`,
       }),
     ).then(response => {
       setSkillsGoals((response.payload as any).data);
