@@ -1,15 +1,152 @@
 import './home.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Alert, Button, Popover, PopoverBody } from 'reactstrap';
+import { Row, Col, Alert, Button, Popover, PopoverBody, Table } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TextFormat, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
+import { getAllActivity } from 'app/entities/activity/activity.reducer';
+import { ASC } from 'app/shared/util/pagination.constants';
+import { APP_DATE_FORMAT } from 'app/config/constants';
+import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+
+// function DisplayUpcomingActivity() {
+
+//   return (
+//     <div>
+//       <h3>Upcoming Activities</h3>
+
+//       <p>There are no upcoming activities.</p>
+//     </div>
+//   );
+// }
 
 function DisplayUpcomingActivity() {
+  const dispatch = useAppDispatch();
+
+  const activityList = useAppSelector(state => state.activity.entities);
+  const loading = useAppSelector(state => state.activity.loading);
+
+  const [currentActivities, setCurrentActivities] = useState([]);
+  const [paginationState, setPaginationState] = useState({
+    activePage: 1,
+    itemsPerPage: 5,
+    sort: 'activityTime',
+    order: ASC,
+  });
+
+  // Fetch activities when the component mounts
+  useEffect(() => {
+    dispatch(getAllActivity({ sort: `${paginationState.sort},${paginationState.order}` }));
+  }, [paginationState]);
+
+  // Filter current activities based on the activityTime
+  useEffect(() => {
+    if (activityList && activityList.length > 0) {
+      const current = activityList.filter(
+        (activity: { activityTime: string | number | Date }) => new Date(activity.activityTime) >= new Date(),
+      );
+      setCurrentActivities(current);
+    }
+  }, [activityList]);
+
+  // Handle pagination for current activities
+  const handlePagination = (currentPage: any) => {
+    setPaginationState({
+      ...paginationState,
+      activePage: currentPage,
+    });
+  };
+
+  const getSortIconByFieldName = (fieldName: string) => {
+    const sortFieldName = paginationState.sort;
+    const order = paginationState.order;
+    if (sortFieldName !== fieldName) {
+      return faSort;
+    } else {
+      return order === ASC ? faSortUp : faSortDown;
+    }
+  };
+
+  // Paginate current activities
+  const currentActivitiesPaginated = currentActivities.slice(
+    (paginationState.activePage - 1) * paginationState.itemsPerPage,
+    paginationState.activePage * paginationState.itemsPerPage,
+  );
+
   return (
     <div>
       <h3>Upcoming Activities</h3>
-      <p>There are no upcoming activities.</p>
+      <div className="current-activities border border-5 p-3 m-2">
+        <div className="table-responsive">
+          {currentActivitiesPaginated.length > 0 ? (
+            <Table responsive bordered>
+              <thead>
+                <tr>
+                  <th>S/No.</th>
+                  <th>
+                    Activity Name <FontAwesomeIcon icon={getSortIconByFieldName('activityName')} />
+                  </th>
+                  <th>
+                    Activity Time <FontAwesomeIcon icon={getSortIconByFieldName('activityTime')} />
+                  </th>
+                  <th>
+                    Duration <FontAwesomeIcon icon={getSortIconByFieldName('duration')} />
+                  </th>
+                  <th>
+                    Venue <FontAwesomeIcon icon={getSortIconByFieldName('venue')} />
+                  </th>
+                  <th>
+                    Details <FontAwesomeIcon icon={getSortIconByFieldName('details')} />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentActivitiesPaginated.map((activity, i) => (
+                  <tr key={`entity-${i}`}>
+                    <td>{(paginationState.activePage - 1) * paginationState.itemsPerPage + i + 1}</td>
+                    <td>
+                      <Button tag={Link} to={`/activity/${activity.id}`} color="link" size="sm">
+                        {activity.activityName}
+                      </Button>
+                    </td>
+                    <td>
+                      {activity.activityTime ? <TextFormat type="date" value={activity.activityTime} format={APP_DATE_FORMAT} /> : null}
+                    </td>
+                    <td>{activity.duration}</td>
+                    <td>{activity.venue}</td>
+                    <td>{activity.details}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            !loading && <div className="alert alert-warning">No Upcoming Activities found</div>
+          )}
+        </div>
+
+        {currentActivities.length > 0 && (
+          <div className="pagination-wrapper">
+            <div className="justify-content-center d-flex">
+              <JhiItemCount
+                page={paginationState.activePage}
+                total={currentActivities.length}
+                itemsPerPage={paginationState.itemsPerPage}
+              />
+            </div>
+            <div className="justify-content-center d-flex">
+              <JhiPagination
+                activePage={paginationState.activePage}
+                onSelect={handlePagination}
+                itemsPerPage={paginationState.itemsPerPage}
+                maxButtons={5}
+                totalItems={currentActivities.length}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
