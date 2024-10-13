@@ -8,11 +8,12 @@ export const CommonNameCard = ({ key, id, profilePic, nickname, jobRole }) => {
         style={{
           border: '2px solid navy',
           borderRadius: '10px',
-          width: '300px',
+          width: '45%',
           padding: '10px',
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          marginRight: '2rem',
         }}
       >
         {/* Display Picture Placeholder */}
