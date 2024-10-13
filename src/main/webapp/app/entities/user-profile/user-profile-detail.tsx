@@ -276,12 +276,6 @@ export const UserProfileDetail = () => {
               alignSelf: 'flex-start',
             }}
           >
-            {/* <img
-              src='https://cdn.discordapp.com/attachments/439427207421493250/1292478233824202783/462090046_8504951729620289_6140065532385310807_n.png?ex=6703e1a8&is=67029028&hm=b043a4aa5ab97b876149b6e0f7cb8a5769b827d9949cdd9b68bec452f34412de&'
-              alt={userProfileEntity?.profilePicture || 'Profile Picture'}
-              //style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
-            /> */}
-
             <div
               style={{
                 width: '300px', // Increase container width

@@ -2,7 +2,17 @@ import './home.scss';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Alert, Button, Popover, PopoverBody } from 'reactstrap';
-import { useAppSelector } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { IUserProfile } from 'app/shared/model/user-profile.model';
+
+function DisplayUpcomingActivity() {
+  return (
+    <div>
+      <h3>Upcoming Activities</h3>
+      <p>There are no upcoming activities.</p>
+    </div>
+  );
+}
 
 function SkillsPopover() {
   const [popoverOpen, setPopoverOpen] = useState({
@@ -125,7 +135,10 @@ function AlertRegister() {
 }
 
 function Home() {
-  const account = useAppSelector(state => state.authentication.account);
+  const account = useAppSelector(state => state.authentication.account); // Get account information
+  const dispatch = useAppDispatch();
+  const userProfileEntitties = useAppSelector(state => state.userProfile.entities);
+  const loggedInUserProfile = userProfileEntitties.find((profile: IUserProfile) => profile.createdBy === account.login);
 
   return (
     <Row>
@@ -137,6 +150,7 @@ function Home() {
         {account?.login ? (
           <div>
             <Alert color="success">You are logged in as user &quot;{account.login}&quot;.</Alert>
+            <DisplayUpcomingActivity />
           </div>
         ) : (
           <div />
