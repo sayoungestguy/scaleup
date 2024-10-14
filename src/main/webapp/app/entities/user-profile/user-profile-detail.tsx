@@ -42,7 +42,7 @@ export const UserProfileDetail = () => {
   const getAllUserSkillsByUserId = () => {
     dispatch(
       getUserSkills({
-        query: `userProfileId.equals=${id}&skillTypeId.equals=3`,
+        query: `userProfileId.equals=${id}&skillTypeId.equals=1`,
       }),
     ).then(response => {
       setSkillsAttained((response.payload as any).data);
@@ -50,7 +50,7 @@ export const UserProfileDetail = () => {
 
     dispatch(
       getUserSkills({
-        query: `userProfileId.equals=${id}&skillTypeId.equals=4`,
+        query: `userProfileId.equals=${id}&skillTypeId.equals=2`,
       }),
     ).then(response => {
       setSkillsGoals((response.payload as any).data);
@@ -255,7 +255,16 @@ export const UserProfileDetail = () => {
           width: '100%',
         }}
       >
-        <div style={{ width: '95%', maxWidth: '1400px', display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
+        <div
+          style={{
+            width: '95%',
+            maxWidth: '1400px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: '20px',
+          }}
+        >
           <div
             style={{
               flex: 1,
@@ -264,19 +273,14 @@ export const UserProfileDetail = () => {
               borderRadius: '100px',
               boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
               textAlign: 'center',
+              alignSelf: 'flex-start',
             }}
           >
-            {/* <img
-              src='https://cdn.discordapp.com/attachments/439427207421493250/1292478233824202783/462090046_8504951729620289_6140065532385310807_n.png?ex=6703e1a8&is=67029028&hm=b043a4aa5ab97b876149b6e0f7cb8a5769b827d9949cdd9b68bec452f34412de&'
-              alt={userProfileEntity?.profilePicture || 'Profile Picture'}
-              //style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
-            /> */}
-
             <div
               style={{
-                width: '150px',
-                height: '150px',
-                borderRadius: '50%',
+                width: '300px', // Increase container width
+                height: '300px', // Increase container height
+                borderRadius: '50%', // Make container circular
                 marginBottom: '30px',
                 backgroundColor: '#f4f4f4',
                 display: 'flex',
@@ -285,11 +289,29 @@ export const UserProfileDetail = () => {
                 margin: '0 auto',
               }}
             >
-              <FontAwesomeIcon icon="user" style={{ fontSize: '100px', color: '#555' }} />
+              {!userProfileEntity?.profilePicture ? (
+                // If no profile picture, show FontAwesomeIcon
+                <FontAwesomeIcon icon="user" style={{ fontSize: '100px', color: '#555' }} />
+              ) : (
+                // Otherwise, show the profile picture
+                <img
+                  src={
+                    userProfileEntity?.profilePicture === 'Male Profile Picture'
+                      ? 'https://images2.imgbox.com/58/df/QqnDcnpM_o.png'
+                      : 'https://images2.imgbox.com/b3/e3/eB7ZJyVa_o.png'
+                  }
+                  alt="Profile Picture"
+                  style={{
+                    width: '280px',
+                    height: '280px',
+                    borderRadius: '50%',
+                  }}
+                />
+              )}
             </div>
 
+            <p>{userProfileEntity.profilePicture}</p>
             <div style={{ padding: '15px', textAlign: 'left', width: '100%' }}></div>
-
             <h2>{userProfileEntity.user ? userProfileEntity.user.login : ''}</h2>
 
             {loading ? (
@@ -334,7 +356,7 @@ export const UserProfileDetail = () => {
           </div>
 
           {/* Skills Attained Section */}
-          <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '10px' }}>
+          <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <h3 style={{ marginBottom: '20px' }}>Skills Attained</h3>
 

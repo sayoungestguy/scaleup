@@ -156,7 +156,7 @@ export const UserSkillUpdate = () => {
                 <option value="" key="0" />
                 {codeTables
                   ? codeTables
-                      .filter(otherEntity => otherEntity.id === 3 || otherEntity.id === 4)
+                      .filter(otherEntity => otherEntity.id === 1 || otherEntity.id === 2)
                       .map(filteredEntity => (
                         <option value={filteredEntity.id} key={filteredEntity.id}>
                           {filteredEntity.codeValue}
@@ -170,7 +170,14 @@ export const UserSkillUpdate = () => {
                 <span className="d-none d-md-inline">Back</span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button
+                color="primary"
+                id="save-entity"
+                data-cy="entityCreateSaveButton"
+                onClick={() => navigate(-1)}
+                type="submit"
+                disabled={updating}
+              >
                 <FontAwesomeIcon icon="save" />
                 &nbsp; Save
               </Button>
