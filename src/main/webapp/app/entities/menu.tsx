@@ -31,7 +31,7 @@ const EntitiesMenu = () => {
         User Skill
       </MenuItem>
       <MenuItem icon="search" to="/search">
-        Search
+        Search ScaleUp Network
       </MenuItem>
       {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
     </>

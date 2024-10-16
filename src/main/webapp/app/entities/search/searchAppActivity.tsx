@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Table } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { useAppDispatch } from 'app/config/store';
 import { getEntities } from 'app/entities/user-profile/user-profile.reducer';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getPaginationState, TextFormat } from 'react-jhipster';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -11,13 +10,11 @@ import { APP_DATE_FORMAT } from 'app/config/constants';
 import { getAllSkills } from 'app/entities/skill/skill.reducer';
 import { getAllActivity } from 'app/entities/activity/activity.reducer';
 import CommonNameCard from 'app/entities/search/commonNameCard';
-import { IUserProfile } from 'app/shared/model/user-profile.model';
 
 export const SearchAppActivity = () => {
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
-  const navigate = useNavigate();
 
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
@@ -35,9 +32,7 @@ export const SearchAppActivity = () => {
   // Validation state
   const [inputError, setInputError] = useState<string | null>(null);
 
-  // Example function to fetch activities (integrating the API call)
   const fetchUserProfile = async (searchQuery: string) => {
-    // Dispatch and unwrap the action to get the actual AxiosResponse
     const response = await dispatch(
       getEntities({
         sort: `${paginationState.sort},${paginationState.order}`,
@@ -45,13 +40,11 @@ export const SearchAppActivity = () => {
       }),
     ).unwrap();
 
-    // Assuming response is an AxiosResponse, return the actual data array (i.e., the profiles)
-    return response.data; // .data should give the list of profiles
+    //Filter out Admin User
+    return response.data.filter(profile => profile.id !== 1);
   };
 
-  // Simulated API calls for other types
   const fetchUserSkills = async (searchQuery: string) => {
-    // Dispatch the action and unwrap the result
     const response = await dispatch(
       getAllSkills({
         sort: `${paginationState.sort},${paginationState.order}`,
@@ -63,13 +56,11 @@ export const SearchAppActivity = () => {
     return response.data;
   };
 
-  // Function to fetch activities linked to a specific user profile
   const fetchActivitiesByUserProfile = async (userProfileId: number) => {
-    // Dispatch the action and unwrap the result
     const response = await dispatch(
       getAllActivity({
         sort: `${paginationState.sort},${paginationState.order}`,
-        query: `creatorProfileId.equals=${userProfileId}`, // Assuming 'userProfileId' is the field in the activity entity
+        query: `creatorProfileId.equals=${userProfileId}`,
       }),
     ).unwrap();
 
@@ -77,9 +68,7 @@ export const SearchAppActivity = () => {
     return response.data;
   };
 
-  // Function to fetch activities linked to a specific user skill
   const fetchActivitiesByUserSkill = async (skillId: number) => {
-    // Dispatch the action and unwrap the result
     const response = await dispatch(
       getAllActivity({
         sort: `${paginationState.sort},${paginationState.order}`,
@@ -96,8 +85,6 @@ export const SearchAppActivity = () => {
       setInputError('Please select a search type and enter a query.');
       return;
     }
-    // Add your search logic here
-
     setLoading(true);
     setError(null); // Reset any previous error
     setResults([]); // Clear previous results
@@ -112,17 +99,34 @@ export const SearchAppActivity = () => {
         // Fetch activities linked to each skill
         const activityPromises = userSkills.map(skill => fetchActivitiesByUserSkill(skill.id));
         const activities = await Promise.all(activityPromises);
-        setActivityResults(activities.flat()); // Flatten the array of activities and set the results
+        const flattenedActivities = activities.flat();
+        // Add skillName to the activity object by matching skillId with results
+        const activitiesWithSkillName = flattenedActivities.map(activity => {
+          const relatedSkill = userSkills.find(skill => skill.id === activity.skill.id);
+          return {
+            ...activity,
+            skillName: relatedSkill ? relatedSkill.skillName : 'Unknown Skill', // Add the skill name
+          };
+        });
+        setActivityResults(activitiesWithSkillName); // Update the activity results with skill names
       } else if (searchType === 'userProfile') {
         // API call for user profile
-        const response = await fetchUserProfile(query);
-        setResults(response);
+        const userProfiles = await fetchUserProfile(query);
+        setResults(userProfiles);
 
         // Fetch activities linked to each user profile
-        const activityPromises = response.map(profile => fetchActivitiesByUserProfile(profile.id));
+        const activityPromises = userProfiles.map(profile => fetchActivitiesByUserProfile(profile.id));
         const activities = await Promise.all(activityPromises);
-
-        setActivityResults(activities.flat()); // Flatten the array of activities and set the results
+        const flattenedActivities = activities.flat();
+        // Add skillName to the activity object by matching skillId with results
+        const activitiesWithProfileName = flattenedActivities.map(activity => {
+          const relatedProfiles = userProfiles.find(profile => profile.id === activity.creatorProfile.id);
+          return {
+            ...activity,
+            creatorProfileName: relatedProfiles ? relatedProfiles.nickname : 'Unknown Name', // Add the skill name
+          };
+        });
+        setActivityResults(activitiesWithProfileName); // Update the activity results with skill names
       }
       setSearchTracking(searchType);
     } catch (err) {
@@ -134,18 +138,8 @@ export const SearchAppActivity = () => {
 
   // Effect to clear results when the user comes back to the tab
   useEffect(() => {
-    // const handleVisibilityChange = () => {
-    //   if (document.visibilityState === 'visible') {
     setResults([]); // Clear the results when user navigates back
     setActivityResults([]); // Also clear activity results
-    //   }
-    // };
-
-    // document.addEventListener('visibilitychange', handleVisibilityChange);
-    //
-    // return () => {
-    //   document.removeEventListener('visibilitychange', handleVisibilityChange);
-    // };
   }, []);
 
   return (
@@ -206,7 +200,6 @@ export const SearchAppActivity = () => {
         {results.length > 0 && !!searchTracking ? (
           <div className="search-results-div border border-5 p-3 m-2">
             <h3>Results</h3>
-            {/* Show search Results */}
             {searchTracking === 'userProfile' ? (
               <Row className="p-3 m-2">
                 {results.map((userProfile, i) => (
@@ -259,8 +252,7 @@ export const SearchAppActivity = () => {
                     <th className="hand">Duration</th>
                     <th className="hand">Venue</th>
                     <th className="hand">Details</th>
-                    <th>Skill</th>
-                    <th>Creator Profile</th>
+                    {searchTracking === 'userSkills' ? <th>Skill</th> : <th>Creator Profile</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -278,8 +270,7 @@ export const SearchAppActivity = () => {
                       <td>{activity.duration}</td>
                       <td>{activity.venue}</td>
                       <td>{activity.details}</td>
-                      <td>{activity.skill ? activity.skill.id : 'Loading...'}</td>
-                      <td>{activity.creatorProfile.id}</td>
+                      {searchTracking === 'userSkills' ? <td>{activity.skillName}</td> : <td>{activity.creatorProfileName}</td>}
                     </tr>
                   ))}
                 </tbody>

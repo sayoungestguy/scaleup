@@ -17,15 +17,15 @@ export const CommonNameCard = ({ key, id, profilePic, nickname, jobRole }) => {
         }}
       >
         {/* Display Picture Placeholder */}
-        <div
-          style={{
-            width: '50px',
-            height: '50px',
-            borderRadius: '50%',
-            backgroundColor: '#ccc',
-            marginRight: '15px',
-          }}
-        ></div>
+        <img
+          src={
+            profilePic === 'Male Profile Picture'
+              ? 'https://images2.imgbox.com/58/df/QqnDcnpM_o.png'
+              : 'https://images2.imgbox.com/b3/e3/eB7ZJyVa_o.png'
+          }
+          alt="Profile Picture"
+          style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '15px' }}
+        />
         {/* Nickname and Job Role */}
         <CardBody style={{ padding: '0' }}>
           <h5 style={{ margin: '0', color: 'navy' }}>{nickname}</h5>
