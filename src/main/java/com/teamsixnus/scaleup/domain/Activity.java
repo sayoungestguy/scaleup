@@ -22,6 +22,7 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
     private static final long serialVersionUID = 1L;
 
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
@@ -216,6 +217,7 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
         if (!(o instanceof Activity)) {
             return false;
         }
+
         return getId() != null && getId().equals(((Activity) o).getId());
     }
 

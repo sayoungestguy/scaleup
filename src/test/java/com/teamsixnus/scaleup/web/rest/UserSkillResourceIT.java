@@ -37,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class UserSkillResourceIT {
 
+    private static final Long DEFAULT_ID = 1L;
+
     private static final Integer DEFAULT_YEARS_OF_EXPERIENCE = 1;
     private static final Integer UPDATED_YEARS_OF_EXPERIENCE = 2;
     private static final Integer SMALLER_YEARS_OF_EXPERIENCE = 1 - 1;
@@ -105,6 +107,9 @@ class UserSkillResourceIT {
     @Transactional
     void createUserSkill() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
+
+        // Ensure the entity has no ID before creation (it will be auto-generated)
+        assertThat(userSkill.getId()).isNull();
         // Create the UserSkill
         UserSkillDTO userSkillDTO = userSkillMapper.toDto(userSkill);
         var returnedUserSkillDTO = om.readValue(
@@ -121,6 +126,9 @@ class UserSkillResourceIT {
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
         var returnedUserSkill = userSkillMapper.toEntity(returnedUserSkillDTO);
         assertUserSkillUpdatableFieldsEquals(returnedUserSkill, getPersistedUserSkill(returnedUserSkill));
+
+        // The ID must be auto-generated and not null after persistence
+        assertThat(returnedUserSkill.getId()).isNotNull();
 
         insertedUserSkill = returnedUserSkill;
     }

@@ -183,7 +183,7 @@ public class Message extends AbstractAuditingEntity<Long> implements Serializabl
         if (!(o instanceof Message)) {
             return false;
         }
-        return getId() != null && getId().equals(((Message) o).getId());
+        return id != null && id.equals(((Message) o).id);
     }
 
     @Override

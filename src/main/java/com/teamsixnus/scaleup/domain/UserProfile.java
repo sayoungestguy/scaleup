@@ -28,6 +28,7 @@ public class UserProfile extends AbstractAuditingEntity<Long> implements Seriali
 
     //edited by wei jie, original function above
     @Id
+    @NotNull
     @Column(name = "id")
     private Long id;
 
