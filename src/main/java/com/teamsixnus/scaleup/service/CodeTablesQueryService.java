@@ -44,7 +44,7 @@ public class CodeTablesQueryService extends QueryService<CodeTables> {
      */
     @Transactional(readOnly = true)
     public Page<CodeTablesDTO> findByCriteria(CodeTablesCriteria criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria, page);
+        // log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<CodeTables> specification = createSpecification(criteria);
         return codeTablesRepository.findAll(specification, page).map(codeTablesMapper::toDto);
     }
@@ -56,7 +56,7 @@ public class CodeTablesQueryService extends QueryService<CodeTables> {
      */
     @Transactional(readOnly = true)
     public long countByCriteria(CodeTablesCriteria criteria) {
-        log.debug("count by criteria : {}", criteria);
+        // log.debug("count by criteria : {}", criteria);
         final Specification<CodeTables> specification = createSpecification(criteria);
         return codeTablesRepository.count(specification);
     }

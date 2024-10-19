@@ -190,7 +190,7 @@ jobs:
         with:
           name: zap report
           path: |
-            target/zap_baseline_report.html
+            ./zap_baseline_report.html
           retention-days: 1
 
   deploy-to-sit:
