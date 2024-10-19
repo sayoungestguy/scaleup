@@ -678,7 +678,7 @@ export const Message = () => {
                     </Button>
                   </td> */}
                   <td>{message.content}</td>
-                  <td>{message.createdBy}</td>
+                  <td>{message.createdBy ? <Link to={`/user-profile/${message.senderProfile.id}`}>{message.createdBy}</Link> : ''}</td>
                   <td>{message.createdDate ? <TextFormat type="date" value={message.createdDate} format={APP_DATE_FORMAT} /> : null}</td>
                   {/* <td>
                     {message.senderProfile ? <Link to={`/user-profile/${message.senderProfile.id}`}>{message.senderProfile.id}</Link> : ''}
