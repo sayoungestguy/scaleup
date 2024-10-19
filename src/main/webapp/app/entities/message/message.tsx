@@ -652,9 +652,9 @@ export const Message = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
+                {/* <th className="hand" onClick={sort('id')}>
                   ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
+                </th> */}
                 <th className="hand" onClick={sort('content')}>
                   Content <FontAwesomeIcon icon={getSortIconByFieldName('content')} />
                 </th>
@@ -664,23 +664,23 @@ export const Message = () => {
                 <th className="hand" onClick={sort('createdDate')}>
                   Created Date <FontAwesomeIcon icon={getSortIconByFieldName('createdDate')} />
                 </th>
-                <th>Sender Profile</th>
-                <th>Receiver Profile</th>
+                {/* <th>Sender Profile</th>
+                <th>Receiver Profile</th> */}
                 <th />
               </tr>
             </thead>
             <tbody>
               {messageList.map((message, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
+                  {/* <td>
                     <Button tag={Link} to={`/message/${message.id}`} color="link" size="sm">
                       {message.id}
                     </Button>
-                  </td>
+                  </td> */}
                   <td>{message.content}</td>
-                  <td>{message.createdBy}</td>
+                  <td>{message.createdBy ? <Link to={`/user-profile/${message.senderProfile.id}`}>{message.createdBy}</Link> : ''}</td>
                   <td>{message.createdDate ? <TextFormat type="date" value={message.createdDate} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>
+                  {/* <td>
                     {message.senderProfile ? <Link to={`/user-profile/${message.senderProfile.id}`}>{message.senderProfile.id}</Link> : ''}
                   </td>
                   <td>
@@ -689,7 +689,7 @@ export const Message = () => {
                     ) : (
                       ''
                     )}
-                  </td>
+                  </td> */}
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/message/${message.id}`} color="info" size="sm" data-cy="entityDetailsButton">
