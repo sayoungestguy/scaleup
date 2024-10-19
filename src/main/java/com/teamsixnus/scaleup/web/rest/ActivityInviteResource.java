@@ -170,7 +170,7 @@ public class ActivityInviteResource {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countActivityInvites(ActivityInviteCriteria criteria) {
-        log.debug("REST request to count ActivityInvites by criteria: {}", criteria);
+        // log.debug("REST request to count ActivityInvites by criteria: {}", criteria);
         return ResponseEntity.ok().body(activityInviteQueryService.countByCriteria(criteria));
     }
 
