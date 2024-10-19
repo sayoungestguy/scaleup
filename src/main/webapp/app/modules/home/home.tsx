@@ -155,10 +155,49 @@ function ScaleUpUserGuide() {
   return (
     <div>
       <Accordion open={open} toggle={toggle}>
+        {/* ScaleUp Intro */}
+        <AccordionItem>
+          <AccordionHeader targetId="1">
+            <strong>🚀 Introduction to ScaleUp</strong>
+          </AccordionHeader>
+          <AccordionBody accordionId="1">
+            <div style={{ marginBottom: '20px' }}>
+              <h4>🌟 ScaleUp: Your Platform for Skill Exchange and Growth</h4>
+              <p>
+                In today’s fast-paced world, staying competitive requires continuous learning. ScaleUp offers a community-driven platform
+                for skill development, where employees can exchange skills without the need for monetary transactions, making learning
+                accessible for all.
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <h5>
+                📈 <strong>Key Benefits:</strong>
+              </h5>
+              <ul className="benefits-list" style={{ listStyleType: 'none', paddingLeft: '0' }}>
+                <li>
+                  <strong>💡 Affordable Learning:</strong> Skill exchanges without financial barriers.
+                </li>
+                <li>
+                  <strong>🎯 Customized Experiences:</strong> Learn specific skills directly from peers.
+                </li>
+                <li>
+                  <strong>🤝 Community Engagement:</strong> Build a collaborative work environment.
+                </li>
+                <li>
+                  <strong>🔄 Continuous Growth:</strong> Promote lifelong learning and development.
+                </li>
+              </ul>
+            </div>
+
+            <p style={{ fontStyle: 'italic' }}>🎉 Join ScaleUp today to connect, learn, and grow with your colleagues!</p>
+          </AccordionBody>
+        </AccordionItem>
+
         {/* User Access Management */}
         <AccordionItem>
-          <AccordionHeader targetId="1">User Access Management</AccordionHeader>
-          <AccordionBody accordionId="1">
+          <AccordionHeader targetId="2">User Access Management</AccordionHeader>
+          <AccordionBody accordionId="2">
             <strong>Sign Up:</strong> Create a new ScaleUp account using your email.
             <ol>
               <li>Navigate to the Sign Up page.</li>
@@ -181,8 +220,8 @@ function ScaleUpUserGuide() {
 
         {/* User Profile Management */}
         <AccordionItem>
-          <AccordionHeader targetId="2">User Profile Management</AccordionHeader>
-          <AccordionBody accordionId="2">
+          <AccordionHeader targetId="3">User Profile Management</AccordionHeader>
+          <AccordionBody accordionId="3">
             <strong>Add Personal Details:</strong> Update profile with personal info.
             <ol>
               <li>Navigate to Profile and click Edit Profile.</li>
@@ -202,8 +241,8 @@ function ScaleUpUserGuide() {
 
         {/* Activity Management */}
         <AccordionItem>
-          <AccordionHeader targetId="3">Activity Management</AccordionHeader>
-          <AccordionBody accordionId="3">
+          <AccordionHeader targetId="4">Activity Management</AccordionHeader>
+          <AccordionBody accordionId="4">
             <strong>Search for Skills:</strong> Find users with specific skills.
             <ol>
               <li>Use the search feature, enter the skill you need, and review results.</li>
@@ -230,8 +269,8 @@ function ScaleUpUserGuide() {
 
         {/* Messaging System */}
         <AccordionItem>
-          <AccordionHeader targetId="4">Messaging System</AccordionHeader>
-          <AccordionBody accordionId="4">
+          <AccordionHeader targetId="5">Messaging System</AccordionHeader>
+          <AccordionBody accordionId="5">
             <strong>Send Messages:</strong> Communicate with other users.
             <ol>
               <li>Navigate to the Messages section.</li>
