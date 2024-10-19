@@ -123,7 +123,7 @@ public class ActivityInviteResource {
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody ActivityInviteDTO activityInviteDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update ActivityInvite partially : {}, {}", id, activityInviteDTO);
+        // log.debug("REST request to partial update ActivityInvite partially : {}, {}", id, activityInviteDTO);
         if (activityInviteDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -155,7 +155,7 @@ public class ActivityInviteResource {
         ActivityInviteCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get ActivityInvites by criteria: {}", criteria);
+        // log.debug("REST request to get ActivityInvites by criteria: {}", criteria);
 
         Page<ActivityInviteDTO> page = activityInviteQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

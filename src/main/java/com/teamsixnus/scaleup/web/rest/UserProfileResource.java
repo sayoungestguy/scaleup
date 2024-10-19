@@ -156,7 +156,7 @@ public class UserProfileResource {
         UserProfileCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get UserProfiles by criteria: {}", criteria);
+        // log.debug("REST request to get UserProfiles by criteria: {}", criteria);
 
         Page<UserProfileDTO> page = userProfileQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -171,7 +171,7 @@ public class UserProfileResource {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countUserProfiles(UserProfileCriteria criteria) {
-        log.debug("REST request to count UserProfiles by criteria: {}", criteria);
+        // log.debug("REST request to count UserProfiles by criteria: {}", criteria);
         return ResponseEntity.ok().body(userProfileQueryService.countByCriteria(criteria));
     }
 

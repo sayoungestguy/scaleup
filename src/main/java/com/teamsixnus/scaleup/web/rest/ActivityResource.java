@@ -163,7 +163,7 @@ public class ActivityResource {
         ActivityCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get Activities by criteria: {}", criteria);
+        // log.debug("REST request to get Activities by criteria: {}", criteria);
 
         Page<ActivityDTO> page = activityQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -178,7 +178,7 @@ public class ActivityResource {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countActivities(ActivityCriteria criteria) {
-        log.debug("REST request to count Activities by criteria: {}", criteria);
+        // log.debug("REST request to count Activities by criteria: {}", criteria);
         return ResponseEntity.ok().body(activityQueryService.countByCriteria(criteria));
     }
 

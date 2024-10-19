@@ -184,7 +184,7 @@ public class UserService {
         }
         userRepository.save(user);
         this.clearUserCaches(user);
-        log.debug("Created Information for User: {}", user);
+        log.info("Created Information for User");
         return user;
     }
 
@@ -220,7 +220,7 @@ public class UserService {
                     .forEach(managedAuthorities::add);
                 userRepository.save(user);
                 this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
+                log.info("Update Information for User");
                 return user;
             })
             .map(AdminUserDTO::new);
