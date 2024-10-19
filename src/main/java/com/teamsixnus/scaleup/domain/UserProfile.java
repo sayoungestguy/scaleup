@@ -216,7 +216,7 @@ public class UserProfile extends AbstractAuditingEntity<Long> implements Seriali
         if (!(o instanceof UserProfile)) {
             return false;
         }
-        return getId() != null && getId().equals(((UserProfile) o).getId());
+        return id != null && id.equals(((UserProfile) o).id);
     }
 
     @Override
