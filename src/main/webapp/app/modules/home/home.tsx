@@ -276,9 +276,9 @@ function ScaleUpUserGuide() {
               <li>Navigate to the Messages section.</li>
               <li>Select or search for a user, type your message, and send.</li>
             </ol>
-            <strong>Persistent Messaging:</strong> Messages are saved even after exiting chat.
+            <strong>Persistent Messaging:</strong> Chat History Preservation
             <ol>
-              <li> </li>
+              <li> Messages are saved even after exiting chat.</li>
             </ol>
             <strong>Delete Messages:</strong> Remove your sent messages.
             <ol>
