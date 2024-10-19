@@ -10,17 +10,7 @@ import { getAllActivity } from 'app/entities/activity/activity.reducer';
 import { ASC } from 'app/shared/util/pagination.constants';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-
-// function DisplayUpcomingActivity() {
-
-//   return (
-//     <div>
-//       <h3>Upcoming Activities</h3>
-
-//       <p>There are no upcoming activities.</p>
-//     </div>
-//   );
-// }
+import { Accordion, AccordionBody, AccordionHeader, AccordionItem } from 'reactstrap';
 
 function DisplayUpcomingActivity() {
   const dispatch = useAppDispatch();
@@ -113,6 +103,7 @@ function DisplayUpcomingActivity() {
                     </td>
                     <td>
                       {activity.activityTime ? <TextFormat type="date" value={activity.activityTime} format={APP_DATE_FORMAT} /> : null}
+                      AA{' '}
                     </td>
                     <td>{activity.duration}</td>
                     <td>{activity.venue}</td>
@@ -147,6 +138,116 @@ function DisplayUpcomingActivity() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function ScaleUpUserGuide() {
+  const [open, setOpen] = useState('1');
+  const toggle = id => {
+    if (open === id) {
+      setOpen('');
+    } else {
+      setOpen(id);
+    }
+  };
+
+  return (
+    <div>
+      <Accordion open={open} toggle={toggle}>
+        {/* User Access Management */}
+        <AccordionItem>
+          <AccordionHeader targetId="1">User Access Management</AccordionHeader>
+          <AccordionBody accordionId="1">
+            <strong>Sign Up:</strong> Create a new ScaleUp account using your email.
+            <ol>
+              <li>Navigate to the "Sign Up" page.</li>
+              <li>Enter a valid email and password.</li>
+              <li>Confirm the password and submit.</li>
+              <li>Check your email for a verification link and click it.</li>
+            </ol>
+            <strong>Log In:</strong> Log into your ScaleUp account.
+            <ol>
+              <li>Navigate to the "Log In" page.</li>
+              <li>Enter your email and password.</li>
+              <li>Click "Log In" to access your account.</li>
+            </ol>
+            <strong>Log Out:</strong> Log out securely.
+            <ol>
+              <li>Click "Log Out" from your profile or navigation bar.</li>
+            </ol>
+          </AccordionBody>
+        </AccordionItem>
+
+        {/* User Profile Management */}
+        <AccordionItem>
+          <AccordionHeader targetId="2">User Profile Management</AccordionHeader>
+          <AccordionBody accordionId="2">
+            <strong>Add Personal Details:</strong> Update profile with personal info.
+            <ol>
+              <li>Navigate to "Profile" and click "Edit Profile."</li>
+              <li>Enter details like nickname and job role, then save.</li>
+            </ol>
+            <strong>Change Profile Picture:</strong> Upload a new profile picture.
+            <ol>
+              <li>Click "Change Picture" and upload a new image.</li>
+            </ol>
+            <strong>Skills to Teach/Learn:</strong> List your skills.
+            <ol>
+              <li>Go to "Skills" in your profile, add skills to teach or learn.</li>
+              <li>Save your changes.</li>
+            </ol>
+          </AccordionBody>
+        </AccordionItem>
+
+        {/* Activity Management */}
+        <AccordionItem>
+          <AccordionHeader targetId="3">Activity Management</AccordionHeader>
+          <AccordionBody accordionId="3">
+            <strong>Search for Skills:</strong> Find users with specific skills.
+            <ol>
+              <li>Use the search feature, enter the skill you need, and review results.</li>
+            </ol>
+            <strong>Create a Forecast Activity:</strong> Organize a learning or teaching event.
+            <ol>
+              <li>Go to "Activities" and click "Create Activity."</li>
+              <li>Add skill, time, date, and venue, then save the activity.</li>
+            </ol>
+            <strong>Edit/Delete Activities:</strong> Modify or remove activities.
+            <ol>
+              <li>Navigate to "Activities" and click "Edit" or "Delete."</li>
+            </ol>
+            <strong>View Activity Records:</strong> Check current or past activities.
+            <ol>
+              <li>Go to your "Activities" page and select "Current" or "Past."</li>
+            </ol>
+            <strong>Invite Users to Activity:</strong> Send invites for your activity.
+            <ol>
+              <li>Use the "Invite" feature during activity creation or editing.</li>
+            </ol>
+          </AccordionBody>
+        </AccordionItem>
+
+        {/* Messaging System */}
+        <AccordionItem>
+          <AccordionHeader targetId="4">Messaging System</AccordionHeader>
+          <AccordionBody accordionId="4">
+            <strong>Send Messages:</strong> Communicate with other users.
+            <ol>
+              <li>Navigate to the "Messages" section.</li>
+              <li>Select or search for a user, type your message, and send.</li>
+            </ol>
+            <strong>Persistent Messaging:</strong> Messages are saved even after exiting chat.
+            <ol>
+              <li>Find the message, click delete, and confirm.</li>
+            </ol>
+            <strong>Delete Messages:</strong> Remove your sent messages.
+            <ol>
+              <li>Find the message, click delete, and confirm.</li>
+            </ol>
+          </AccordionBody>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }
@@ -293,12 +394,18 @@ function Home() {
           <div />
         )}
         <h3>
+          <p>ScaleUp User Guide</p>
+        </h3>
+        <div>
+          <ScaleUpUserGuide />
+        </div>
+        {/* <h3>
           <p>Types of Skills</p>
         </h3>
         <SkillsPopover />
         <div>
           <AlertRegister />
-        </div>
+        </div> */}
       </Col>
     </Row>
   );
