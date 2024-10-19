@@ -38,6 +38,11 @@ export const Activity = () => {
 
   const activityList = useAppSelector(state => state.activity.entities);
   const loading = useAppSelector(state => state.activity.loading);
+  // Assuming the user's roles are stored in the authentication state
+  const currentUser = useAppSelector(state => state.authentication.account);
+
+  // Check if the current user has the "admin" role
+  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
 
   const [currentActivities, setCurrentActivities] = useState([]);
   const [pastActivities, setPastActivities] = useState([]);
@@ -47,9 +52,14 @@ export const Activity = () => {
 
   const getAllActivities = () => {
     dispatch(
-      getAllActivity({
-        sort: `${currentPaginationState.sort},${currentPaginationState.order}`,
-      }),
+      getAllActivity(
+        isAdmin
+          ? { sort: `${currentPaginationState.sort},${currentPaginationState.order}` }
+          : {
+              sort: `${currentPaginationState.sort},${currentPaginationState.order}`,
+              query: `creatorProfileId.equals=${currentUser.id.toString()}`,
+            },
+      ),
     );
   };
 
@@ -192,12 +202,6 @@ export const Activity = () => {
       fetchSkillsForPastActivities();
     }
   }, [currentActivities, pastActivities]);
-
-  // Assuming the user's roles are stored in the authentication state
-  const currentUser = useAppSelector(state => state.authentication.account);
-
-  // Check if the current user has the "admin" role
-  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
 
   return (
     <div>
