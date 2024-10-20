@@ -114,7 +114,7 @@ public class UserSkill implements Serializable {
         if (!(o instanceof UserSkill)) {
             return false;
         }
-        return getId() != null && getId().equals(((UserSkill) o).getId());
+        return id != null && id.equals(((UserSkill) o).id);
     }
 
     @Override

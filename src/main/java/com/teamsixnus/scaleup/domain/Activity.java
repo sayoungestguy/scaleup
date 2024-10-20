@@ -216,7 +216,8 @@ public class Activity extends AbstractAuditingEntity<Long> implements Serializab
         if (!(o instanceof Activity)) {
             return false;
         }
-        return getId() != null && getId().equals(((Activity) o).getId());
+
+        return id != null && id.equals(((Activity) o).id);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class UserService {
     }
 
     public Optional<User> activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
+        log.info("Activating user for activation key");
         return userRepository
             .findOneByActivationKey(key)
             .map(user -> {
@@ -75,7 +75,7 @@ public class UserService {
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
-        log.debug("Reset user password for reset key {}", key);
+        log.info("Reset user password for reset key");
         return userRepository
             .findOneByResetKey(key)
             .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
@@ -184,7 +184,7 @@ public class UserService {
         }
         userRepository.save(user);
         this.clearUserCaches(user);
-        log.debug("Created Information for User: {}", user);
+        log.info("Created Information for User");
         return user;
     }
 
@@ -220,7 +220,7 @@ public class UserService {
                     .forEach(managedAuthorities::add);
                 userRepository.save(user);
                 this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
+                log.info("Update Information for User");
                 return user;
             })
             .map(AdminUserDTO::new);
