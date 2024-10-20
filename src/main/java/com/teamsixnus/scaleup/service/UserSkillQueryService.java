@@ -26,7 +26,7 @@ import tech.jhipster.service.QueryService;
 @Transactional(readOnly = true)
 public class UserSkillQueryService extends QueryService<UserSkill> {
 
-    private static final Logger log = LoggerFactory.getLogger(UserSkillQueryService.class);
+    // private static final Logger log = LoggerFactory.getLogger(UserSkillQueryService.class);
 
     private final UserSkillRepository userSkillRepository;
 
@@ -45,7 +45,7 @@ public class UserSkillQueryService extends QueryService<UserSkill> {
      */
     @Transactional(readOnly = true)
     public Page<UserSkillDTO> findByCriteria(UserSkillCriteria criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria, page);
+        // log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<UserSkill> specification = createSpecification(criteria);
         return userSkillRepository.findAll(specification, page).map(userSkillMapper::toDto);
     }
@@ -57,7 +57,7 @@ public class UserSkillQueryService extends QueryService<UserSkill> {
      */
     @Transactional(readOnly = true)
     public long countByCriteria(UserSkillCriteria criteria) {
-        log.debug("count by criteria : {}", criteria);
+        // log.debug("count by criteria : {}", criteria);
         final Specification<UserSkill> specification = createSpecification(criteria);
         return userSkillRepository.count(specification);
     }

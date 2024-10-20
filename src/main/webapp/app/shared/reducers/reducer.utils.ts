@@ -79,6 +79,7 @@ export interface EntityState<T> {
 }
 
 /**
+ * Factory Method Implemented Here.
  * A wrapper on top of createSlice from Redux Toolkit to extract
  * common reducers and matchers used by entities
  */

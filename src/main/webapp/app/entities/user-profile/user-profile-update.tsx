@@ -132,11 +132,17 @@ export const UserProfileUpdate = () => {
                 id="user-profile-profilePicture"
                 name="profilePicture"
                 data-cy="profilePicture"
-                type="text"
+                type="select"
                 validate={{
-                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                  required: { value: true, message: 'This field is required.' },
                 }}
-              />
+              >
+                <option value="" disabled>
+                  Select a profile picture
+                </option>
+                <option value="Male Profile Picture">Male Profile Picture</option>
+                <option value="Female Profile Picture">Female Profile Picture</option>
+              </ValidatedField>
               <ValidatedField
                 label="Social Links"
                 id="user-profile-socialLinks"

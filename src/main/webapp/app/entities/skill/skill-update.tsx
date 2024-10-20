@@ -125,7 +125,7 @@ export const SkillUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/skill" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to={-1} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>

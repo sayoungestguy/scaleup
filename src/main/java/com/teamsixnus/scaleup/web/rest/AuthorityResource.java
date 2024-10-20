@@ -80,7 +80,7 @@ public class AuthorityResource {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Authority> getAuthority(@PathVariable("id") String id) {
-        log.debug("REST request to get Authority : {}", id);
+        // log.debug("REST request to get Authority : {}", id);
         Optional<Authority> authority = authorityRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(authority);
     }
@@ -94,7 +94,7 @@ public class AuthorityResource {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteAuthority(@PathVariable("id") String id) {
-        log.debug("REST request to delete Authority : {}", id);
+        // log.debug("REST request to delete Authority : {}", id);
         authorityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }

@@ -44,7 +44,7 @@ public class SkillQueryService extends QueryService<Skill> {
      */
     @Transactional(readOnly = true)
     public Page<SkillDTO> findByCriteria(SkillCriteria criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria, page);
+        // log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Skill> specification = createSpecification(criteria);
         return skillRepository.findAll(specification, page).map(skillMapper::toDto);
     }
@@ -56,7 +56,7 @@ public class SkillQueryService extends QueryService<Skill> {
      */
     @Transactional(readOnly = true)
     public long countByCriteria(SkillCriteria criteria) {
-        log.debug("count by criteria : {}", criteria);
+        // log.debug("count by criteria : {}", criteria);
         final Specification<Skill> specification = createSpecification(criteria);
         return skillRepository.count(specification);
     }

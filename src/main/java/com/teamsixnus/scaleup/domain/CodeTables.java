@@ -150,7 +150,7 @@ public class CodeTables extends AbstractAuditingEntity<Long> implements Serializ
         if (!(o instanceof CodeTables)) {
             return false;
         }
-        return getId() != null && getId().equals(((CodeTables) o).getId());
+        return id != null && id.equals(((CodeTables) o).id);
     }
 
     @Override

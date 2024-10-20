@@ -1,10 +1,108 @@
-/* ==========================================================================
-Main page styles
-========================================================================== */
+.pad {
+  padding: 20px;
+}
+
+.display-4 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.lead {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #6c757d;
+}
+
 .hipster {
-  display: inline-block;
-  width: 100%;
-  height: 497px;
-  background: url('/content/images/jhipster_family_member_1.svg') no-repeat center top;
+  display: block;
+  width: 150px;
+  height: 150px;
+  background: url('/content/images/companypic.png') no-repeat center top;
   background-size: contain;
+  background-position: center;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+ul {
+  padding-left: 0;
+  list-style: none;
+
+  li {
+    a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease-in-out;
+
+      &:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.skill-button {
+  text-decoration: none;
+  font-size: 18px;
+  color: #163ad7;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 5px;
+  margin: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.popover {
+  max-width: 200px;
+}
+
+.popover-body {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.custom-alert {
+  background-color: #e7f3fe;
+  color: #0c5460;
+  border-color: #bee5eb;
+  font-size: 1rem;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.custom-alert .alert-link {
+  color: #045021;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.custom-alert .alert-link:hover {
+  color: #69c291;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
+  .hipster {
+    width: 100px;
+    height: 100px;
+  }
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { Row, Col, Alert, Button } from 'reactstrap';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -11,6 +11,7 @@ import { handleRegister, reset } from './register.reducer';
 export const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(
     () => () => {
@@ -30,8 +31,9 @@ export const RegisterPage = () => {
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage);
+      navigate('/login'); // Redirect to login after showing the toast
     }
-  }, [successMessage]);
+  }, [successMessage, navigate]); // Add navigate to dependency array
 
   return (
     <div>
@@ -110,11 +112,6 @@ export const RegisterPage = () => {
             <Link to="/login" className="alert-link">
               sign in
             </Link>
-            <span>
-              , you can try the default accounts:
-              <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;) <br />- User (login=&quot;user&quot; and
-              password=&quot;user&quot;).
-            </span>
           </Alert>
         </Col>
       </Row>

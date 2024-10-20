@@ -85,27 +85,6 @@ public class ActivityService {
             .map(activityMapper::toDto);
     }
 
-    //    /**
-    //     * Get all the activities.
-    //     *
-    //     * @param pageable the pagination information.
-    //     * @return the list of entities.
-    //     */
-    //    @Transactional(readOnly = true)
-    //    public Page<ActivityDTO> findAll(Pageable pageable) {
-    //        log.debug("Request to get all Activities");
-    //        Optional<User> currentUser = userService.getUserById();
-    //
-    //        if (currentUser.isPresent()) {
-    //            if (currentUser.get().getAuthorities().stream().anyMatch(authority -> authority.getName().equals(AuthoritiesConstants.ADMIN))) {
-    //                return activityRepository.findAll(pageable).map(activityMapper::toDto);
-    //            } else {
-    //                return activityRepository.findAllByCreatorProfileUserId(currentUser.get().getId(), pageable).map(activityMapper::toDto);
-    //            }
-    //        }
-    //        return Page.empty(); // Or throw an exception if user not found
-    //    }
-
     /**
      * Get one activity by id.
      *

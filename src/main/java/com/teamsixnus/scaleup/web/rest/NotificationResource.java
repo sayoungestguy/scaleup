@@ -63,7 +63,7 @@ public class NotificationResource {
      */
     @PostMapping("")
     public ResponseEntity<NotificationDTO> createNotification(@RequestBody NotificationDTO notificationDTO) throws URISyntaxException {
-        log.debug("REST request to save Notification : {}", notificationDTO);
+        // log.debug("REST request to save Notification : {}", notificationDTO);
         if (notificationDTO.getId() != null) {
             throw new BadRequestAlertException("A new notification cannot already have an ID", ENTITY_NAME, "idexists");
         }
@@ -154,7 +154,7 @@ public class NotificationResource {
         NotificationCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get Notifications by criteria: {}", criteria);
+        // log.debug("REST request to get Notifications by criteria: {}", criteria);
 
         Page<NotificationDTO> page = notificationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -169,7 +169,7 @@ public class NotificationResource {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countNotifications(NotificationCriteria criteria) {
-        log.debug("REST request to count Notifications by criteria: {}", criteria);
+        // log.debug("REST request to count Notifications by criteria: {}", criteria);
         return ResponseEntity.ok().body(notificationQueryService.countByCriteria(criteria));
     }
 

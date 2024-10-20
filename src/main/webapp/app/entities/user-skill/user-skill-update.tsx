@@ -8,6 +8,8 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+import { IUser } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
@@ -25,6 +27,7 @@ export const UserSkillUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const users = useAppSelector(state => state.userManagement.users);
   const userProfiles = useAppSelector(state => state.userProfile.entities);
   const skills = useAppSelector(state => state.skill.entities);
   const codeTables = useAppSelector(state => state.codeTables.entities);
@@ -47,6 +50,7 @@ export const UserSkillUpdate = () => {
     dispatch(getUserProfiles({}));
     dispatch(getSkills({}));
     dispatch(getCodeTables({}));
+    dispatch(getUsers({}));
   }, []);
 
   useEffect(() => {
@@ -70,6 +74,7 @@ export const UserSkillUpdate = () => {
       userProfile: userProfiles.find(it => it.id.toString() === values.userProfile?.toString()),
       skill: skills.find(it => it.id.toString() === values.skill?.toString()),
       skillType: codeTables.find(it => it.id.toString() === values.skillType?.toString()),
+      user: users.find(it => it.id.toString() === values.user?.toString()),
     };
 
     if (isNew) {
@@ -87,6 +92,7 @@ export const UserSkillUpdate = () => {
           userProfile: userSkillEntity?.userProfile?.id,
           skill: userSkillEntity?.skill?.id,
           skillType: userSkillEntity?.skillType?.id,
+          user: userSkillEntity?.user?.id,
         };
 
   return (
@@ -121,7 +127,17 @@ export const UserSkillUpdate = () => {
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nickname}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <ValidatedField id="user-profile-user" name="user" data-cy="user" label="User" type="select" required>
+                <option value="" key="0" />
+                {users
+                  ? users.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.login}
                       </option>
                     ))
                   : null}
@@ -131,7 +147,7 @@ export const UserSkillUpdate = () => {
                 {skills
                   ? skills.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.skillName}
                       </option>
                     ))
                   : null}
@@ -139,23 +155,37 @@ export const UserSkillUpdate = () => {
               <ValidatedField id="user-skill-skillType" name="skillType" data-cy="skillType" label="Skill Type" type="select">
                 <option value="" key="0" />
                 {codeTables
-                  ? codeTables.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
+                  ? codeTables
+                      .filter(otherEntity => otherEntity.id === 1 || otherEntity.id === 2)
+                      .map(filteredEntity => (
+                        <option value={filteredEntity.id} key={filteredEntity.id}>
+                          {filteredEntity.codeValue}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/user-skill" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to={-1} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button
+                color="primary"
+                id="save-entity"
+                data-cy="entityCreateSaveButton"
+                onClick={() => navigate(-1)}
+                type="submit"
+                disabled={updating}
+              >
                 <FontAwesomeIcon icon="save" />
                 &nbsp; Save
               </Button>
+              &nbsp;&nbsp;
+              <Link to="/skill/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+                <FontAwesomeIcon icon="plus" />
+                &nbsp; Create a new Skill
+              </Link>
             </ValidatedForm>
           )}
         </Col>
