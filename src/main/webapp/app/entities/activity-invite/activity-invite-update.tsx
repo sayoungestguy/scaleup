@@ -143,12 +143,20 @@ export const ActivityInviteUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
-              <ValidatedField id="activity-invite-activity" name="activity" data-cy="activity" label="Activity" type="select">
+              <ValidatedField
+                id="activity-invite-activity"
+                name="activity"
+                data-cy="activity"
+                label="Activity"
+                type="select"
+                disabled={!isNew}
+                value={activityInviteEntity?.activity?.id}
+              >
                 <option value="" key="0" />
                 {activities
                   ? activities.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.activityName}
                       </option>
                     ))
                   : null}
@@ -159,12 +167,14 @@ export const ActivityInviteUpdate = () => {
                 data-cy="inviteeProfile"
                 label="Invitee Profile"
                 type="select"
+                disabled={!isNew}
+                value={activityInviteEntity?.inviteeProfile?.id}
               >
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.inviteeProfile}
                       </option>
                     ))
                   : null}
@@ -172,11 +182,13 @@ export const ActivityInviteUpdate = () => {
               <ValidatedField id="activity-invite-status" name="status" data-cy="status" label="Status" type="select">
                 <option value="" key="0" />
                 {codeTables
-                  ? codeTables.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
+                  ? codeTables
+                      .filter(codeTable => codeTable.id >= 5 && codeTable.id <= 7)
+                      .map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.statusName}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/activity" replace color="info">

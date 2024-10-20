@@ -37,6 +37,33 @@ export const getActivityInviteById = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
+export const getActivityById = createAsyncThunk(
+  'activityInvite/fetch_entity',
+  async (id: string | number) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    return axios.get<IActivityInvite>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const getInviteeProfileById = createAsyncThunk(
+  'activityInvite/fetch_entity',
+  async (id: string | number) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    return axios.get<IActivityInvite>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const getStatusById = createAsyncThunk(
+  'activityInvite/fetch_entity',
+  async (id: string | number) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    return axios.get<IActivityInvite>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
 export const createEntity = createAsyncThunk(
   'activityInvite/create_entity',
   async (entity: IActivityInvite, thunkAPI) => {

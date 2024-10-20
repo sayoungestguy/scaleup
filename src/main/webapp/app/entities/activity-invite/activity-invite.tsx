@@ -10,6 +10,9 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getAllActivityInvites } from './activity-invite.reducer';
+import { getActivityById } from './activity-invite.reducer';
+import { getInviteeProfileById } from './activity-invite.reducer';
+import { getStatusById } from './activity-invite.reducer';
 
 export const ActivityInvite = () => {
   const dispatch = useAppDispatch();
@@ -24,6 +27,15 @@ export const ActivityInvite = () => {
   const activityInviteList = useAppSelector(state => state.activityInvite.entities);
   const loading = useAppSelector(state => state.activityInvite.loading);
   const totalItems = useAppSelector(state => state.activityInvite.totalItems);
+
+  const [currentActivity, setCurrentActivity] = React.useState<{ [key: number]: string }>({});
+  const [pastActivity, setPastActivity] = React.useState<{ [key: number]: string }>({});
+
+  const [currentInviteeProfile, setCurrentInviteeProfile] = React.useState<{ [key: number]: string }>({});
+  const [pastInviteeProfile, setPastInviteeProfile] = React.useState<{ [key: number]: string }>({});
+
+  const [currentStatus, setCurrentStatus] = React.useState<{ [key: number]: string }>({});
+  const [pastStatus, setPastStatus] = React.useState<{ [key: number]: string }>({});
 
   //console.log(props.activityId);
   const getAllEntities = () => {
@@ -43,6 +55,65 @@ export const ActivityInvite = () => {
     if (pageLocation.search !== endURL) {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
+  };
+
+  // Fetch Activity names for the activities invite
+  const fetchActivity = async (activityId: number, isCurrent: boolean) => {
+    const response = await dispatch(getActivityById(activityId)).unwrap();
+    const activityName = response.data.activity;
+
+    if (isCurrent) {
+      setCurrentActivity(prevActivity => ({
+        ...prevActivity,
+        [activityId]: activityName.toString(),
+      }));
+    } else {
+      setPastActivity(prevActivity => ({
+        ...prevActivity,
+        [activityId]: activityName.toString(),
+      }));
+    }
+
+    return activityName;
+  };
+
+  // Fetch Invitee Profile names for the activities invite
+  const fetchInviteeProfile = async (nickname: number, isCurrent: boolean) => {
+    const response = await dispatch(getInviteeProfileById(nickname)).unwrap();
+    const inviteeProfile = response.data.inviteeProfile;
+
+    if (isCurrent) {
+      setCurrentInviteeProfile(prevInviteeProfile => ({
+        ...prevInviteeProfile,
+        [nickname]: inviteeProfile.toString(),
+      }));
+    } else {
+      setPastInviteeProfile(prevInviteeProfile => ({
+        ...prevInviteeProfile,
+        [nickname]: inviteeProfile.toString(),
+      }));
+    }
+
+    return inviteeProfile;
+  };
+
+  // Fetch Invitee Profile names for the activities invite
+  const fetchStatus = async (codevalue: number, isCurrent: boolean) => {
+    const response = await dispatch(getStatusById(codevalue)).unwrap();
+    const statusName = response.data.status;
+
+    if (isCurrent) {
+      setCurrentStatus(prevStatus => ({
+        ...prevStatus,
+        [codevalue]: statusName.toString(),
+      }));
+    } else {
+      setPastStatus(prevStatus => ({
+        ...prevStatus,
+        [codevalue]: statusName.toString(),
+      }));
+    }
+    return statusName;
   };
 
   useEffect(() => {
@@ -91,6 +162,12 @@ export const ActivityInvite = () => {
       return order === ASC ? faSortUp : faSortDown;
     }
   };
+
+  // Assuming the user's roles are stored in the authentication state
+  const currentUser = useAppSelector(state => state.authentication.account);
+
+  // Check if the current user has the "admin" role
+  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
 
   return (
     <div>
@@ -141,20 +218,26 @@ export const ActivityInvite = () => {
                   <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
                   <td>
                     {activityInvite.activity ? (
-                      <Link to={`/activity/${activityInvite.activity.id}`}>{activityInvite.activity.id}</Link>
+                      <Link to={`/activity/${activityInvite.activity.id}`}>{currentActivity[activityInvite.activity.id]}</Link>
                     ) : (
                       ''
                     )}
                   </td>
                   <td>
                     {activityInvite.inviteeProfile ? (
-                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>{activityInvite.inviteeProfile.id}</Link>
+                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>
+                        {currentInviteeProfile[activityInvite.inviteeProfile.id]}
+                      </Link>
                     ) : (
                       ''
                     )}
                   </td>
                   <td>
-                    {activityInvite.status ? <Link to={`/code-tables/${activityInvite.status.id}`}>{activityInvite.status.id}</Link> : ''}
+                    {activityInvite.status ? (
+                      <Link to={`/code-tables/${activityInvite.status.id}`}>{currentStatus[activityInvite.status.id]}</Link>
+                    ) : (
+                      ''
+                    )}
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
@@ -170,16 +253,18 @@ export const ActivityInvite = () => {
                       >
                         <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                       </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/activity-invite/${activityInvite.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                      </Button>
+                      {
+                        <Button
+                          onClick={() =>
+                            (window.location.href = `/activity-invite/${activityInvite.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
+                          color="danger"
+                          size="sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        </Button>
+                      }
                     </div>
                   </td>
                 </tr>
