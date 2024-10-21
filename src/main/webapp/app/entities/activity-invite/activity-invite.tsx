@@ -60,7 +60,7 @@ export const ActivityInvite = () => {
   // Fetch Invitee Profile Name
   const fetchInviteeProfileName = async (profileId: number) => {
     const response = await dispatch(getUserProfileById(profileId)).unwrap();
-    console.log('profile:', response.data);
+
     setInviteeProfileNames(prev => ({ ...prev, [profileId]: response.data.nickname }));
   };
 
@@ -73,14 +73,11 @@ export const ActivityInvite = () => {
   // UseEffect to fetch Invitee Profile names after activityInviteList is updated
   useEffect(() => {
     if (activityInviteList.length > 0) {
-      console.log(activityInviteList.length);
       activityInviteList.forEach(invite => {
-        console.log('hit1');
         if (invite.activity.id && !activityNames[invite.activity.id]) {
           fetchActivityName(invite.activity.id);
         }
         if (invite.inviteeProfile.id && !inviteeProfileNames[invite.inviteeProfile.id]) {
-          console.log('hit1');
           fetchInviteeProfileName(invite.inviteeProfile.id);
         }
         if (invite.status.id && !statusNames[invite.status.id]) {
