@@ -8,8 +8,8 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getActivityInviteById, getStatusById } from './activity-invite.reducer';
-import { getActivityById } from './activity-invite.reducer';
 import { getInviteeProfileById } from './activity-invite.reducer';
+import { getActivityById } from 'app/entities/activity/activity.reducer';
 
 export const ActivityInviteDetail = () => {
   const dispatch = useAppDispatch();

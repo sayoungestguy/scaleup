@@ -37,14 +37,14 @@ export const getActivityInviteById = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const getActivityById = createAsyncThunk(
-  'activityInvite/fetch_entity',
-  async (id: string | number) => {
-    const requestUrl = `${apiUrl}/${id}`;
-    return axios.get<IActivityInvite>(requestUrl);
-  },
-  { serializeError: serializeAxiosError },
-);
+// export const getActivityById = createAsyncThunk(
+//   'activityInvite/fetch_entity',
+//   async (id: string | number) => {
+//     const requestUrl = `${apiUrl}/${id}`;
+//     return axios.get<IActivityInvite>(requestUrl);
+//   },
+//   { serializeError: serializeAxiosError },
+// );
 
 export const getInviteeProfileById = createAsyncThunk(
   'activityInvite/fetch_entity',

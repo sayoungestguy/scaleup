@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import { getPaginationState, JhiItemCount, JhiPagination } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getAllActivityInvites } from './activity-invite.reducer';
-import { getActivityById } from './activity-invite.reducer';
-import { getInviteeProfileById } from './activity-invite.reducer';
-import { getStatusById } from './activity-invite.reducer';
+import { getAllActivityInvites, getInviteeProfileById, getStatusById } from './activity-invite.reducer';
+import { getActivityById } from 'app/entities/activity/activity.reducer';
 
 export const ActivityInvite = () => {
   const dispatch = useAppDispatch();
@@ -28,20 +25,17 @@ export const ActivityInvite = () => {
   const loading = useAppSelector(state => state.activityInvite.loading);
   const totalItems = useAppSelector(state => state.activityInvite.totalItems);
 
-  const [currentActivity, setCurrentActivity] = React.useState<{ [key: number]: string }>({});
-  const [pastActivity, setPastActivity] = React.useState<{ [key: number]: string }>({});
+  const [activity, setActivity] = React.useState<{ [key: number]: string }>({});
 
-  const [currentInviteeProfile, setCurrentInviteeProfile] = React.useState<{ [key: number]: string }>({});
-  const [pastInviteeProfile, setPastInviteeProfile] = React.useState<{ [key: number]: string }>({});
+  const [inviteeProfile, setInviteeProfile] = React.useState<{ [key: number]: string }>({});
 
-  const [currentStatus, setCurrentStatus] = React.useState<{ [key: number]: string }>({});
-  const [pastStatus, setPastStatus] = React.useState<{ [key: number]: string }>({});
+  const [codeTableStatus, setCodeTableStatus] = React.useState<{ [key: number]: string }>({});
 
   //console.log(props.activityId);
   const getAllEntities = () => {
     dispatch(
       getAllActivityInvites({
-        //query: `activityId.equals=${props.activityId}`,
+        query: `inviteeProfileId.equals=${currentUser.id.toString()}`,
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
         sort: `${paginationState.sort},${paginationState.order}`,
@@ -58,61 +52,28 @@ export const ActivityInvite = () => {
   };
 
   // Fetch Activity names for the activities invite
-  const fetchActivity = async (activityId: number, isCurrent: boolean) => {
+  const fetchActivity = async (activityId: number) => {
     const response = await dispatch(getActivityById(activityId)).unwrap();
-    const activityName = response.data.activity;
+    const activityName = response.data.activityName;
 
-    if (isCurrent) {
-      setCurrentActivity(prevActivity => ({
-        ...prevActivity,
-        [activityId]: activityName.toString(),
-      }));
-    } else {
-      setPastActivity(prevActivity => ({
-        ...prevActivity,
-        [activityId]: activityName.toString(),
-      }));
-    }
+    setActivity(prevSkills => ({
+      ...prevSkills,
+      [activityId]: activityName,
+    }));
 
     return activityName;
   };
 
   // Fetch Invitee Profile names for the activities invite
-  const fetchInviteeProfile = async (nickname: number, isCurrent: boolean) => {
+  const fetchInviteeProfileName = async (nickname: number, isCurrent: boolean) => {
     const response = await dispatch(getInviteeProfileById(nickname)).unwrap();
-    const inviteeProfile = response.data.inviteeProfile;
-
-    if (isCurrent) {
-      setCurrentInviteeProfile(prevInviteeProfile => ({
-        ...prevInviteeProfile,
-        [nickname]: inviteeProfile.toString(),
-      }));
-    } else {
-      setPastInviteeProfile(prevInviteeProfile => ({
-        ...prevInviteeProfile,
-        [nickname]: inviteeProfile.toString(),
-      }));
-    }
-
-    return inviteeProfile;
+    return response.data.inviteeProfile.nickname;
   };
 
   // Fetch Invitee Profile names for the activities invite
   const fetchStatus = async (codevalue: number, isCurrent: boolean) => {
     const response = await dispatch(getStatusById(codevalue)).unwrap();
     const statusName = response.data.status;
-
-    if (isCurrent) {
-      setCurrentStatus(prevStatus => ({
-        ...prevStatus,
-        [codevalue]: statusName.toString(),
-      }));
-    } else {
-      setPastStatus(prevStatus => ({
-        ...prevStatus,
-        [codevalue]: statusName.toString(),
-      }));
-    }
     return statusName;
   };
 
@@ -218,27 +179,19 @@ export const ActivityInvite = () => {
                   <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
                   <td>
                     {activityInvite.activity ? (
-                      <Link to={`/activity/${activityInvite.activity.id}`}>{currentActivity[activityInvite.activity.id]}</Link>
+                      <Link to={`/activity/${activityInvite.activity.id}`}>{activity[activityInvite.activity.id]}</Link>
                     ) : (
                       ''
                     )}
                   </td>
                   <td>
                     {activityInvite.inviteeProfile ? (
-                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>
-                        {currentInviteeProfile[activityInvite.inviteeProfile.id]}
-                      </Link>
+                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>{activityInvite.inviteeProfile.id}</Link>
                     ) : (
                       ''
                     )}
                   </td>
-                  <td>
-                    {activityInvite.status ? (
-                      <Link to={`/code-tables/${activityInvite.status.id}`}>{currentStatus[activityInvite.status.id]}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
+                  <td>{activityInvite.status ? activityInvite.status.id : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/activity-invite/${activityInvite.id}`} color="info" size="sm" data-cy="entityDetailsButton">

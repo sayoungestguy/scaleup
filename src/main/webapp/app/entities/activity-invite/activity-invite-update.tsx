@@ -119,30 +119,6 @@ export const ActivityInviteUpdate = () => {
                 check
                 type="checkbox"
               />
-              <ValidatedField label="Created By" id="activity-invite-createdBy" name="createdBy" data-cy="createdBy" type="text" />
-              <ValidatedField
-                label="Created Date"
-                id="activity-invite-createdDate"
-                name="createdDate"
-                data-cy="createdDate"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField
-                label="Last Modified By"
-                id="activity-invite-lastModifiedBy"
-                name="lastModifiedBy"
-                data-cy="lastModifiedBy"
-                type="text"
-              />
-              <ValidatedField
-                label="Last Modified Date"
-                id="activity-invite-lastModifiedDate"
-                name="lastModifiedDate"
-                data-cy="lastModifiedDate"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
               <ValidatedField
                 id="activity-invite-activity"
                 name="activity"
@@ -174,7 +150,7 @@ export const ActivityInviteUpdate = () => {
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.inviteeProfile}
+                        {otherEntity.id}
                       </option>
                     ))
                   : null}
@@ -183,15 +159,15 @@ export const ActivityInviteUpdate = () => {
                 <option value="" key="0" />
                 {codeTables
                   ? codeTables
-                      .filter(codeTable => codeTable.id >= 5 && codeTable.id <= 7)
+                      .filter(codeTable => codeTable.id >= 3 && codeTable.id <= 5)
                       .map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.statusName}
+                          {otherEntity.codeValue}
                         </option>
                       ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/activity" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/activity-invite" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>
