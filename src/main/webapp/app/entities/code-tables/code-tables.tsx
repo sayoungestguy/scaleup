@@ -9,7 +9,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities } from './code-tables.reducer';
+import { getCodeTables } from './code-tables.reducer';
 
 export const CodeTables = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +27,7 @@ export const CodeTables = () => {
 
   const getAllEntities = () => {
     dispatch(
-      getEntities({
+      getCodeTables({
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
         sort: `${paginationState.sort},${paginationState.order}`,

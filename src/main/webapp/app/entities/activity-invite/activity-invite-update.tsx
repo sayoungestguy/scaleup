@@ -11,9 +11,9 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IActivity } from 'app/shared/model/activity.model';
 import { getAllActivity as getActivities } from 'app/entities/activity/activity.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
+import { getAllUserProfiles as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ICodeTables } from 'app/shared/model/code-tables.model';
-import { getEntities as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
+import { getCodeTables as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
 import { IActivityInvite } from 'app/shared/model/activity-invite.model';
 import { getActivityInviteById, updateEntity, createEntity, reset } from './activity-invite.reducer';
 
@@ -127,6 +127,9 @@ export const ActivityInviteUpdate = () => {
                 type="select"
                 disabled={!isNew}
                 value={activityInviteEntity?.activity?.id}
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
               >
                 <option value="" key="0" />
                 {activities
@@ -145,17 +148,29 @@ export const ActivityInviteUpdate = () => {
                 type="select"
                 disabled={!isNew}
                 value={activityInviteEntity?.inviteeProfile?.id}
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
               >
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.nickname}
                       </option>
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="activity-invite-status" name="status" data-cy="status" label="Status" type="select">
+              <ValidatedField
+                id="activity-invite-status"
+                name="status"
+                data-cy="status"
+                label="Status"
+                type="select"
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
+              >
                 <option value="" key="0" />
                 {codeTables
                   ? codeTables

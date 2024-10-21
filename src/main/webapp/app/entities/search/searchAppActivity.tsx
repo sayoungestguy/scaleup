@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Table } from 'reactstrap';
 import { useAppDispatch } from 'app/config/store';
-import { getEntities } from 'app/entities/user-profile/user-profile.reducer';
+import { getAllUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { Link, useLocation } from 'react-router-dom';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getPaginationState, TextFormat } from 'react-jhipster';
@@ -34,7 +34,7 @@ export const SearchAppActivity = () => {
 
   const fetchUserProfile = async (searchQuery: string) => {
     const response = await dispatch(
-      getEntities({
+      getAllUserProfiles({
         sort: `${paginationState.sort},${paginationState.order}`,
         query: `nickname.contains=${searchQuery}`,
       }),

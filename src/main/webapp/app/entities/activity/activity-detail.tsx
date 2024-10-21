@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getActivityById } from './activity.reducer';
 import { getSkillById } from 'app/entities/skill/skill.reducer';
-import { getEntity } from 'app/entities/user-profile/user-profile.reducer';
+import { getUserProfileById } from 'app/entities/user-profile/user-profile.reducer';
 
 export const ActivityDetail = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +27,7 @@ export const ActivityDetail = () => {
 
   useEffect(() => {
     if (activityEntity?.creatorProfile?.id) {
-      dispatch(getEntity(activityEntity.creatorProfile.id)); // Fetch profile by ID
+      dispatch(getUserProfileById(activityEntity.creatorProfile.id)); // Fetch profile by ID
     }
     if (activityEntity?.skill?.id) {
       dispatch(getSkillById(activityEntity.skill.id)); // Fetch skill by ID

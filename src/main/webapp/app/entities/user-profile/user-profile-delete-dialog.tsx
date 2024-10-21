@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from './user-profile.reducer';
+import { getUserProfileById, deleteUserProfile } from './user-profile.reducer';
 
 export const UserProfileDeleteDialog = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export const UserProfileDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getUserProfileById(id));
     setLoadModal(true);
   }, []);
 
@@ -36,7 +36,7 @@ export const UserProfileDeleteDialog = () => {
   }, [updateSuccess]);
 
   const confirmDelete = () => {
-    dispatch(deleteEntity(userProfileEntity.id));
+    dispatch(deleteUserProfile(userProfileEntity.id));
   };
 
   return (

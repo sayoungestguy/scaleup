@@ -8,8 +8,10 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getAllActivityInvites, getInviteeProfileById, getStatusById } from './activity-invite.reducer';
+import { getAllActivityInvites } from './activity-invite.reducer';
 import { getActivityById } from 'app/entities/activity/activity.reducer';
+import { getUserProfileById } from 'app/entities/user-profile/user-profile.reducer';
+import { getCodeTableById } from 'app/entities/code-tables/code-tables.reducer';
 
 export const ActivityInvite = () => {
   const dispatch = useAppDispatch();
@@ -25,11 +27,9 @@ export const ActivityInvite = () => {
   const loading = useAppSelector(state => state.activityInvite.loading);
   const totalItems = useAppSelector(state => state.activityInvite.totalItems);
 
-  const [activity, setActivity] = React.useState<{ [key: number]: string }>({});
-
-  const [inviteeProfile, setInviteeProfile] = React.useState<{ [key: number]: string }>({});
-
-  const [codeTableStatus, setCodeTableStatus] = React.useState<{ [key: number]: string }>({});
+  const [activityNames, setActivityNames] = useState<{ [key: number]: string }>({});
+  const [inviteeProfileNames, setInviteeProfileNames] = useState<{ [key: number]: string }>({});
+  const [statusNames, setStatusNames] = useState<{ [key: number]: string }>({});
 
   //console.log(props.activityId);
   const getAllEntities = () => {
@@ -51,31 +51,44 @@ export const ActivityInvite = () => {
     }
   };
 
-  // Fetch Activity names for the activities invite
-  const fetchActivity = async (activityId: number) => {
+  // Fetch Activity Name
+  const fetchActivityName = async (activityId: number) => {
     const response = await dispatch(getActivityById(activityId)).unwrap();
-    const activityName = response.data.activityName;
-
-    setActivity(prevSkills => ({
-      ...prevSkills,
-      [activityId]: activityName,
-    }));
-
-    return activityName;
+    setActivityNames(prev => ({ ...prev, [activityId]: response.data.activityName }));
   };
 
-  // Fetch Invitee Profile names for the activities invite
-  const fetchInviteeProfileName = async (nickname: number, isCurrent: boolean) => {
-    const response = await dispatch(getInviteeProfileById(nickname)).unwrap();
-    return response.data.inviteeProfile.nickname;
+  // Fetch Invitee Profile Name
+  const fetchInviteeProfileName = async (profileId: number) => {
+    const response = await dispatch(getUserProfileById(profileId)).unwrap();
+    console.log('profile:', response.data);
+    setInviteeProfileNames(prev => ({ ...prev, [profileId]: response.data.nickname }));
   };
 
-  // Fetch Invitee Profile names for the activities invite
-  const fetchStatus = async (codevalue: number, isCurrent: boolean) => {
-    const response = await dispatch(getStatusById(codevalue)).unwrap();
-    const statusName = response.data.status;
-    return statusName;
+  // Fetch Status Name
+  const fetchStatusName = async (statusId: number) => {
+    const response = await dispatch(getCodeTableById(statusId)).unwrap();
+    setStatusNames(prev => ({ ...prev, [statusId]: response.data.codeValue }));
   };
+
+  // UseEffect to fetch Invitee Profile names after activityInviteList is updated
+  useEffect(() => {
+    if (activityInviteList.length > 0) {
+      console.log(activityInviteList.length);
+      activityInviteList.forEach(invite => {
+        console.log('hit1');
+        if (invite.activity.id && !activityNames[invite.activity.id]) {
+          fetchActivityName(invite.activity.id);
+        }
+        if (invite.inviteeProfile.id && !inviteeProfileNames[invite.inviteeProfile.id]) {
+          console.log('hit1');
+          fetchInviteeProfileName(invite.inviteeProfile.id);
+        }
+        if (invite.status.id && !statusNames[invite.status.id]) {
+          fetchStatusName(invite.status.id);
+        }
+      });
+    }
+  }, [activityInviteList]);
 
   useEffect(() => {
     sortEntities();
@@ -179,19 +192,21 @@ export const ActivityInvite = () => {
                   <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
                   <td>
                     {activityInvite.activity ? (
-                      <Link to={`/activity/${activityInvite.activity.id}`}>{activity[activityInvite.activity.id]}</Link>
+                      <Link to={`/activity/${activityInvite.activity.id}`}>{activityNames[activityInvite.activity.id]}</Link>
                     ) : (
                       ''
                     )}
                   </td>
                   <td>
                     {activityInvite.inviteeProfile ? (
-                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>{activityInvite.inviteeProfile.id}</Link>
+                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>
+                        {inviteeProfileNames[activityInvite.inviteeProfile.id]}
+                      </Link>
                     ) : (
                       ''
                     )}
                   </td>
-                  <td>{activityInvite.status ? activityInvite.status.id : ''}</td>
+                  <td>{activityInvite.status ? statusNames[activityInvite.status.id] : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/activity-invite/${activityInvite.id}`} color="info" size="sm" data-cy="entityDetailsButton">

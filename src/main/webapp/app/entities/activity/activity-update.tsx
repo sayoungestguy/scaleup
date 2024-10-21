@@ -9,7 +9,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
+import { getAllUserProfiles as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
 import { getAllSkills as getSkills } from 'app/entities/skill/skill.reducer';
 import { IActivity } from 'app/shared/model/activity.model';

@@ -7,8 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getActivityInviteById, getStatusById } from './activity-invite.reducer';
-import { getInviteeProfileById } from './activity-invite.reducer';
+import { getActivityInviteById } from './activity-invite.reducer';
 import { getActivityById } from 'app/entities/activity/activity.reducer';
 
 export const ActivityInviteDetail = () => {
@@ -21,23 +20,6 @@ export const ActivityInviteDetail = () => {
   }, []);
 
   const activityInviteEntity = useAppSelector(state => state.activityInvite.entity);
-
-  useEffect(() => {
-    if (activityInviteEntity?.activity?.id) {
-      dispatch(getActivityById(activityInviteEntity.activity.id)); // Fetch Activity by ID
-    }
-    if (activityInviteEntity?.inviteeProfile?.id) {
-      dispatch(getInviteeProfileById(activityInviteEntity.inviteeProfile.id)); // Fetch Invitee Profile by ID
-    }
-    if (activityInviteEntity?.status?.id) {
-      dispatch(getStatusById(activityInviteEntity.status.id)); // Fetch status by ID
-    }
-  }, [dispatch, activityInviteEntity]);
-
-  // Get activity, invitee profile and status from the Redux state
-  const activity = useAppSelector(state => (activityInviteEntity.activity?.id ? state.activity.entity : null));
-  const inviteeProfile = useAppSelector(state => (activityInviteEntity.inviteeProfile?.id ? state.inviteeProfile.entity : null));
-  const status = useAppSelector(state => (activityInviteEntity.status?.id ? state.status.entity : null));
 
   return (
     <Row>

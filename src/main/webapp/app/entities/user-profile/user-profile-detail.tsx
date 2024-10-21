@@ -9,8 +9,8 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getUserSkills } from '../../entities/user-skill/user-skill.reducer';
-import { getEntities as getUserProfiles } from '../../entities/user-profile/user-profile.reducer';
-import { getEntity } from './user-profile.reducer';
+import { getAllUserProfiles as getUserProfiles } from '../../entities/user-profile/user-profile.reducer';
+import { getUserProfileById } from './user-profile.reducer';
 import { getSkillById as getSkillName } from 'app/entities/skill/skill.reducer';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 
@@ -34,7 +34,7 @@ export const UserProfileDetail = () => {
   const [skillNames, setSkillNames] = useState({});
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getUserProfileById(id));
   }, []);
 
   const userProfileEntity = useAppSelector(state => state.userProfile.entity);
