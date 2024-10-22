@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col, FormText } from 'reactstrap';
-import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Button, Row, Col } from 'reactstrap';
+import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getAllUserProfiles as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
-import { ISkill } from 'app/shared/model/skill.model';
 import { getAllSkills as getSkills } from 'app/entities/skill/skill.reducer';
-import { IActivity } from 'app/shared/model/activity.model';
 import { getActivityById, updateEntity, createEntity, reset } from './activity.reducer';
-import { min } from 'lodash';
 
 export const ActivityUpdate = () => {
   const dispatch = useAppDispatch();
@@ -171,25 +166,6 @@ export const ActivityUpdate = () => {
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
-              {/*<ValidatedField*/}
-              {/*  id="activity-creatorProfile"*/}
-              {/*  name="creatorProfile"*/}
-              {/*  data-cy="creatorProfile"*/}
-              {/*  label="Creator Profile"*/}
-              {/*  type="select"*/}
-              {/*  validate={{*/}
-              {/*    required: { value: true, message: 'This field is required' },*/}
-              {/*  }}*/}
-              {/*>*/}
-              {/*  <option value="" key="0" />*/}
-              {/*  {userProfiles*/}
-              {/*    ? userProfiles.map(otherEntity => (*/}
-              {/*        <option value={otherEntity.id} key={otherEntity.id}>*/}
-              {/*          {otherEntity.id}*/}
-              {/*        </option>*/}
-              {/*      ))*/}
-              {/*    : null}*/}
-              {/*</ValidatedField>*/}
               <ValidatedField
                 id="activity-skill"
                 name="skill"

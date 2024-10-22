@@ -4,11 +4,13 @@ import { Button, Row, Col } from 'reactstrap';
 import { TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getActivityInviteById } from './activity-invite.reducer';
 import { getActivityById } from 'app/entities/activity/activity.reducer';
+import { getUserProfileById } from 'app/entities/user-profile/user-profile.reducer';
+import { getCodeTableById } from 'app/entities/code-tables/code-tables.reducer';
 
 export const ActivityInviteDetail = () => {
   const dispatch = useAppDispatch();
@@ -20,6 +22,22 @@ export const ActivityInviteDetail = () => {
   }, []);
 
   const activityInviteEntity = useAppSelector(state => state.activityInvite.entity);
+
+  useEffect(() => {
+    if (activityInviteEntity?.activity?.id) {
+      dispatch(getActivityById(activityInviteEntity?.activity?.id));
+    }
+    if (activityInviteEntity?.inviteeProfile?.id) {
+      dispatch(getUserProfileById(activityInviteEntity?.inviteeProfile?.id));
+    }
+    if (activityInviteEntity?.status?.id) {
+      dispatch(getCodeTableById(activityInviteEntity?.status?.id));
+    }
+  }, [dispatch, activityInviteEntity]);
+
+  const activityName = useAppSelector(state => (activityInviteEntity?.activity?.id ? state.activity.entity : null));
+  const inviteeProfile = useAppSelector(state => (activityInviteEntity.inviteeProfile?.id ? state.userProfile.entity : null));
+  const status = useAppSelector(state => (activityInviteEntity?.status?.id ? state.codeTables.entity : null));
 
   return (
     <Row>
@@ -59,11 +77,11 @@ export const ActivityInviteDetail = () => {
             ) : null}
           </dd>
           <dt>Activity</dt>
-          <dd>{activityInviteEntity.activity ? activityInviteEntity.activity.id : ''}</dd>
+          <dd>{activityName ? activityName.activityName : ''}</dd>
           <dt>Invitee Profile</dt>
-          <dd>{activityInviteEntity.inviteeProfile ? activityInviteEntity.inviteeProfile.id : ''}</dd>
+          <dd>{inviteeProfile ? inviteeProfile.nickname : ''}</dd>
           <dt>Status</dt>
-          <dd>{activityInviteEntity.status ? activityInviteEntity.status.id : ''}</dd>
+          <dd>{status ? status.codeValue : ''}</dd>
         </dl>
         <Button tag={Link} to="/activity-invite" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

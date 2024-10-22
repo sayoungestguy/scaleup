@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col, FormText } from 'reactstrap';
-import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Button, Row, Col } from 'reactstrap';
+import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { IActivity } from 'app/shared/model/activity.model';
 import { getAllActivity as getActivities } from 'app/entities/activity/activity.reducer';
-import { IUserProfile } from 'app/shared/model/user-profile.model';
 import { getAllUserProfiles as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
-import { ICodeTables } from 'app/shared/model/code-tables.model';
 import { getCodeTables as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
-import { IActivityInvite } from 'app/shared/model/activity-invite.model';
 import { getActivityInviteById, updateEntity, createEntity, reset } from './activity-invite.reducer';
 
 export const ActivityInviteUpdate = () => {
@@ -108,17 +103,7 @@ export const ActivityInviteUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? (
-                <ValidatedField name="id" required readOnly id="activity-invite-id" label="ID" validate={{ required: true }} />
-              ) : null}
-              <ValidatedField
-                label="Will Participate"
-                id="activity-invite-willParticipate"
-                name="willParticipate"
-                data-cy="willParticipate"
-                check
-                type="checkbox"
-              />
+              {!isNew ? <ValidatedField name="id" required readOnly id="activity-invite-id" label="ID" /> : null}
               <ValidatedField
                 id="activity-invite-activity"
                 name="activity"
@@ -126,7 +111,6 @@ export const ActivityInviteUpdate = () => {
                 label="Activity"
                 type="select"
                 disabled={!isNew}
-                value={activityInviteEntity?.activity?.id}
                 validate={{
                   required: { value: true, message: 'This field is required.' },
                 }}
@@ -147,18 +131,19 @@ export const ActivityInviteUpdate = () => {
                 label="Invitee Profile"
                 type="select"
                 disabled={!isNew}
-                value={activityInviteEntity?.inviteeProfile?.id}
                 validate={{
                   required: { value: true, message: 'This field is required.' },
                 }}
               >
                 <option value="" key="0" />
                 {userProfiles
-                  ? userProfiles.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.nickname}
-                      </option>
-                    ))
+                  ? userProfiles
+                      //.filter(userProfile => userProfile.id )
+                      .map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.nickname}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
               <ValidatedField

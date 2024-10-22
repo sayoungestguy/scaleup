@@ -75,7 +75,7 @@ export const ActivityDetail = () => {
             <dt>Skill</dt>
             <dd>{skill ? skill.skillName : ''}</dd>
           </dl>
-          <Button tag={Link} to="/activity" replace color="info" data-cy="entityDetailsBackButton">
+          <Button tag={Link} to={-1} replace color="info" data-cy="entityDetailsBackButton">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
           </Button>
           &nbsp;
@@ -88,21 +88,6 @@ export const ActivityDetail = () => {
           )}
         </Col>
       </Row>
-      {/*<Row className="p-5">*/}
-      {/*  <div className="activity-invite-tbl border border-5 p-3 m-2">*/}
-      {/*    <ActivityInviteTable*/}
-      {/*      activityInviteList={activityInviteList}*/}
-      {/*      sort={sort}*/}
-      {/*      getSortIconByFieldName={getSortIconByFieldName}*/}
-      {/*      loading={loading}*/}
-      {/*      paginationState={paginationState}*/}
-      {/*      totalItems={totalItems}*/}
-      {/*      handlePagination*/}
-      {/*      handleSyncList*/}
-      {/*    />*/}
-      {/*    <ActivityInviteTable activityId={id} />*/}
-      {/*  </div>*/}
-      {/*</Row>*/}
     </>
   );
 };

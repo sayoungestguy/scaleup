@@ -27,19 +27,32 @@ export const ActivityInvite = () => {
   const loading = useAppSelector(state => state.activityInvite.loading);
   const totalItems = useAppSelector(state => state.activityInvite.totalItems);
 
+  // Assuming the user's roles are stored in the authentication state
+  const currentUser = useAppSelector(state => state.authentication.account);
+
+  // Check if the current user has the "admin" role
+  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
+
   const [activityNames, setActivityNames] = useState<{ [key: number]: string }>({});
   const [inviteeProfileNames, setInviteeProfileNames] = useState<{ [key: number]: string }>({});
   const [statusNames, setStatusNames] = useState<{ [key: number]: string }>({});
 
-  //console.log(props.activityId);
   const getAllEntities = () => {
     dispatch(
-      getAllActivityInvites({
-        query: `inviteeProfileId.equals=${currentUser.id.toString()}`,
-        page: paginationState.activePage - 1,
-        size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
-      }),
+      getAllActivityInvites(
+        isAdmin
+          ? {
+              page: paginationState.activePage - 1,
+              size: paginationState.itemsPerPage,
+              sort: `${paginationState.sort},${paginationState.order}`,
+            }
+          : {
+              query: `inviteeProfileId.equals=${currentUser.id.toString()}`,
+              page: paginationState.activePage - 1,
+              size: paginationState.itemsPerPage,
+              sort: `${paginationState.sort},${paginationState.order}`,
+            },
+      ),
     );
   };
 
@@ -134,12 +147,6 @@ export const ActivityInvite = () => {
     }
   };
 
-  // Assuming the user's roles are stored in the authentication state
-  const currentUser = useAppSelector(state => state.authentication.account);
-
-  // Check if the current user has the "admin" role
-  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
-
   return (
     <div>
       <h2 id="activity-invite-heading" data-cy="ActivityInviteHeading">
@@ -159,20 +166,14 @@ export const ActivityInvite = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
-                <th className="hand" onClick={sort('willParticipate')}>
-                  Will Participate <FontAwesomeIcon icon={getSortIconByFieldName('willParticipate')} />
-                </th>
-
-                <th>
+                <th>S/No.</th>
+                <th className="hand" onClick={sort('activity')}>
                   Activity <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
+                <th className="hand" onClick={sort('inviteeProfile')}>
                   Invitee Profile <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
+                <th className="hand" onClick={sort('status')}>
                   Status <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
@@ -181,12 +182,7 @@ export const ActivityInvite = () => {
             <tbody>
               {activityInviteList.map((activityInvite, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/activity-invite/${activityInvite.id}`} color="link" size="sm">
-                      {activityInvite.id}
-                    </Button>
-                  </td>
-                  <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
+                  <td>{i + 1}</td>
                   <td>
                     {activityInvite.activity ? (
                       <Link to={`/activity/${activityInvite.activity.id}`}>{activityNames[activityInvite.activity.id]}</Link>
@@ -206,9 +202,19 @@ export const ActivityInvite = () => {
                   <td>{activityInvite.status ? statusNames[activityInvite.status.id] : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/activity-invite/${activityInvite.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                      </Button>
+                      {isAdmin ? (
+                        <Button
+                          tag={Link}
+                          to={`/activity-invite/${activityInvite.id}`}
+                          color="info"
+                          size="sm"
+                          data-cy="entityDetailsButton"
+                        >
+                          <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        </Button>
+                      ) : (
+                        ''
+                      )}
                       <Button
                         tag={Link}
                         to={`/activity-invite/${activityInvite.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
