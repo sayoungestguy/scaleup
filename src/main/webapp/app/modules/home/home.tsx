@@ -142,7 +142,7 @@ function DisplayUpcomingActivity() {
   );
 }
 
-function ScaleUpUserGuide() {
+function IntroToScaleUp() {
   const [open, setOpen] = useState('1');
   const toggle = id => {
     if (open === id) {
@@ -193,11 +193,67 @@ function ScaleUpUserGuide() {
             <p style={{ fontStyle: 'italic' }}>🎉 Join ScaleUp today to connect, learn, and grow with your colleagues!</p>
           </AccordionBody>
         </AccordionItem>
+      </Accordion>
+    </div>
+  );
+}
+
+function ScaleUpUserGuide() {
+  const [open, setOpen] = useState('');
+  const toggle = id => {
+    if (open === id) {
+      setOpen('');
+    } else {
+      setOpen(id);
+    }
+  };
+
+  return (
+    <div>
+      <Accordion open={open} toggle={toggle}>
+        {/* ScaleUp Intro */}
+        {/* <AccordionItem>
+          <AccordionHeader targetId="1">
+            <strong>🚀 Introduction to ScaleUp</strong>
+          </AccordionHeader>
+          <AccordionBody accordionId="1">
+            <div style={{ marginBottom: '20px' }}>
+              <h4>🌟 ScaleUp: Your Platform for Skill Exchange and Growth</h4>
+              <p>
+                In today’s fast-paced world, staying competitive requires continuous learning. ScaleUp offers a community-driven platform
+                for skill development, where employees can exchange skills without the need for monetary transactions, making learning
+                accessible for all.
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <h5>
+                📈 <strong>Key Benefits:</strong>
+              </h5>
+              <ul className="benefits-list" style={{ listStyleType: 'none', paddingLeft: '0' }}>
+                <li>
+                  <strong>💡 Affordable Learning:</strong> Skill exchanges without financial barriers.
+                </li>
+                <li>
+                  <strong>🎯 Customized Experiences:</strong> Learn specific skills directly from peers.
+                </li>
+                <li>
+                  <strong>🤝 Community Engagement:</strong> Build a collaborative work environment.
+                </li>
+                <li>
+                  <strong>🔄 Continuous Growth:</strong> Promote lifelong learning and development.
+                </li>
+              </ul>
+            </div>
+
+            <p style={{ fontStyle: 'italic' }}>🎉 Join ScaleUp today to connect, learn, and grow with your colleagues!</p>
+          </AccordionBody>
+        </AccordionItem> */}
 
         {/* User Access Management */}
-        <AccordionItem>
-          <AccordionHeader targetId="2">User Access Management</AccordionHeader>
-          <AccordionBody accordionId="2">
+        <AccordionItem style={{ border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}>
+          <AccordionHeader targetId="1">User Access Management</AccordionHeader>
+          <AccordionBody accordionId="1">
             <strong>Sign Up:</strong> Create a new ScaleUp account using your email.
             <ol>
               <li>Navigate to the Sign Up page.</li>
@@ -219,9 +275,9 @@ function ScaleUpUserGuide() {
         </AccordionItem>
 
         {/* User Profile Management */}
-        <AccordionItem>
-          <AccordionHeader targetId="3">User Profile Management</AccordionHeader>
-          <AccordionBody accordionId="3">
+        <AccordionItem style={{ border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}>
+          <AccordionHeader targetId="2">User Profile Management</AccordionHeader>
+          <AccordionBody accordionId="2">
             <strong>Add Personal Details:</strong> Update profile with personal info.
             <ol>
               <li>Navigate to Profile and click Edit Profile.</li>
@@ -240,9 +296,9 @@ function ScaleUpUserGuide() {
         </AccordionItem>
 
         {/* Activity Management */}
-        <AccordionItem>
-          <AccordionHeader targetId="4">Activity Management</AccordionHeader>
-          <AccordionBody accordionId="4">
+        <AccordionItem style={{ border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}>
+          <AccordionHeader targetId="3">Activity Management</AccordionHeader>
+          <AccordionBody accordionId="3">
             <strong>Search for Skills:</strong> Find users with specific skills.
             <ol>
               <li>Use the search feature, enter the skill you need, and review results.</li>
@@ -268,9 +324,9 @@ function ScaleUpUserGuide() {
         </AccordionItem>
 
         {/* Messaging System */}
-        <AccordionItem>
-          <AccordionHeader targetId="5">Messaging System</AccordionHeader>
-          <AccordionBody accordionId="5">
+        <AccordionItem style={{ border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}>
+          <AccordionHeader targetId="4">Messaging System</AccordionHeader>
+          <AccordionBody accordionId="4">
             <strong>Send Messages:</strong> Communicate with other users.
             <ol>
               <li>Navigate to the Messages section.</li>
@@ -424,20 +480,28 @@ function Home() {
       </Col>
       <Col md="9">
         <h1 className="display-4">Welcome to ScaleUp</h1>
+        <div className="intro-section">
+          <IntroToScaleUp />
+        </div>
         {account?.login ? (
-          <div>
-            <Alert color="success">You are logged in as user &quot;{account.login}&quot;.</Alert>
-            <DisplayUpcomingActivity />
-          </div>
+          <>
+            <div className="upcoming-activities-section" style={{ marginTop: '20px' }}>
+              {/* <Alert color="success">You are logged in as user &quot;{account.login}&quot;.</Alert> */}
+              <DisplayUpcomingActivity />
+            </div>
+            <div style={{ marginTop: '20px' }}>
+              <h3>
+                <p>ScaleUp User Guide</p>
+              </h3>
+              <div>
+                <ScaleUpUserGuide />
+              </div>
+            </div>
+          </>
         ) : (
           <div />
         )}
-        <h3>
-          <p>ScaleUp User Guide</p>
-        </h3>
-        <div>
-          <ScaleUpUserGuide />
-        </div>
+
         {/* <h3>
           <p>Types of Skills</p>
         </h3>

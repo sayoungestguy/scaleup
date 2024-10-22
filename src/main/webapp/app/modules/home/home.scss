@@ -106,3 +106,31 @@ ul {
     height: 100px;
   }
 }
+
+/* Styling for activity table */
+.current-activities {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add a background color to the introduction section */
+.intro-section {
+  background-color: #f8f9fa; /* Light background */
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the Accordion */
+.accordion-item {
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
