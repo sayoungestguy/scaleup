@@ -8,6 +8,9 @@ import Health from './health/health';
 import Metrics from './metrics/metrics';
 import Configuration from './configuration/configuration';
 import Docs from './docs/docs';
+import Skill from 'app/entities/skill/skill';
+import UserSkill from 'app/entities/user-skill/user-skill';
+import UserProfile from 'app/entities/user-profile/user-profile';
 
 const AdministrationRoutes = () => (
   <div>
@@ -18,6 +21,9 @@ const AdministrationRoutes = () => (
       <Route path="configuration" element={<Configuration />} />
       <Route path="logs" element={<Logs />} />
       <Route path="docs" element={<Docs />} />
+      <Route path="skill/*" element={<Skill />} />
+      <Route path="user-skill/*" element={<UserSkill />} />
+      <Route path="user-profile/*" element={<UserProfile />} />
     </ErrorBoundaryRoutes>
   </div>
 );
