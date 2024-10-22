@@ -6,10 +6,10 @@ import sinon from 'sinon';
 import { EntityState } from 'app/shared/reducers/reducer.utils';
 import { ICodeTables, defaultValue } from 'app/shared/model/code-tables.model';
 import reducer, {
-  createEntity,
+  createCodeTable,
   deleteEntity,
-  getEntities,
-  getEntity,
+  getCodeTables,
+  getCodeTableById,
   updateEntity,
   partialUpdateEntity,
   reset,
@@ -59,7 +59,7 @@ describe('Entities reducer tests', () => {
 
   describe('Requests', () => {
     it('should set state to loading', () => {
-      testMultipleTypes([getEntities.pending.type, getEntity.pending.type], {}, state => {
+      testMultipleTypes([getCodeTables.pending.type, getCodeTableById.pending.type], {}, state => {
         expect(state).toMatchObject({
           errorMessage: null,
           updateSuccess: false,
@@ -70,7 +70,7 @@ describe('Entities reducer tests', () => {
 
     it('should set state to updating', () => {
       testMultipleTypes(
-        [createEntity.pending.type, updateEntity.pending.type, partialUpdateEntity.pending.type, deleteEntity.pending.type],
+        [createCodeTable.pending.type, updateEntity.pending.type, partialUpdateEntity.pending.type, deleteEntity.pending.type],
         {},
         state => {
           expect(state).toMatchObject({
@@ -93,9 +93,9 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          getEntities.rejected.type,
-          getEntity.rejected.type,
-          createEntity.rejected.type,
+          getCodeTables.rejected.type,
+          getCodeTableById.rejected.type,
+          createCodeTable.rejected.type,
           updateEntity.rejected.type,
           partialUpdateEntity.rejected.type,
           deleteEntity.rejected.type,
@@ -120,7 +120,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }], headers: { 'x-total-count': 123 } };
       expect(
         reducer(undefined, {
-          type: getEntities.fulfilled.type,
+          type: getCodeTables.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -135,7 +135,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: { 1: 'fake1' } };
       expect(
         reducer(undefined, {
-          type: getEntity.fulfilled.type,
+          type: getCodeTableById.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -149,7 +149,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: 'fake payload' };
       expect(
         reducer(undefined, {
-          type: createEntity.fulfilled.type,
+          type: createCodeTable.fulfilled.type,
           payload,
         }),
       ).toEqual({
@@ -194,31 +194,31 @@ describe('Entities reducer tests', () => {
     it('dispatches FETCH_CODETABLES_LIST actions', async () => {
       const arg = {};
 
-      const result = await getEntities(arg)(dispatch, getState, extra);
+      const result = await getCodeTables(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntities.fulfilled.match(result)).toBe(true);
+      expect(getCodeTables.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches FETCH_CODETABLES actions', async () => {
       const arg = 42666;
 
-      const result = await getEntity(arg)(dispatch, getState, extra);
+      const result = await getCodeTableById(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(getEntity.fulfilled.match(result)).toBe(true);
+      expect(getCodeTableById.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches CREATE_CODETABLES actions', async () => {
       const arg = { id: 456 };
 
-      const result = await createEntity(arg)(dispatch, getState, extra);
+      const result = await createCodeTable(arg)(dispatch, getState, extra);
 
       const pendingAction = dispatch.mock.calls[0][0];
       expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(createEntity.fulfilled.match(result)).toBe(true);
+      expect(createCodeTable.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches UPDATE_CODETABLES actions', async () => {

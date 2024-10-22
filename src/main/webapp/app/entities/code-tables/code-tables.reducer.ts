@@ -18,7 +18,7 @@ const apiUrl = 'api/code-tables';
 
 // Actions
 
-export const getEntities = createAsyncThunk(
+export const getCodeTables = createAsyncThunk(
   'codeTables/fetch_entity_list',
   async ({ page, size, sort }: IQueryParams) => {
     const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
@@ -27,7 +27,7 @@ export const getEntities = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const getEntity = createAsyncThunk(
+export const getCodeTableById = createAsyncThunk(
   'codeTables/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
@@ -36,11 +36,11 @@ export const getEntity = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const createEntity = createAsyncThunk(
+export const createCodeTable = createAsyncThunk(
   'codeTables/create_entity',
   async (entity: ICodeTables, thunkAPI) => {
     const result = await axios.post<ICodeTables>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getCodeTables({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -50,7 +50,7 @@ export const updateEntity = createAsyncThunk(
   'codeTables/update_entity',
   async (entity: ICodeTables, thunkAPI) => {
     const result = await axios.put<ICodeTables>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getCodeTables({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -60,7 +60,7 @@ export const partialUpdateEntity = createAsyncThunk(
   'codeTables/partial_update_entity',
   async (entity: ICodeTables, thunkAPI) => {
     const result = await axios.patch<ICodeTables>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getCodeTables({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -71,7 +71,7 @@ export const deleteEntity = createAsyncThunk(
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<ICodeTables>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getCodeTables({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -84,7 +84,7 @@ export const CodeTablesSlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getEntity.fulfilled, (state, action) => {
+      .addCase(getCodeTableById.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
@@ -93,7 +93,7 @@ export const CodeTablesSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getCodeTables), (state, action) => {
         const { data, headers } = action.payload;
 
         return {
@@ -103,18 +103,18 @@ export const CodeTablesSlice = createEntitySlice({
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
-      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
+      .addMatcher(isFulfilled(createCodeTable, updateEntity, partialUpdateEntity), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getCodeTables, getCodeTableById), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
+      .addMatcher(isPending(createCodeTable, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;

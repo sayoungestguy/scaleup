@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './code-tables.reducer';
+import { getCodeTableById } from './code-tables.reducer';
 
 export const CodeTablesDetail = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ export const CodeTablesDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getCodeTableById(id));
   }, []);
 
   const codeTablesEntity = useAppSelector(state => state.codeTables.entity);

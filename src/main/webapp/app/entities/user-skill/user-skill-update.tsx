@@ -11,11 +11,11 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
+import { getAllUserProfiles as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
 import { getAllSkills as getSkills } from 'app/entities/skill/skill.reducer';
 import { ICodeTables } from 'app/shared/model/code-tables.model';
-import { getEntities as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
+import { getCodeTables as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
 import { IUserSkill } from 'app/shared/model/user-skill.model';
 import { getEntity, updateEntity, createEntity, reset } from './user-skill.reducer';
 

@@ -140,20 +140,20 @@ class ActivityInviteResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeCreate);
     }
 
-    //        @Test
-    //        @Transactional
-    //        void getAllActivityInvites() throws Exception {
-    //            // Initialize the database
-    //            insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-    //
-    //            // Get all the activityInviteList
-    //            restActivityInviteMockMvc
-    //                .perform(get(ENTITY_API_URL + "?sort=id,desc"))
-    //                .andExpect(status().isOk())
-    //                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-    //                .andExpect(jsonPath("$.[*].id").value(hasItem(activityInvite.getId().intValue())))
-    //                .andExpect(jsonPath("$.[*].willParticipate").value(hasItem(DEFAULT_WILL_PARTICIPATE.booleanValue())));
-    //        }
+    @Test
+    @Transactional
+    void getAllActivityInvites() throws Exception {
+        // Initialize the database
+        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
+
+        // Get all the activityInviteList
+        restActivityInviteMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(activityInvite.getId().intValue())))
+            .andExpect(jsonPath("$.[*].willParticipate").value(hasItem(DEFAULT_WILL_PARTICIPATE.booleanValue())));
+    }
 
     @Test
     @Transactional
@@ -170,123 +170,123 @@ class ActivityInviteResourceIT {
             .andExpect(jsonPath("$.willParticipate").value(DEFAULT_WILL_PARTICIPATE.booleanValue()));
     }
 
-    //        @Test
-    //        @Transactional
-    //        void getActivityInvitesByIdFiltering() throws Exception {
-    //            // Initialize the database
-    //            insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-    //
-    //            Long id = activityInvite.getId();
-    //
-    //            defaultActivityInviteFiltering("id.equals=" + id, "id.notEquals=" + id);
-    //
-    //            defaultActivityInviteFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
-    //
-    //            defaultActivityInviteFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
-    //        }
-    //
-    //        @Test
-    //        @Transactional
-    //        void getAllActivityInvitesByWillParticipateIsEqualToSomething() throws Exception {
-    //            // Initialize the database
-    //            insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-    //
-    //            // Get all the activityInviteList where willParticipate equals to
-    //            defaultActivityInviteFiltering(
-    //                "willParticipate.equals=" + DEFAULT_WILL_PARTICIPATE,
-    //                "willParticipate.equals=" + UPDATED_WILL_PARTICIPATE
-    //            );
-    //        }
-    //
-    //        @Test
-    //        @Transactional
-    //        void getAllActivityInvitesByWillParticipateIsInShouldWork() throws Exception {
-    //            // Initialize the database
-    //            insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-    //
-    //            // Get all the activityInviteList where willParticipate in
-    //            defaultActivityInviteFiltering(
-    //                "willParticipate.in=" + DEFAULT_WILL_PARTICIPATE + "," + UPDATED_WILL_PARTICIPATE,
-    //                "willParticipate.in=" + UPDATED_WILL_PARTICIPATE
-    //            );
-    //        }
-    //
-    //        @Test
-    //        @Transactional
-    //        void getAllActivityInvitesByWillParticipateIsNullOrNotNull() throws Exception {
-    //            // Initialize the database
-    //            insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-    //
-    //            // Get all the activityInviteList where willParticipate is not null
-    //            defaultActivityInviteFiltering("willParticipate.specified=true", "willParticipate.specified=false");
-    //        }
-    //
-    //        @Test
-    //        @Transactional
-    //        @WithMockUser(username = "user", authorities = {AuthoritiesConstants.USER})
-    //        void getAllActivityInvitesByActivityIsEqualToSomething() throws Exception {
-    //            Activity activity;
-    //            if (TestUtil.findAll(em, Activity.class).isEmpty()) {
-    //                activityInviteRepository.saveAndFlush(activityInvite);
-    //                activity = ActivityResourceIT.createEntity(em);
-    //            } else {
-    //                activity = TestUtil.findAll(em, Activity.class).get(0);
-    //            }
-    //            em.persist(activity);
-    //            em.flush();
-    //            activityInvite.setActivity(activity);
-    //            activityInviteRepository.saveAndFlush(activityInvite);
-    //            Long activityId = activity.getId();
-    //            // Get all the activityInviteList where activity equals to activityId
-    //            defaultActivityInviteShouldBeFound("activityId.equals=" + activityId);
-    //
-    //            // Get all the activityInviteList where activity equals to (activityId + 1)
-    //            defaultActivityInviteShouldNotBeFound("activityId.equals=" + (activityId + 1));
-    //        }
-    //
-    //        @Test
-    //        @Transactional
-    //        void getAllActivityInvitesByInviteeProfileIsEqualToSomething() throws Exception {
-    //            UserProfile inviteeProfile;
-    //            if (TestUtil.findAll(em, UserProfile.class).isEmpty()) {
-    //                activityInviteRepository.saveAndFlush(activityInvite);
-    //                inviteeProfile = UserProfileResourceIT.createEntity(em);
-    //            } else {
-    //                inviteeProfile = TestUtil.findAll(em, UserProfile.class).get(0);
-    //            }
-    //            em.persist(inviteeProfile);
-    //            em.flush();
-    //            activityInvite.setInviteeProfile(inviteeProfile);
-    //            activityInviteRepository.saveAndFlush(activityInvite);
-    //            Long inviteeProfileId = inviteeProfile.getId();
-    //            // Get all the activityInviteList where inviteeProfile equals to inviteeProfileId
-    //            defaultActivityInviteShouldBeFound("inviteeProfileId.equals=" + inviteeProfileId);
-    //
-    //            // Get all the activityInviteList where inviteeProfile equals to (inviteeProfileId + 1)
-    //            defaultActivityInviteShouldNotBeFound("inviteeProfileId.equals=" + (inviteeProfileId + 1));
-    //        }
-    //
-    //        @Test
-    //        @Transactional
-    //        void getAllActivityInvitesByStatusIsEqualToSomething() throws Exception {
-    //            CodeTables status;
-    //            if (TestUtil.findAll(em, CodeTables.class).isEmpty()) {
-    //                activityInviteRepository.saveAndFlush(activityInvite);
-    //                status = CodeTablesResourceIT.createEntity(em);
-    //            } else {
-    //                status = TestUtil.findAll(em, CodeTables.class).get(0);
-    //            }
-    //            em.persist(status);
-    //            em.flush();
-    //            activityInvite.setStatus(status);
-    //            activityInviteRepository.saveAndFlush(activityInvite);
-    //            Long statusId = status.getId();
-    //            // Get all the activityInviteList where status equals to statusId
-    //            defaultActivityInviteShouldBeFound("statusId.equals=" + statusId);
-    //
-    //            // Get all the activityInviteList where status equals to (statusId + 1)
-    //            defaultActivityInviteShouldNotBeFound("statusId.equals=" + (statusId + 1));
-    //        }
+    @Test
+    @Transactional
+    void getActivityInvitesByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
+
+        Long id = activityInvite.getId();
+
+        defaultActivityInviteFiltering("id.equals=" + id, "id.notEquals=" + id);
+
+        defaultActivityInviteFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+
+        defaultActivityInviteFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllActivityInvitesByWillParticipateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
+
+        // Get all the activityInviteList where willParticipate equals to
+        defaultActivityInviteFiltering(
+            "willParticipate.equals=" + DEFAULT_WILL_PARTICIPATE,
+            "willParticipate.equals=" + UPDATED_WILL_PARTICIPATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActivityInvitesByWillParticipateIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
+
+        // Get all the activityInviteList where willParticipate in
+        defaultActivityInviteFiltering(
+            "willParticipate.in=" + DEFAULT_WILL_PARTICIPATE + "," + UPDATED_WILL_PARTICIPATE,
+            "willParticipate.in=" + UPDATED_WILL_PARTICIPATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActivityInvitesByWillParticipateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
+
+        // Get all the activityInviteList where willParticipate is not null
+        defaultActivityInviteFiltering("willParticipate.specified=true", "willParticipate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "user", authorities = { AuthoritiesConstants.USER })
+    void getAllActivityInvitesByActivityIsEqualToSomething() throws Exception {
+        Activity activity;
+        if (TestUtil.findAll(em, Activity.class).isEmpty()) {
+            activityInviteRepository.saveAndFlush(activityInvite);
+            activity = ActivityResourceIT.createEntity(em);
+        } else {
+            activity = TestUtil.findAll(em, Activity.class).get(0);
+        }
+        em.persist(activity);
+        em.flush();
+        activityInvite.setActivity(activity);
+        activityInviteRepository.saveAndFlush(activityInvite);
+        Long activityId = activity.getId();
+        // Get all the activityInviteList where activity equals to activityId
+        defaultActivityInviteShouldBeFound("activityId.equals=" + activityId);
+
+        // Get all the activityInviteList where activity equals to (activityId + 1)
+        defaultActivityInviteShouldNotBeFound("activityId.equals=" + (activityId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllActivityInvitesByInviteeProfileIsEqualToSomething() throws Exception {
+        UserProfile inviteeProfile;
+        if (TestUtil.findAll(em, UserProfile.class).isEmpty()) {
+            activityInviteRepository.saveAndFlush(activityInvite);
+            inviteeProfile = UserProfileResourceIT.createEntity(em);
+        } else {
+            inviteeProfile = TestUtil.findAll(em, UserProfile.class).get(0);
+        }
+        em.persist(inviteeProfile);
+        em.flush();
+        activityInvite.setInviteeProfile(inviteeProfile);
+        activityInviteRepository.saveAndFlush(activityInvite);
+        Long inviteeProfileId = inviteeProfile.getId();
+        // Get all the activityInviteList where inviteeProfile equals to inviteeProfileId
+        defaultActivityInviteShouldBeFound("inviteeProfileId.equals=" + inviteeProfileId);
+
+        // Get all the activityInviteList where inviteeProfile equals to (inviteeProfileId + 1)
+        defaultActivityInviteShouldNotBeFound("inviteeProfileId.equals=" + (inviteeProfileId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllActivityInvitesByStatusIsEqualToSomething() throws Exception {
+        CodeTables status;
+        if (TestUtil.findAll(em, CodeTables.class).isEmpty()) {
+            activityInviteRepository.saveAndFlush(activityInvite);
+            status = CodeTablesResourceIT.createEntity(em);
+        } else {
+            status = TestUtil.findAll(em, CodeTables.class).get(0);
+        }
+        em.persist(status);
+        em.flush();
+        activityInvite.setStatus(status);
+        activityInviteRepository.saveAndFlush(activityInvite);
+        Long statusId = status.getId();
+        // Get all the activityInviteList where status equals to statusId
+        defaultActivityInviteShouldBeFound("statusId.equals=" + statusId);
+
+        // Get all the activityInviteList where status equals to (statusId + 1)
+        defaultActivityInviteShouldNotBeFound("statusId.equals=" + (statusId + 1));
+    }
 
     private void defaultActivityInviteFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
         defaultActivityInviteShouldBeFound(shouldBeFound);

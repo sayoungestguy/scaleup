@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntity, updateEntity, createEntity, reset } from './user-profile.reducer';
+import { getUserProfileById, updateUserProfile, createUserProfile, reset } from './user-profile.reducer';
 
 export const UserProfileUpdate = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ export const UserProfileUpdate = () => {
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getUserProfileById(id));
     }
 
     dispatch(getUsers({}));
@@ -62,9 +62,9 @@ export const UserProfileUpdate = () => {
     };
 
     if (isNew) {
-      dispatch(createEntity(entity));
+      dispatch(createUserProfile(entity));
     } else {
-      dispatch(updateEntity(entity));
+      dispatch(updateUserProfile(entity));
     }
   };
 

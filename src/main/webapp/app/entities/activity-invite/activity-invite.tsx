@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import { getPaginationState, JhiItemCount, JhiPagination } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getAllActivityInvites } from './activity-invite.reducer';
+import { getActivityById } from 'app/entities/activity/activity.reducer';
+import { getUserProfileById } from 'app/entities/user-profile/user-profile.reducer';
+import { getCodeTableById } from 'app/entities/code-tables/code-tables.reducer';
 
 export const ActivityInvite = () => {
   const dispatch = useAppDispatch();
@@ -25,15 +27,32 @@ export const ActivityInvite = () => {
   const loading = useAppSelector(state => state.activityInvite.loading);
   const totalItems = useAppSelector(state => state.activityInvite.totalItems);
 
-  //console.log(props.activityId);
+  // Assuming the user's roles are stored in the authentication state
+  const currentUser = useAppSelector(state => state.authentication.account);
+
+  // Check if the current user has the "admin" role
+  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
+
+  const [activityNames, setActivityNames] = useState<{ [key: number]: string }>({});
+  const [inviteeProfileNames, setInviteeProfileNames] = useState<{ [key: number]: string }>({});
+  const [statusNames, setStatusNames] = useState<{ [key: number]: string }>({});
+
   const getAllEntities = () => {
     dispatch(
-      getAllActivityInvites({
-        //query: `activityId.equals=${props.activityId}`,
-        page: paginationState.activePage - 1,
-        size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
-      }),
+      getAllActivityInvites(
+        isAdmin
+          ? {
+              page: paginationState.activePage - 1,
+              size: paginationState.itemsPerPage,
+              sort: `${paginationState.sort},${paginationState.order}`,
+            }
+          : {
+              query: `inviteeProfileId.equals=${currentUser.id.toString()}`,
+              page: paginationState.activePage - 1,
+              size: paginationState.itemsPerPage,
+              sort: `${paginationState.sort},${paginationState.order}`,
+            },
+      ),
     );
   };
 
@@ -44,6 +63,42 @@ export const ActivityInvite = () => {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
+
+  // Fetch Activity Name
+  const fetchActivityName = async (activityId: number) => {
+    const response = await dispatch(getActivityById(activityId)).unwrap();
+    setActivityNames(prev => ({ ...prev, [activityId]: response.data.activityName }));
+  };
+
+  // Fetch Invitee Profile Name
+  const fetchInviteeProfileName = async (profileId: number) => {
+    const response = await dispatch(getUserProfileById(profileId)).unwrap();
+
+    setInviteeProfileNames(prev => ({ ...prev, [profileId]: response.data.nickname }));
+  };
+
+  // Fetch Status Name
+  const fetchStatusName = async (statusId: number) => {
+    const response = await dispatch(getCodeTableById(statusId)).unwrap();
+    setStatusNames(prev => ({ ...prev, [statusId]: response.data.codeValue }));
+  };
+
+  // UseEffect to fetch Invitee Profile names after activityInviteList is updated
+  useEffect(() => {
+    if (activityInviteList.length > 0) {
+      activityInviteList.forEach(invite => {
+        if (invite.activity.id && !activityNames[invite.activity.id]) {
+          fetchActivityName(invite.activity.id);
+        }
+        if (invite.inviteeProfile.id && !inviteeProfileNames[invite.inviteeProfile.id]) {
+          fetchInviteeProfileName(invite.inviteeProfile.id);
+        }
+        if (invite.status.id && !statusNames[invite.status.id]) {
+          fetchStatusName(invite.status.id);
+        }
+      });
+    }
+  }, [activityInviteList]);
 
   useEffect(() => {
     sortEntities();
@@ -111,20 +166,14 @@ export const ActivityInvite = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
-                <th className="hand" onClick={sort('willParticipate')}>
-                  Will Participate <FontAwesomeIcon icon={getSortIconByFieldName('willParticipate')} />
-                </th>
-
-                <th>
+                <th>S/No.</th>
+                <th className="hand" onClick={sort('activity')}>
                   Activity <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
+                <th className="hand" onClick={sort('inviteeProfile')}>
                   Invitee Profile <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
+                <th className="hand" onClick={sort('status')}>
                   Status <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
@@ -133,34 +182,39 @@ export const ActivityInvite = () => {
             <tbody>
               {activityInviteList.map((activityInvite, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/activity-invite/${activityInvite.id}`} color="link" size="sm">
-                      {activityInvite.id}
-                    </Button>
-                  </td>
-                  <td>{activityInvite.willParticipate ? 'true' : 'false'}</td>
+                  <td>{i + 1}</td>
                   <td>
                     {activityInvite.activity ? (
-                      <Link to={`/activity/${activityInvite.activity.id}`}>{activityInvite.activity.id}</Link>
+                      <Link to={`/activity/${activityInvite.activity.id}`}>{activityNames[activityInvite.activity.id]}</Link>
                     ) : (
                       ''
                     )}
                   </td>
                   <td>
                     {activityInvite.inviteeProfile ? (
-                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>{activityInvite.inviteeProfile.id}</Link>
+                      <Link to={`/user-profile/${activityInvite.inviteeProfile.id}`}>
+                        {inviteeProfileNames[activityInvite.inviteeProfile.id]}
+                      </Link>
                     ) : (
                       ''
                     )}
                   </td>
-                  <td>
-                    {activityInvite.status ? <Link to={`/code-tables/${activityInvite.status.id}`}>{activityInvite.status.id}</Link> : ''}
-                  </td>
+                  <td>{activityInvite.status ? statusNames[activityInvite.status.id] : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/activity-invite/${activityInvite.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                      </Button>
+                      {isAdmin ? (
+                        <Button
+                          tag={Link}
+                          to={`/activity-invite/${activityInvite.id}`}
+                          color="info"
+                          size="sm"
+                          data-cy="entityDetailsButton"
+                        >
+                          <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        </Button>
+                      ) : (
+                        ''
+                      )}
                       <Button
                         tag={Link}
                         to={`/activity-invite/${activityInvite.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
@@ -170,16 +224,18 @@ export const ActivityInvite = () => {
                       >
                         <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                       </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/activity-invite/${activityInvite.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                      </Button>
+                      {
+                        <Button
+                          onClick={() =>
+                            (window.location.href = `/activity-invite/${activityInvite.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
+                          color="danger"
+                          size="sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        </Button>
+                      }
                     </div>
                   </td>
                 </tr>

@@ -9,7 +9,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { ICodeTables } from 'app/shared/model/code-tables.model';
-import { getEntity, updateEntity, createEntity, reset } from './code-tables.reducer';
+import { getCodeTableById, updateEntity, createCodeTable, reset } from './code-tables.reducer';
 
 export const CodeTablesUpdate = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ export const CodeTablesUpdate = () => {
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getCodeTableById(id));
     }
   }, []);
 
@@ -56,7 +56,7 @@ export const CodeTablesUpdate = () => {
     };
 
     if (isNew) {
-      dispatch(createEntity(entity));
+      dispatch(createCodeTable(entity));
     } else {
       dispatch(updateEntity(entity));
     }

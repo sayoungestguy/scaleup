@@ -9,9 +9,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
+import { getAllUserProfiles as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { ICodeTables } from 'app/shared/model/code-tables.model';
-import { getEntities as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
+import { getCodeTables as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
 import { INotification } from 'app/shared/model/notification.model';
 import { getEntity, updateEntity, createEntity, reset } from './notification.reducer';
 
