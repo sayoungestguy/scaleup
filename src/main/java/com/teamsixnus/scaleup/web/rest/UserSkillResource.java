@@ -156,7 +156,7 @@ public class UserSkillResource {
         UserSkillCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get UserSkills by criteria: {}", criteria);
+        // log.debug("REST request to get UserSkills by criteria: {}", criteria);
 
         Page<UserSkillDTO> page = userSkillQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -171,7 +171,7 @@ public class UserSkillResource {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countUserSkills(UserSkillCriteria criteria) {
-        log.debug("REST request to count UserSkills by criteria: {}", criteria);
+        // log.debug("REST request to count UserSkills by criteria: {}", criteria);
         return ResponseEntity.ok().body(userSkillQueryService.countByCriteria(criteria));
     }
 

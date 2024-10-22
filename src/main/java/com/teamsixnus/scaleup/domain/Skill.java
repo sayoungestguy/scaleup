@@ -117,7 +117,7 @@ public class Skill extends AbstractAuditingEntity<Long> implements Serializable,
         if (!(o instanceof Skill)) {
             return false;
         }
-        return getId() != null && getId().equals(((Skill) o).getId());
+        return id != null && id.equals(((Skill) o).id);
     }
 
     @Override

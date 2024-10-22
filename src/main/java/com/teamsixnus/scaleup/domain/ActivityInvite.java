@@ -2,6 +2,7 @@ package com.teamsixnus.scaleup.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import org.hibernate.annotations.Cache;
@@ -164,7 +165,7 @@ public class ActivityInvite extends AbstractAuditingEntity<Long> implements Seri
         if (!(o instanceof ActivityInvite)) {
             return false;
         }
-        return getId() != null && getId().equals(((ActivityInvite) o).getId());
+        return id != null && id.equals(((ActivityInvite) o).id);
     }
 
     @Override
