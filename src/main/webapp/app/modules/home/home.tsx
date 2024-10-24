@@ -14,6 +14,11 @@ import { Accordion, AccordionBody, AccordionHeader, AccordionItem } from 'reacts
 
 function DisplayUpcomingActivity() {
   const dispatch = useAppDispatch();
+  // Assuming the user's roles are stored in the authentication state
+  const currentUser = useAppSelector(state => state.authentication.account);
+
+  // Check if the current user has the "admin" role
+  const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
 
   const activityList = useAppSelector(state => state.activity.entities);
   const loading = useAppSelector(state => state.activity.loading);
@@ -28,7 +33,14 @@ function DisplayUpcomingActivity() {
 
   // Fetch activities when the component mounts
   useEffect(() => {
-    dispatch(getAllActivity({ sort: `${paginationState.sort},${paginationState.order}` }));
+    isAdmin
+      ? dispatch(getAllActivity({ sort: `${paginationState.sort},${paginationState.order}` }))
+      : dispatch(
+          getAllActivity({
+            sort: `${paginationState.sort},${paginationState.order}`,
+            query: `creatorProfileId.equals=${currentUser.id.toString()}`,
+          }),
+        );
   }, [paginationState]);
 
   // Filter current activities based on the activityTime

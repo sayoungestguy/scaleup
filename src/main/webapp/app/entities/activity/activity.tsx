@@ -36,13 +36,14 @@ export const Activity = () => {
     order: ASC,
   });
 
-  const activityList = useAppSelector(state => state.activity.entities);
-  const loading = useAppSelector(state => state.activity.loading);
   // Assuming the user's roles are stored in the authentication state
   const currentUser = useAppSelector(state => state.authentication.account);
 
   // Check if the current user has the "admin" role
   const isAdmin = currentUser?.authorities?.includes('ROLE_ADMIN');
+
+  const activityList = useAppSelector(state => state.activity.entities);
+  const loading = useAppSelector(state => state.activity.loading);
 
   const [currentActivities, setCurrentActivities] = useState([]);
   const [pastActivities, setPastActivities] = useState([]);
@@ -51,16 +52,14 @@ export const Activity = () => {
   const [pastSkills, setPastSkills] = React.useState<{ [key: number]: string }>({});
 
   const getAllActivities = () => {
-    dispatch(
-      getAllActivity(
-        isAdmin
-          ? { sort: `${currentPaginationState.sort},${currentPaginationState.order}` }
-          : {
-              sort: `${currentPaginationState.sort},${currentPaginationState.order}`,
-              query: `creatorProfileId.equals=${currentUser.id.toString()}`,
-            },
-      ),
-    );
+    isAdmin
+      ? dispatch(getAllActivity({ sort: `${currentPaginationState.sort},${currentPaginationState.order}` }))
+      : dispatch(
+          getAllActivity({
+            sort: `${currentPaginationState.sort},${currentPaginationState.order}`,
+            query: `creatorProfileId.equals=${currentUser.id.toString()}`,
+          }),
+        );
   };
 
   // Sort activities
@@ -135,8 +134,10 @@ export const Activity = () => {
   };
 
   useEffect(() => {
-    sortEntities();
-  }, [currentPaginationState.activePage, currentPaginationState.order, currentPaginationState.sort]);
+    if (currentUser && currentUser.id) {
+      sortEntities();
+    }
+  }, [currentPaginationState.activePage, currentPaginationState.order, currentPaginationState.sort, currentUser]);
 
   const sort = p => () => {
     setPaginationState({
@@ -243,7 +244,7 @@ export const Activity = () => {
                     Activity Time <FontAwesomeIcon icon={getSortIconByFieldName('activityTime')} />
                   </th>
                   <th className="hand" onClick={sort('duration')}>
-                    Duration <FontAwesomeIcon icon={getSortIconByFieldName('duration')} />
+                    Duration (Hours) <FontAwesomeIcon icon={getSortIconByFieldName('duration')} />
                   </th>
                   <th className="hand" onClick={sort('venue')}>
                     Venue <FontAwesomeIcon icon={getSortIconByFieldName('venue')} />
@@ -352,7 +353,7 @@ export const Activity = () => {
                     Activity Time <FontAwesomeIcon icon={getSortIconByFieldName('activityTime')} />
                   </th>
                   <th className="hand" onClick={sort('duration')}>
-                    Duration <FontAwesomeIcon icon={getSortIconByFieldName('duration')} />
+                    Duration (Hours) <FontAwesomeIcon icon={getSortIconByFieldName('duration')} />
                   </th>
                   <th className="hand" onClick={sort('venue')}>
                     Venue <FontAwesomeIcon icon={getSortIconByFieldName('venue')} />

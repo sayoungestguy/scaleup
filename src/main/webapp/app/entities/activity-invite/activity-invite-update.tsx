@@ -19,7 +19,7 @@ export const ActivityInviteUpdate = () => {
 
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
-
+  const currentUser = useAppSelector(state => state.authentication.account);
   const activities = useAppSelector(state => state.activity.entities);
   const userProfiles = useAppSelector(state => state.userProfile.entities);
   const codeTables = useAppSelector(state => state.codeTables.entities);
@@ -117,11 +117,13 @@ export const ActivityInviteUpdate = () => {
               >
                 <option value="" key="0" />
                 {activities
-                  ? activities.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.activityName}
-                      </option>
-                    ))
+                  ? activities
+                      .filter(activity => activity.creatorProfile?.id?.toString() === currentUser.id?.toString())
+                      .map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.activityName}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
               <ValidatedField
@@ -138,7 +140,7 @@ export const ActivityInviteUpdate = () => {
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles
-                      //.filter(userProfile => userProfile.id )
+                      .filter(userProfile => userProfile.id.toString() !== currentUser.id.toString())
                       .map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
                           {otherEntity.nickname}
