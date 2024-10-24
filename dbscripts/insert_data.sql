@@ -1,6 +1,6 @@
 -- Insert provided sample data
 INSERT INTO code_tables (id, category, code_key, code_value, created_by, created_date, last_modified_by, last_modified_date)
-VALUES 
+VALUES
 (1, 'skill_type', 'teach', 'Teach', 'admin', NOW(), 'admin', NOW()),
 (2, 'skill_type', 'learn', 'Learn', 'admin', NOW(), 'admin', NOW()),
 (3, 'invite_status', 'pending', 'Pending', 'admin', NOW(), 'admin', NOW()),
@@ -10,13 +10,13 @@ VALUES
 
 -- Insert sample data with the first entry as admin
 INSERT INTO user_profile (id, nickname, job_role, about_me, profile_picture, social_links, created_by, created_date, last_modified_by, last_modified_date, user_id)
-VALUES 
+VALUES
 (1, 'admin', 'Administrator', 'System administrator account.', 'admin_profile.jpg', 'https://linkedin.com/admin', 'admin', NOW(), 'admin', NOW(), 1),
-(2, 'John Doe', 'Software Engineer', 'Passionate about coding and open-source.', 'profile1.jpg', 'https://linkedin.com/john_doe', 'admin', NOW(), 'admin', NOW(), 2);
+(2, 'John Doe', 'Software Engineer', 'Passionate about coding and open-source.', 'profile1.jpg', 'https://linkedin.com/john_doe', 'user', NOW(), 'user', NOW(), 2);
 
 -- Insert sample data for 20 technology and IT-related skills
 INSERT INTO skill (id, skill_name, created_by, created_date, last_modified_by, last_modified_date)
-VALUES 
+VALUES
 (1, 'Python Programming', 'admin', NOW(), 'admin', NOW()),
 (2, 'Data Analysis', 'admin', NOW(), 'admin', NOW()),
 (3, 'Cloud Computing', 'admin', NOW(), 'admin', NOW()),
