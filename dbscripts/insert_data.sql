@@ -11,8 +11,8 @@ VALUES
 -- Insert sample data with the first entry as admin
 INSERT INTO user_profile (id, nickname, job_role, about_me, profile_picture, social_links, created_by, created_date, last_modified_by, last_modified_date, user_id)
 VALUES
-(1, 'admin', 'Administrator', 'System administrator account.', 'admin_profile.jpg', 'https://linkedin.com/admin', 'admin', NOW(), 'admin', NOW(), 1),
-(2, 'John Doe', 'Software Engineer', 'Passionate about coding and open-source.', 'profile1.jpg', 'https://linkedin.com/john_doe', 'user', NOW(), 'user', NOW(), 2);
+(1, 'admin', 'Administrator', 'System administrator account.', 'Male Profile Picture', 'https://linkedin.com/admin', 'admin', NOW(), 'admin', NOW(), 1),
+(2, 'John Doe', 'Software Engineer', 'Passionate about coding and open-source.', 'Male Profile Picture', 'https://linkedin.com/john_doe', 'user', NOW(), 'user', NOW(), 2);
 
 -- Insert sample data for 20 technology and IT-related skills
 INSERT INTO skill (id, skill_name, created_by, created_date, last_modified_by, last_modified_date)
