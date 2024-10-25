@@ -115,6 +115,7 @@ export const ActivityUpdate = () => {
                 type="text"
                 validate={{
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                  required: { value: true, message: 'This field is required.' },
                 }}
               />
               <ValidatedField
@@ -129,7 +130,7 @@ export const ActivityUpdate = () => {
                 }}
               />
               <ValidatedField
-                label="Duration"
+                label="Duration (Hours)"
                 id="activity-duration"
                 name="duration"
                 data-cy="duration"
