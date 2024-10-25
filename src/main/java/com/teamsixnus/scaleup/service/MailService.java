@@ -57,14 +57,14 @@ public class MailService {
     }
 
     private void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
-        log.debug(
-            "Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
-            isMultipart,
-            isHtml,
-            to,
-            subject,
-            content
-        );
+        //        log.debug(
+        //            "Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+        //            isMultipart,
+        //            isHtml,
+        //            to,
+        //            subject,
+        //            content
+        //        );
 
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -76,7 +76,7 @@ public class MailService {
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
-            log.debug("Sent email to User '{}'", to);
+            log.info("Sent email to User");
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", to, e);
         }
@@ -89,7 +89,7 @@ public class MailService {
 
     private void sendEmailFromTemplateSync(User user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
-            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            log.info("Email doesn't exist for user");
             return;
         }
         Locale locale = Locale.forLanguageTag(user.getLangKey());
@@ -103,19 +103,19 @@ public class MailService {
 
     @Async
     public void sendActivationEmail(User user) {
-        log.debug("Sending activation email to '{}'", user.getEmail());
+        // log.debug("Sending activation email to '{}'", user.getEmail());
         this.sendEmailFromTemplateSync(user, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
     public void sendCreationEmail(User user) {
-        log.debug("Sending creation email to '{}'", user.getEmail());
+        // log.debug("Sending creation email to '{}'", user.getEmail());
         this.sendEmailFromTemplateSync(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
     public void sendPasswordResetMail(User user) {
-        log.debug("Sending password reset email to '{}'", user.getEmail());
+        // log.debug("Sending password reset email to '{}'", user.getEmail());
         this.sendEmailFromTemplateSync(user, "mail/passwordResetEmail", "email.reset.title");
     }
 }

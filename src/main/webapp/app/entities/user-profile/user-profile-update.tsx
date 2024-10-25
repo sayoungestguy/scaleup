@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntity, updateEntity, createEntity, reset } from './user-profile.reducer';
+import { getUserProfileById, updateUserProfile, createUserProfile, reset } from './user-profile.reducer';
 
 export const UserProfileUpdate = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +26,7 @@ export const UserProfileUpdate = () => {
   const loading = useAppSelector(state => state.userProfile.loading);
   const updating = useAppSelector(state => state.userProfile.updating);
   const updateSuccess = useAppSelector(state => state.userProfile.updateSuccess);
+  const currentUser = useAppSelector(state => state.authentication.account);
 
   const handleClose = () => {
     navigate('/user-profile' + location.search);
@@ -35,7 +36,7 @@ export const UserProfileUpdate = () => {
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getUserProfileById(id));
     }
 
     dispatch(getUsers({}));
@@ -58,13 +59,13 @@ export const UserProfileUpdate = () => {
     const entity = {
       ...userProfileEntity,
       ...values,
-      user: users.find(it => it.id.toString() === values.user?.toString()),
+      user: users.find(it => it.id.toString() === currentUser.id?.toString()),
     };
 
     if (isNew) {
-      dispatch(createEntity(entity));
+      dispatch(createUserProfile(entity));
     } else {
-      dispatch(updateEntity(entity));
+      dispatch(updateUserProfile(entity));
     }
   };
 
@@ -86,7 +87,7 @@ export const UserProfileUpdate = () => {
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="scaleupApp.userProfile.home.createOrEditLabel" data-cy="UserProfileCreateUpdateHeading">
-            Create or edit a User Profile
+            {isNew ? 'Create' : 'Edit'} a User Profile
           </h2>
         </Col>
       </Row>
@@ -104,6 +105,7 @@ export const UserProfileUpdate = () => {
                 data-cy="nickname"
                 type="text"
                 validate={{
+                  required: { value: true, message: 'This field is required.' },
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
@@ -114,6 +116,7 @@ export const UserProfileUpdate = () => {
                 data-cy="jobRole"
                 type="text"
                 validate={{
+                  required: { value: true, message: 'This field is required.' },
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
@@ -132,11 +135,17 @@ export const UserProfileUpdate = () => {
                 id="user-profile-profilePicture"
                 name="profilePicture"
                 data-cy="profilePicture"
-                type="text"
+                type="select"
                 validate={{
-                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                  required: { value: true, message: 'This field is required.' },
                 }}
-              />
+              >
+                <option value="" disabled>
+                  Select a profile picture
+                </option>
+                <option value="Male Profile Picture">Male Profile Picture</option>
+                <option value="Female Profile Picture">Female Profile Picture</option>
+              </ValidatedField>
               <ValidatedField
                 label="Social Links"
                 id="user-profile-socialLinks"
@@ -147,42 +156,7 @@ export const UserProfileUpdate = () => {
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
-              <ValidatedField label="Created By" id="user-profile-createdBy" name="createdBy" data-cy="createdBy" type="text" />
-              <ValidatedField
-                label="Created Date"
-                id="user-profile-createdDate"
-                name="createdDate"
-                data-cy="createdDate"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField
-                label="Last Modified By"
-                id="user-profile-lastModifiedBy"
-                name="lastModifiedBy"
-                data-cy="lastModifiedBy"
-                type="text"
-              />
-              <ValidatedField
-                label="Last Modified Date"
-                id="user-profile-lastModifiedDate"
-                name="lastModifiedDate"
-                data-cy="lastModifiedDate"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField id="user-profile-user" name="user" data-cy="user" label="User" type="select" required>
-                <option value="" key="0" />
-                {users
-                  ? users.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.login}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>This field is required.</FormText>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/user-profile" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to={-1} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>

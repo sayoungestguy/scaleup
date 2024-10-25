@@ -2,8 +2,11 @@ package com.teamsixnus.scaleup.web.rest;
 
 import com.teamsixnus.scaleup.domain.User;
 import com.teamsixnus.scaleup.repository.MessageRepository;
-//import com.teamsixnus.scaleup.service.MessageQueryService;
+import com.teamsixnus.scaleup.security.AuthoritiesConstants; // Adjust the package if needed
+import com.teamsixnus.scaleup.security.SecurityUtils; // Adjust the package if needed
+import com.teamsixnus.scaleup.service.MessageQueryService;
 import com.teamsixnus.scaleup.service.MessageService;
+import com.teamsixnus.scaleup.service.MessageService; // Adjust the package if needed
 import com.teamsixnus.scaleup.service.UserService; // Ensure this import matches your actual UserService package
 import com.teamsixnus.scaleup.service.criteria.MessageCriteria;
 import com.teamsixnus.scaleup.service.dto.MessageDTO;
@@ -20,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Pageable; // Import for Pageable
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -49,7 +53,7 @@ public class MessageResource {
 
     private final MessageRepository messageRepository;
 
-    //private final MessageQueryService messageQueryService;
+    private final MessageQueryService messageQueryService;
 
     private final UserService userService;
 
@@ -59,10 +63,16 @@ public class MessageResource {
     //     this.messageQueryService = messageQueryService;
     // }
 
-    public MessageResource(MessageService messageService, MessageRepository messageRepository, UserService userService) {
+    public MessageResource(
+        MessageService messageService,
+        MessageRepository messageRepository,
+        UserService userService,
+        MessageQueryService messageQueryService
+    ) {
         this.messageService = messageService;
         this.messageRepository = messageRepository;
         this.userService = userService;
+        this.messageQueryService = messageQueryService;
     }
 
     /**
@@ -172,18 +182,52 @@ public class MessageResource {
     //     return ResponseEntity.ok().headers(headers).body(page.getContent());
     // }
 
+    // @GetMapping("")
+    // public ResponseEntity<List<MessageDTO>> getAllMessages(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    //     log.debug("REST request to get a page of Messages");
+    //     // Get the current user
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     String username = authentication.getName();
+    //     // Get the user details from the user service
+    //     User user = userService.getUserByLogin(username);
+    //     Long userId = user.getId();
+    //     // Fetch messages for the current user
+    //     Page<MessageDTO> page = messageService.findAllForUser(userId, pageable);
+    //     HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    //     return ResponseEntity.ok().headers(headers).body(page.getContent());
+    // }
     @GetMapping("")
-    public ResponseEntity<List<MessageDTO>> getAllMessages(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Messages");
+    public ResponseEntity<List<MessageDTO>> getAllMessages(
+        MessageCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get messages");
+
         // Get the current user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
+
         // Get the user details from the user service
         User user = userService.getUserByLogin(username);
         Long userId = user.getId();
-        // Fetch messages for the current user
-        Page<MessageDTO> page = messageService.findAllForUser(userId, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+
+        // Check if logged in user is admin
+        boolean isAdmin = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN);
+
+        Page<MessageDTO> page; // Declare page here
+        HttpHeaders headers; // Declare headers here
+
+        if (isAdmin) {
+            // Fetch all messages for admins
+            page = messageQueryService.findByCriteria(criteria, pageable); // Use existing 'page' variable
+        } else {
+            // Fetch messages for the current user
+            page = messageService.findAllForUser(userId, pageable);
+        }
+
+        // Generate headers after determining the page
+        headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 

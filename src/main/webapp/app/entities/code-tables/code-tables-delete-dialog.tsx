@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from './code-tables.reducer';
+import { getCodeTableById, deleteEntity } from './code-tables.reducer';
 
 export const CodeTablesDeleteDialog = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ export const CodeTablesDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getCodeTableById(id));
     setLoadModal(true);
   }, []);
 

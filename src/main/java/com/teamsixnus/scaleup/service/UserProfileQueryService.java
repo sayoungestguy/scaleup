@@ -45,7 +45,7 @@ public class UserProfileQueryService extends QueryService<UserProfile> {
      */
     @Transactional(readOnly = true)
     public Page<UserProfileDTO> findByCriteria(UserProfileCriteria criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria, page);
+        // log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<UserProfile> specification = createSpecification(criteria);
         return userProfileRepository.findAll(specification, page).map(userProfileMapper::toDto);
     }
@@ -57,7 +57,7 @@ public class UserProfileQueryService extends QueryService<UserProfile> {
      */
     @Transactional(readOnly = true)
     public long countByCriteria(UserProfileCriteria criteria) {
-        log.debug("count by criteria : {}", criteria);
+        // log.debug("count by criteria : {}", criteria);
         final Specification<UserProfile> specification = createSpecification(criteria);
         return userProfileRepository.count(specification);
     }

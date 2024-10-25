@@ -148,7 +148,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: github.ref != 'refs/heads/main'
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sayoungestguy_scaleup
+      - name: Build and analyze for main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: github.ref == 'refs/heads/main'
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sayoungestguy_scaleup #-Dsonar.qualitygate.wait=true
   snyk:
     name: Vulnerability Scanning with Synk
     needs: [backend-test, frontend-test]
@@ -190,16 +197,41 @@ jobs:
     name: Deploy to SIT
     needs: jib-build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/testing-sit' # Only apply changes on main branch
+    if: github.ref == 'refs/heads/testing-sit' # Only apply changes on sit branch
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     steps:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ec2-52-77-34-58.ap-southeast-1.compute.amazonaws.com
+          host: ec2-52-77-34-58.ap-southeast-1.compute.amazonaws.com # Change this to SIT host
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/scaleup:latest
+            if [ "$(sudo docker ps -q -f name=scaleUp)" ]; then
+                sudo docker stop scaleUp
+                sudo docker rm scaleUp
+            elif [ "$(sudo docker ps -a -q -f name=scaleUp)" ]; then
+                sudo docker rm scaleUp
+            fi
+            sudo docker run -d -p 8080:8080 --name scaleUp  ${{ secrets.DOCKER_USERNAME }}/scaleup:latest
+
+  deploy-to-main:
+    name: Deploy to Production
+    needs: [jib-build, dast-scan, snyk, sonar]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Only apply changes on main branch
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-54-255-11-22.ap-southeast-1.compute.amazonaws.com # Change to Prod host
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY_PROD }}
           port: 22
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/scaleup:latest

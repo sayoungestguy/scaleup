@@ -45,7 +45,7 @@ public class MessageQueryService extends QueryService<Message> {
      */
     @Transactional(readOnly = true)
     public Page<MessageDTO> findByCriteria(MessageCriteria criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria, page);
+        // log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Message> specification = createSpecification(criteria);
         return messageRepository.findAll(specification, page).map(messageMapper::toDto);
     }
@@ -57,7 +57,7 @@ public class MessageQueryService extends QueryService<Message> {
      */
     @Transactional(readOnly = true)
     public long countByCriteria(MessageCriteria criteria) {
-        log.debug("count by criteria : {}", criteria);
+        // log.debug("count by criteria : {}", criteria);
         final Specification<Message> specification = createSpecification(criteria);
         return messageRepository.count(specification);
     }

@@ -56,18 +56,18 @@ public class ActivityInviteQueryService extends QueryService<ActivityInvite> {
      */
     @Transactional(readOnly = true)
     public Page<ActivityInviteDTO> findByCriteria(ActivityInviteCriteria criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria, page);
-        User currentUser = userService.getUserById().orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        boolean isAdmin = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN);
-        if (currentUser != null && !isAdmin) {
-            // Set the creatorProfileId in the criteria to match the current user
-            if (criteria == null) {
-                criteria = new ActivityInviteCriteria();
-            }
-            LongFilter userFilter = new LongFilter();
-            userFilter.setEquals(currentUser.getId());
-            criteria.setInviteeProfileId(userFilter);
-        }
+        // log.debug("find by criteria : {}, page: {}", criteria, page);
+        //        User currentUser = userService.getUserById().orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        //        boolean isAdmin = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN);
+        //        if (currentUser != null && !isAdmin) {
+        //            // Set the creatorProfileId in the criteria to match the current user
+        //            if (criteria == null) {
+        //                criteria = new ActivityInviteCriteria();
+        //            }
+        //            LongFilter userFilter = new LongFilter();
+        //            userFilter.setEquals(currentUser.getId());
+        //            criteria.setInviteeProfileId(userFilter);
+        //        }
         final Specification<ActivityInvite> specification = createSpecification(criteria);
         return activityInviteRepository.findAll(specification, page).map(activityInviteMapper::toDto);
     }
@@ -79,7 +79,7 @@ public class ActivityInviteQueryService extends QueryService<ActivityInvite> {
      */
     @Transactional(readOnly = true)
     public long countByCriteria(ActivityInviteCriteria criteria) {
-        log.debug("count by criteria : {}", criteria);
+        // log.debug("count by criteria : {}", criteria);
         final Specification<ActivityInvite> specification = createSpecification(criteria);
         return activityInviteRepository.count(specification);
     }

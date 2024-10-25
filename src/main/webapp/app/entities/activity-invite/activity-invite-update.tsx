@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col, FormText } from 'reactstrap';
-import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Button, Row, Col } from 'reactstrap';
+import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { IActivity } from 'app/shared/model/activity.model';
 import { getAllActivity as getActivities } from 'app/entities/activity/activity.reducer';
-import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
-import { ICodeTables } from 'app/shared/model/code-tables.model';
-import { getEntities as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
-import { IActivityInvite } from 'app/shared/model/activity-invite.model';
+import { getAllUserProfiles as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
+import { getCodeTables as getCodeTables } from 'app/entities/code-tables/code-tables.reducer';
 import { getActivityInviteById, updateEntity, createEntity, reset } from './activity-invite.reducer';
 
 export const ActivityInviteUpdate = () => {
@@ -24,7 +19,7 @@ export const ActivityInviteUpdate = () => {
 
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
-
+  const currentUser = useAppSelector(state => state.authentication.account);
   const activities = useAppSelector(state => state.activity.entities);
   const userProfiles = useAppSelector(state => state.userProfile.entities);
   const codeTables = useAppSelector(state => state.codeTables.entities);
@@ -108,49 +103,27 @@ export const ActivityInviteUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? (
-                <ValidatedField name="id" required readOnly id="activity-invite-id" label="ID" validate={{ required: true }} />
-              ) : null}
+              {!isNew ? <ValidatedField name="id" required readOnly id="activity-invite-id" label="ID" /> : null}
               <ValidatedField
-                label="Will Participate"
-                id="activity-invite-willParticipate"
-                name="willParticipate"
-                data-cy="willParticipate"
-                check
-                type="checkbox"
-              />
-              <ValidatedField label="Created By" id="activity-invite-createdBy" name="createdBy" data-cy="createdBy" type="text" />
-              <ValidatedField
-                label="Created Date"
-                id="activity-invite-createdDate"
-                name="createdDate"
-                data-cy="createdDate"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField
-                label="Last Modified By"
-                id="activity-invite-lastModifiedBy"
-                name="lastModifiedBy"
-                data-cy="lastModifiedBy"
-                type="text"
-              />
-              <ValidatedField
-                label="Last Modified Date"
-                id="activity-invite-lastModifiedDate"
-                name="lastModifiedDate"
-                data-cy="lastModifiedDate"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
-              <ValidatedField id="activity-invite-activity" name="activity" data-cy="activity" label="Activity" type="select">
+                id="activity-invite-activity"
+                name="activity"
+                data-cy="activity"
+                label="Activity"
+                type="select"
+                disabled={!isNew}
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
+              >
                 <option value="" key="0" />
                 {activities
-                  ? activities.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
+                  ? activities
+                      .filter(activity => activity.creatorProfile?.id?.toString() === currentUser.id?.toString())
+                      .map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.activityName}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
               <ValidatedField
@@ -159,27 +132,44 @@ export const ActivityInviteUpdate = () => {
                 data-cy="inviteeProfile"
                 label="Invitee Profile"
                 type="select"
+                disabled={!isNew}
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
               >
                 <option value="" key="0" />
                 {userProfiles
-                  ? userProfiles.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
+                  ? userProfiles
+                      .filter(userProfile => userProfile.id.toString() !== currentUser.id.toString())
+                      .map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.nickname}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="activity-invite-status" name="status" data-cy="status" label="Status" type="select">
+              <ValidatedField
+                id="activity-invite-status"
+                name="status"
+                data-cy="status"
+                label="Status"
+                type="select"
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
+              >
                 <option value="" key="0" />
                 {codeTables
-                  ? codeTables.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
+                  ? codeTables
+                      .filter(codeTable => codeTable.id >= 3 && codeTable.id <= 5)
+                      .map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.codeValue}
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/activity" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/activity-invite" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>

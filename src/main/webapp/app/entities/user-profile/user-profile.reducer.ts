@@ -18,16 +18,16 @@ const apiUrl = 'api/user-profiles';
 
 // Actions
 
-export const getEntities = createAsyncThunk(
+export const getAllUserProfiles = createAsyncThunk(
   'userProfile/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ query, page, size, sort }: IQueryParams) => {
+    const requestUrl = `${apiUrl}?${query ? `${query}&` : ''}${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
     return axios.get<IUserProfile[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
 );
 
-export const getEntity = createAsyncThunk(
+export const getUserProfileById = createAsyncThunk(
   'userProfile/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
@@ -36,42 +36,42 @@ export const getEntity = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const createEntity = createAsyncThunk(
+export const createUserProfile = createAsyncThunk(
   'userProfile/create_entity',
   async (entity: IUserProfile, thunkAPI) => {
     const result = await axios.post<IUserProfile>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllUserProfiles({}));
     return result;
   },
   { serializeError: serializeAxiosError },
 );
 
-export const updateEntity = createAsyncThunk(
+export const updateUserProfile = createAsyncThunk(
   'userProfile/update_entity',
   async (entity: IUserProfile, thunkAPI) => {
     const result = await axios.put<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllUserProfiles({}));
     return result;
   },
   { serializeError: serializeAxiosError },
 );
 
-export const partialUpdateEntity = createAsyncThunk(
+export const partialUpdateUserProfile = createAsyncThunk(
   'userProfile/partial_update_entity',
   async (entity: IUserProfile, thunkAPI) => {
     const result = await axios.patch<IUserProfile>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllUserProfiles({}));
     return result;
   },
   { serializeError: serializeAxiosError },
 );
 
-export const deleteEntity = createAsyncThunk(
+export const deleteUserProfile = createAsyncThunk(
   'userProfile/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<IUserProfile>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getAllUserProfiles({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -84,16 +84,16 @@ export const UserProfileSlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getEntity.fulfilled, (state, action) => {
+      .addCase(getUserProfileById.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;
       })
-      .addCase(deleteEntity.fulfilled, state => {
+      .addCase(deleteUserProfile.fulfilled, state => {
         state.updating = false;
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getAllUserProfiles), (state, action) => {
         const { data, headers } = action.payload;
 
         return {
@@ -103,18 +103,18 @@ export const UserProfileSlice = createEntitySlice({
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
-      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
+      .addMatcher(isFulfilled(createUserProfile, updateUserProfile, partialUpdateUserProfile), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getAllUserProfiles, getUserProfileById), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
+      .addMatcher(isPending(createUserProfile, updateUserProfile, partialUpdateUserProfile, deleteUserProfile), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;

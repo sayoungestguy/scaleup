@@ -156,7 +156,7 @@ public class CodeTablesResource {
         CodeTablesCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get CodeTables by criteria: {}", criteria);
+        // log.debug("REST request to get CodeTables by criteria: {}", criteria);
 
         Page<CodeTablesDTO> page = codeTablesQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -171,7 +171,7 @@ public class CodeTablesResource {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countCodeTables(CodeTablesCriteria criteria) {
-        log.debug("REST request to count CodeTables by criteria: {}", criteria);
+        // log.debug("REST request to count CodeTables by criteria: {}", criteria);
         return ResponseEntity.ok().body(codeTablesQueryService.countByCriteria(criteria));
     }
 

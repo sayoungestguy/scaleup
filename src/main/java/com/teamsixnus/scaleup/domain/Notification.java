@@ -184,7 +184,7 @@ public class Notification extends AbstractAuditingEntity<Long> implements Serial
         if (!(o instanceof Notification)) {
             return false;
         }
-        return getId() != null && getId().equals(((Notification) o).getId());
+        return id != null && id.equals(((Notification) o).id);
     }
 
     @Override

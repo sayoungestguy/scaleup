@@ -52,7 +52,7 @@
         <liquibase-plugin.password/>
         <liquibase-plugin.url/>
         <liquibase-plugin.username/>
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <mapstruct.version>1.6.0</mapstruct.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
@@ -78,6 +78,9 @@
         <springdoc-openapi-starter-webmvc-api.version>2.5.0</springdoc-openapi-starter-webmvc-api.version>
         <sonar.organization>sayoungestguy</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.coverage.exclusions>**/test/**</sonar.coverage.exclusions>
+        <sonar.cpd.exclusions>**/*DTO*.*, **/domain/**, **/service/criteria/**, **/test/**</sonar.cpd.exclusions>
+        <sonar.exclusions>**/test/**</sonar.exclusions>
     </properties>
 
     <dependencies>
