@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getAllActivity, reset } from './activity.reducer';
 import { getSkillById } from 'app/entities/skill/skill.reducer';
+import { getAllUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 
 export const Activity = () => {
   const dispatch = useAppDispatch();
@@ -132,6 +133,28 @@ export const Activity = () => {
       activePage: currentPage, // Update only the past activities page
     });
   };
+
+  useEffect(() => {
+    // Check if User Profile is existent else navigate to profile page
+    const userProfileExist = async () => {
+      const response = await dispatch(
+        getAllUserProfiles({
+          query: `createdBy.equals=${currentUser.login}`,
+        }),
+      ).unwrap();
+      return response.data.length > 0;
+    };
+
+    // Run the async function to check profile existence and handle redirect
+    const validateUserProfile = async () => {
+      const profileExists = await userProfileExist();
+      if (!profileExists) {
+        navigate('/user-profile/new');
+      }
+    };
+
+    validateUserProfile();
+  }, []);
 
   useEffect(() => {
     if (currentUser && currentUser.id) {

@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getAllActivityInvites } from './activity-invite.reducer';
 import { getActivityById } from 'app/entities/activity/activity.reducer';
-import { getUserProfileById } from 'app/entities/user-profile/user-profile.reducer';
+import { getAllUserProfiles, getUserProfileById } from 'app/entities/user-profile/user-profile.reducer';
 import { getCodeTableById } from 'app/entities/code-tables/code-tables.reducer';
 
 export const ActivityInvite = () => {
@@ -82,6 +82,28 @@ export const ActivityInvite = () => {
     const response = await dispatch(getCodeTableById(statusId)).unwrap();
     setStatusNames(prev => ({ ...prev, [statusId]: response.data.codeValue }));
   };
+
+  useEffect(() => {
+    // Check if User Profile is existent else navigate to profile page
+    const userProfileExist = async () => {
+      const response = await dispatch(
+        getAllUserProfiles({
+          query: `createdBy.equals=${currentUser.login}`,
+        }),
+      ).unwrap();
+      return response.data.length > 0;
+    };
+
+    // Run the async function to check profile existence and handle redirect
+    const validateUserProfile = async () => {
+      const profileExists = await userProfileExist();
+      if (!profileExists) {
+        navigate('/user-profile/new');
+      }
+    };
+
+    validateUserProfile();
+  }, []);
 
   // UseEffect to fetch Invitee Profile names after activityInviteList is updated
   useEffect(() => {
