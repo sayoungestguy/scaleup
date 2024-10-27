@@ -100,10 +100,11 @@ export const UserSkillUpdate = () => {
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="scaleupApp.userSkill.home.createOrEditLabel" data-cy="UserSkillCreateUpdateHeading">
-            Create or edit a User Skill
+            {isNew ? 'Add User Skill' : 'Edit User Skill'}
           </h2>
         </Col>
       </Row>
+
       <Row className="justify-content-center">
         <Col md="8">
           {loading ? (
