@@ -118,7 +118,7 @@ export const ActivityInviteUpdate = () => {
                 <option value="" key="0" />
                 {activities
                   ? activities
-                      .filter(activity => activity.creatorProfile?.id?.toString() === currentUser.id?.toString())
+                      .filter(activity => (isNew ? activity.creatorProfile?.id?.toString() === currentUser.id?.toString() : activity))
                       .map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
                           {otherEntity.activityName}
@@ -140,7 +140,7 @@ export const ActivityInviteUpdate = () => {
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles
-                      .filter(userProfile => userProfile.id.toString() !== currentUser.id.toString())
+                      .filter(userProfile => (isNew ? userProfile.id.toString() !== currentUser.id.toString() : userProfile))
                       .map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
                           {otherEntity.nickname}
