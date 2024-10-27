@@ -11,7 +11,7 @@
     -->
     <changeSet id="20240825084257-1" author="jhipster">
         <createTable tableName="message">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="content" type="${clobType}">

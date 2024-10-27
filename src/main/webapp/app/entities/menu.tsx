@@ -4,43 +4,9 @@ import MenuItem from 'app/shared/layout/menus/menu-item';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities } from 'app/modules/account/profile/user-profile.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
+import { getAllUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 
 const EntitiesMenu = () => {
-  const dispatchEntities = useAppDispatch();
-  const account = useAppSelector(state => state.authentication.account); // Get account information
-  const userProfileEntitties = useAppSelector(state => state.userProfile.entities);
-
-  useEffect(() => {
-    dispatchEntities(
-      getEntities({
-        query: `createdBy.equals=${account.login}`,
-      }),
-    );
-  }, []);
-
-  const loggedInUserProfile = userProfileEntitties.find((profile: IUserProfile) => profile.createdBy === account.login);
-
-  // if user doesn't have a user profile created, the profile option will route to the create a new profile page
-  if (!loggedInUserProfile?.id) {
-    return (
-      <>
-        {/* prettier-ignore */}
-        <MenuItem icon="book" to="/user-profile/new">
-          Activity
-        </MenuItem>
-        <MenuItem icon="people-arrows" to="/user-profile/new">
-          Activity Invite
-        </MenuItem>
-        <MenuItem icon="envelope" to="/user-profile/new">
-          Message
-        </MenuItem>
-        <MenuItem icon="search" to="/user-profile/new">
-          Search ScaleUp Network
-        </MenuItem>
-      </>
-    );
-  }
-
   return (
     <>
       {/* prettier-ignore */}
