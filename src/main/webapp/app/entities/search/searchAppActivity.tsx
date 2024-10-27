@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Table } from 'reactstrap';
-import { useAppDispatch } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getAllUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, redirect, useLocation, useNavigate } from 'react-router-dom';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getPaginationState, TextFormat } from 'react-jhipster';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -10,11 +10,14 @@ import { APP_DATE_FORMAT } from 'app/config/constants';
 import { getAllSkills } from 'app/entities/skill/skill.reducer';
 import { getAllActivity } from 'app/entities/activity/activity.reducer';
 import CommonNameCard from 'app/entities/search/commonNameCard';
+import { IUserProfile } from 'app/shared/model/user-profile.model';
 
 export const SearchAppActivity = () => {
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
+  const navigate = useNavigate();
+  const account = useAppSelector(state => state.authentication.account); // Get account information
 
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
@@ -140,6 +143,26 @@ export const SearchAppActivity = () => {
   useEffect(() => {
     setResults([]); // Clear the results when user navigates back
     setActivityResults([]); // Also clear activity results
+
+    // Check if User Profile is existent else navigate to profile page
+    const userProfileExist = async () => {
+      const response = await dispatch(
+        getAllUserProfiles({
+          query: `createdBy.equals=${account.login}`,
+        }),
+      ).unwrap();
+      return response.data.length > 0;
+    };
+
+    // Run the async function to check profile existence and handle redirect
+    const validateUserProfile = async () => {
+      const profileExists = await userProfileExist();
+      if (!profileExists) {
+        navigate('/user-profile/new');
+      }
+    };
+
+    validateUserProfile();
   }, []);
 
   return (
