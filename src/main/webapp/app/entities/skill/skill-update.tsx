@@ -101,7 +101,7 @@ export const SkillUpdate = () => {
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
-              <ValidatedField label="Created By" id="skill-createdBy" name="createdBy" data-cy="createdBy" type="text" />
+              {/* <ValidatedField label="Created By" id="skill-createdBy" name="createdBy" data-cy="createdBy" type="text" />
               <ValidatedField
                 label="Created Date"
                 id="skill-createdDate"
@@ -124,7 +124,7 @@ export const SkillUpdate = () => {
                 data-cy="lastModifiedDate"
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
-              />
+              /> */}
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to={-1} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
