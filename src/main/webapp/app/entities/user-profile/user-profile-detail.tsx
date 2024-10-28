@@ -310,9 +310,9 @@ export const UserProfileDetail = () => {
               )}
             </div>
 
-            <p>{userProfileEntity.profilePicture}</p>
-            <div style={{ padding: '15px', textAlign: 'left', width: '100%' }}></div>
             <h2>{userProfileEntity.user ? userProfileEntity.user.login : ''}</h2>
+            <div style={{ padding: '15px', textAlign: 'left', width: '100%' }}></div>
+            <h2>{}</h2>
 
             {loading ? (
               <p>Loading...</p>
@@ -368,7 +368,7 @@ export const UserProfileDetail = () => {
                       <thead>
                         <tr>
                           <th className="hand" onClick={sort('id')}>
-                            ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                            S/N <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                           </th>
                           <th className="hand" onClick={sort('yearsOfExperience')}>
                             Years Of Experience <FontAwesomeIcon icon={getSortIconByFieldName('yearsOfExperience')} />
@@ -382,24 +382,14 @@ export const UserProfileDetail = () => {
                       <tbody>
                         {skillsAttained.map((userSkill, i) => (
                           <tr key={`entity-${i}`} data-cy="entityTable">
-                            <td>
-                              <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
-                                {userSkill.id}
-                              </Button>
-                            </td>
+                            <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{i + 1}</td>
                             <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{userSkill.yearsOfExperience}</td>
-                            <td>
-                              {userSkill.skill ? (
-                                <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
-                              ) : (
-                                ''
-                              )}
-                            </td>
+                            <td>{userSkill.skill ? <strong>{skillNames[userSkill.skill.id] || 'Loading...'}</strong> : ''}</td>
                             <td className="text-end">
                               <div className="btn-group flex-btn-group-container">
-                                <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                {/* <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                                   <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                                </Button>
+                                </Button> */}
                                 <Button
                                   tag={Link}
                                   to={`/user-skill/${userSkill.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
@@ -447,7 +437,7 @@ export const UserProfileDetail = () => {
                       <thead>
                         <tr>
                           <th className="hand" onClick={sort('id')}>
-                            ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                            S/N <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                           </th>
                           <th className="hand" onClick={sort('yearsOfExperience')}></th>
                           <th>
@@ -459,24 +449,14 @@ export const UserProfileDetail = () => {
                       <tbody>
                         {skillsGoals.map((userSkill, i) => (
                           <tr key={`entity-${i}`} data-cy="entityTable">
-                            <td>
-                              <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="link" size="sm">
-                                {userSkill.id}
-                              </Button>
-                            </td>
+                            <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{i + 1}</td>
                             <td>{}</td>
-                            <td>
-                              {userSkill.skill ? (
-                                <Link to={`/skill/${userSkill.skill.id}`}>{skillNames[userSkill.skill.id] || 'Loading...'}</Link>
-                              ) : (
-                                ''
-                              )}
-                            </td>
+                            <td>{userSkill.skill ? <strong>{skillNames[userSkill.skill.id] || 'Loading...'}</strong> : ''}</td>
                             <td className="text-end">
                               <div className="btn-group flex-btn-group-container">
-                                <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                {/* <Button tag={Link} to={`/user-skill/${userSkill.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                                   <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                                </Button>
+                                </Button> */}
                                 <Button
                                   tag={Link}
                                   to={`/user-skill/${userSkill.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
