@@ -27,6 +27,7 @@ export const UserSkillUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const account = useAppSelector(state => state.authentication.account); // To fetch the account name
   const users = useAppSelector(state => state.userManagement.users);
   const userProfiles = useAppSelector(state => state.userProfile.entities);
   const skills = useAppSelector(state => state.skill.entities);
@@ -55,9 +56,9 @@ export const UserSkillUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      navigate(`/user-profile/${userSkillEntity.userProfile?.id}`);
     }
-  }, [updateSuccess]);
+  }, [updateSuccess, navigate, userSkillEntity.userProfile?.id]);
 
   // eslint-disable-next-line complexity
   const saveEntity = values => {
@@ -86,13 +87,17 @@ export const UserSkillUpdate = () => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? {
+          userProfile: userProfiles.find(profile => profile.createdBy === account.login)?.id,
+          user: users.find(user => user.login === account.login)?.id,
+        }
       : {
           ...userSkillEntity,
           userProfile: userSkillEntity?.userProfile?.id,
+          // user: userSkillEntity?.user?.id,
+          user: users.find(user => user.login === account.login)?.id,
           skill: userSkillEntity?.skill?.id,
           skillType: userSkillEntity?.skillType?.id,
-          user: userSkillEntity?.user?.id,
         };
 
   return (
@@ -123,7 +128,15 @@ export const UserSkillUpdate = () => {
                   validate: v => isNumber(v) || 'This field should be a number.',
                 }}
               />
-              <ValidatedField id="user-skill-userProfile" name="userProfile" data-cy="userProfile" label="User Profile" type="select">
+              <ValidatedField
+                id="user-skill-userProfile"
+                name="userProfile"
+                required
+                data-cy="userProfile"
+                label="User Profile"
+                type="select"
+                disabled={true}
+              >
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
@@ -133,7 +146,7 @@ export const UserSkillUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="user-profile-user" name="user" data-cy="user" label="User" type="select" required>
+              <ValidatedField id="user-profile-user" name="user" required data-cy="user" label="User" type="select" disabled={true}>
                 <option value="" key="0" />
                 {users
                   ? users.map(otherEntity => (
@@ -175,7 +188,7 @@ export const UserSkillUpdate = () => {
                 color="primary"
                 id="save-entity"
                 data-cy="entityCreateSaveButton"
-                onClick={() => navigate(-1)}
+                // onClick={() => navigate(-1)}
                 type="submit"
                 disabled={updating}
               >
