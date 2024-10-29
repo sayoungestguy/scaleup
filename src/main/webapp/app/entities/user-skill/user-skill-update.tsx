@@ -196,10 +196,10 @@ export const UserSkillUpdate = () => {
                 &nbsp; Save
               </Button>
               &nbsp;&nbsp;
-              <Link to="/skill/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <Button color="primary" className="jh-create-entity" data-cy="entityCreateButton" onClick={() => navigate('/skill/new')}>
                 <FontAwesomeIcon icon="plus" />
                 &nbsp; Create a new Skill
-              </Link>
+              </Button>
             </ValidatedForm>
           )}
         </Col>

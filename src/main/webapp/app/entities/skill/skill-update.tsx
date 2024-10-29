@@ -25,7 +25,8 @@ export const SkillUpdate = () => {
   const updateSuccess = useAppSelector(state => state.skill.updateSuccess);
 
   const handleClose = () => {
-    navigate('/skill' + location.search);
+    // navigate('/skill/new');
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -135,7 +136,7 @@ export const SkillUpdate = () => {
                 color="primary"
                 id="save-entity"
                 data-cy="entityCreateSaveButton"
-                onClick={() => navigate(-1)}
+                // onClick={() => navigate(-1)}
                 type="submit"
                 disabled={updating}
               >
