@@ -44,9 +44,9 @@ export const UserProfileUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      navigate(`/user-profile/${userProfileEntity.id}`);
     }
-  }, [updateSuccess]);
+  }, [updateSuccess, navigate, userProfileEntity.id]);
 
   // eslint-disable-next-line complexity
   const saveEntity = values => {
@@ -162,14 +162,7 @@ export const UserProfileUpdate = () => {
                 <span className="d-none d-md-inline">Back</span>
               </Button>
               &nbsp;
-              <Button
-                color="primary"
-                id="save-entity"
-                data-cy="entityCreateSaveButton"
-                onClick={() => navigate(-1)}
-                type="submit"
-                disabled={updating}
-              >
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp; Save
               </Button>
