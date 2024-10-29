@@ -323,7 +323,13 @@ export const MessageUpdate = () => {
                   {currentUserId}
                 </option>
               </ValidatedField>
-              <ValidatedField id="message-receiverProfile" name="receiverProfile" label="Receiver Profile" type="select">
+              <ValidatedField
+                id="message-receiverProfile"
+                name="receiverProfile"
+                label="Receiver Profile"
+                type="select"
+                validate={{ required: { value: true, message: 'This field is required.' } }}
+              >
                 <option value="" key="0" />
                 {users.map(otherEntity => (
                   <option value={otherEntity.id} key={otherEntity.id}>
