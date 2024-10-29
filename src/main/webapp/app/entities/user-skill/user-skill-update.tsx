@@ -128,15 +128,7 @@ export const UserSkillUpdate = () => {
                   validate: v => isNumber(v) || 'This field should be a number.',
                 }}
               />
-              <ValidatedField
-                id="user-skill-userProfile"
-                name="userProfile"
-                required
-                data-cy="userProfile"
-                label="User Profile"
-                type="select"
-                disabled={true}
-              >
+              <ValidatedField id="user-skill-userProfile" name="userProfile" required data-cy="userProfile" type="hidden" disabled={true}>
                 <option value="" key="0" />
                 {userProfiles
                   ? userProfiles.map(otherEntity => (
@@ -146,7 +138,7 @@ export const UserSkillUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="user-profile-user" name="user" required data-cy="user" label="User" type="select" disabled={true}>
+              <ValidatedField id="user-profile-user" name="user" required data-cy="user" type="hidden" disabled={true}>
                 <option value="" key="0" />
                 {users
                   ? users.map(otherEntity => (
@@ -156,7 +148,16 @@ export const UserSkillUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="user-skill-skill" name="skill" data-cy="skill" label="Skill" type="select">
+              <ValidatedField
+                id="user-skill-skill"
+                name="skill"
+                data-cy="skill"
+                label="Skill"
+                type="select"
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
+              >
                 <option value="" key="0" />
                 {skills
                   ? skills.map(otherEntity => (
@@ -166,7 +167,16 @@ export const UserSkillUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="user-skill-skillType" name="skillType" data-cy="skillType" label="Skill Type" type="select">
+              <ValidatedField
+                id="user-skill-skillType"
+                name="skillType"
+                data-cy="skillType"
+                label="Skill Type"
+                type="select"
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
+              >
                 <option value="" key="0" />
                 {codeTables
                   ? codeTables
