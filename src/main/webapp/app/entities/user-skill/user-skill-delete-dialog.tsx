@@ -37,6 +37,7 @@ export const UserSkillDeleteDialog = () => {
 
   const confirmDelete = () => {
     dispatch(deleteEntity(userSkillEntity.id));
+    navigate(`/user-profile/${userSkillEntity.userProfile?.id}`);
   };
 
   return (

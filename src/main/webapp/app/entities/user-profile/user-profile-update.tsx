@@ -44,9 +44,9 @@ export const UserProfileUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      navigate(`/user-profile/${userProfileEntity.id}`);
     }
-  }, [updateSuccess]);
+  }, [updateSuccess, navigate, userProfileEntity.id]);
 
   // eslint-disable-next-line complexity
   const saveEntity = values => {

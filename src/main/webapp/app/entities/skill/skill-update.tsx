@@ -25,7 +25,8 @@ export const SkillUpdate = () => {
   const updateSuccess = useAppSelector(state => state.skill.updateSuccess);
 
   const handleClose = () => {
-    navigate('/skill' + location.search);
+    // navigate('/skill/new');
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -101,7 +102,7 @@ export const SkillUpdate = () => {
                   maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
                 }}
               />
-              <ValidatedField label="Created By" id="skill-createdBy" name="createdBy" data-cy="createdBy" type="text" />
+              {/* <ValidatedField label="Created By" id="skill-createdBy" name="createdBy" data-cy="createdBy" type="text" />
               <ValidatedField
                 label="Created Date"
                 id="skill-createdDate"
@@ -124,14 +125,21 @@ export const SkillUpdate = () => {
                 data-cy="lastModifiedDate"
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
-              />
+              /> */}
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to={-1} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button
+                color="primary"
+                id="save-entity"
+                data-cy="entityCreateSaveButton"
+                // onClick={() => navigate(-1)}
+                type="submit"
+                disabled={updating}
+              >
                 <FontAwesomeIcon icon="save" />
                 &nbsp; Save
               </Button>
