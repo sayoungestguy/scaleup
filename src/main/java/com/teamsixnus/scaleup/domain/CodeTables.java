@@ -13,7 +13,7 @@ import org.springframework.data.domain.Persistable;
  * A CodeTables.
  */
 @Entity
-@Table(name = "code_tables")
+@Table(name = "tbl_code_tables")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @JsonIgnoreProperties(value = { "new" })
 @SuppressWarnings("common-java:DuplicatedBlocks")

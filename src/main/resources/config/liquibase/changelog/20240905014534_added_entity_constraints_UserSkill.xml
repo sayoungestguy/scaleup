@@ -11,24 +11,24 @@
     <changeSet id="20240905014534-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="user_profile_id"
-                                 baseTableName="user_skill"
-                                 constraintName="fk_user_skill__user_profile_id"
+                                 baseTableName="tbl_user_skill"
+                                 constraintName="fk_tbl_user_skill__user_profile_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="user_profile"
+                                 referencedTableName="tbl_user_profile"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="skill_id"
-                                 baseTableName="user_skill"
-                                 constraintName="fk_user_skill__skill_id"
+                                 baseTableName="tbl_user_skill"
+                                 constraintName="fk_tbl_user_skill__skill_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="skill"
+                                 referencedTableName="tbl_skill"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="skill_type_id"
-                                 baseTableName="user_skill"
-                                 constraintName="fk_user_skill__skill_type_id"
+                                 baseTableName="tbl_user_skill"
+                                 constraintName="fk_tbl_user_skill__skill_type_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="code_tables"
+                                 referencedTableName="tbl_code_tables"
                                  />
     </changeSet>
 </databaseChangeLog>

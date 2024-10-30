@@ -10,7 +10,7 @@
         Added the entity UserSkill.
     -->
     <changeSet id="20240905014534-1" author="jhipster">
-        <createTable tableName="user_skill">
+        <createTable tableName="tbl_user_skill">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -44,7 +44,7 @@
         <loadData
                   file="config/liquibase/fake-data/user_skill.csv"
                   separator=";"
-                  tableName="user_skill"
+                  tableName="tbl_user_skill"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="years_of_experience" type="numeric"/>

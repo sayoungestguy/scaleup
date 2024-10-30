@@ -10,7 +10,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Table(name = "jhi_entity_audit_event")
+@Table(name = "tbl_entity_audit_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EntityAuditEvent implements Serializable {
 

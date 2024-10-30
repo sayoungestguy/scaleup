@@ -13,7 +13,7 @@ import org.springframework.data.domain.Persistable;
  * A UserProfile.
  */
 @Entity
-@Table(name = "user_profile")
+@Table(name = "tbl_user_profile")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @JsonIgnoreProperties(value = { "new" })
 @SuppressWarnings("common-java:DuplicatedBlocks")
