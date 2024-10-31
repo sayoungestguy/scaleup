@@ -10,8 +10,8 @@
         Added the entity CodeTables.
     -->
     <changeSet id="20240825084254-1" author="jhipster">
-        <createTable tableName="code_tables">
-            <column name="id" type="bigint" autoIncrement="true">
+        <createTable tableName="tbl_code_tables">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="category" type="varchar(50)">
@@ -37,8 +37,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="code_tables" columnName="created_date" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="code_tables" columnName="last_modified_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_code_tables" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_code_tables" columnName="last_modified_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -55,7 +55,7 @@
         <loadData
                   file="config/liquibase/fake-data/code_tables.csv"
                   separator=";"
-                  tableName="code_tables"
+                  tableName="tbl_code_tables"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="category" type="string"/>

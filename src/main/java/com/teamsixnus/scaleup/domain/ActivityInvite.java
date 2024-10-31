@@ -13,7 +13,7 @@ import org.springframework.data.domain.Persistable;
  * A ActivityInvite.
  */
 @Entity
-@Table(name = "activity_invite")
+@Table(name = "tbl_activity_invite")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @JsonIgnoreProperties(value = { "new" })
 @SuppressWarnings("common-java:DuplicatedBlocks")

@@ -15,7 +15,7 @@ import org.springframework.data.domain.Persistable;
  * A Notification.
  */
 @Entity
-@Table(name = "notification")
+@Table(name = "tbl_notification")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @JsonIgnoreProperties(value = { "new" })
 @SuppressWarnings("common-java:DuplicatedBlocks")

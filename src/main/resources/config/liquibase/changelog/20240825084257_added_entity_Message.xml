@@ -10,7 +10,7 @@
         Added the entity Message.
     -->
     <changeSet id="20240825084257-1" author="jhipster">
-        <createTable tableName="message">
+        <createTable tableName="tbl_message">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -43,9 +43,9 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="message" columnName="sent_at" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="message" columnName="created_date" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="message" columnName="last_modified_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_message" columnName="sent_at" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_message" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_message" columnName="last_modified_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -62,7 +62,7 @@
         <loadData
                   file="config/liquibase/fake-data/message.csv"
                   separator=";"
-                  tableName="message"
+                  tableName="tbl_message"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="content" type="clob"/>

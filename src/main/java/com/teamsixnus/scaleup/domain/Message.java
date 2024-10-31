@@ -13,7 +13,7 @@ import org.springframework.data.domain.Persistable;
  * A Message.
  */
 @Entity
-@Table(name = "message")
+@Table(name = "tbl_message")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @JsonIgnoreProperties(value = { "new" })
 @SuppressWarnings("common-java:DuplicatedBlocks")

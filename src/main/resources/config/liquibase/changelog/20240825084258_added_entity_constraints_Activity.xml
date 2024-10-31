@@ -11,17 +11,17 @@
     <changeSet id="20240825084258-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="creator_profile_id"
-                                 baseTableName="activity"
-                                 constraintName="fk_activity__creator_profile_id"
+                                 baseTableName="tbl_activity"
+                                 constraintName="fk_tbl_activity__creator_profile_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="user_profile"
+                                 referencedTableName="tbl_user_profile"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="skill_id"
-                                 baseTableName="activity"
-                                 constraintName="fk_activity__skill_id"
+                                 baseTableName="tbl_activity"
+                                 constraintName="fk_tbl_activity__skill_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="skill"
+                                 referencedTableName="tbl_skill"
                                  />
     </changeSet>
 </databaseChangeLog>

@@ -11,7 +11,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * A UserSkill.
  */
 @Entity
-@Table(name = "user_skill")
+@Table(name = "tbl_user_skill")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class UserSkill implements Serializable {
