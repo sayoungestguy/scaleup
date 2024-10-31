@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
+import { Button, Card, CardBody, Table } from 'reactstrap';
 import { getPaginationState, JhiItemCount, JhiPagination } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
@@ -39,20 +39,11 @@ export const ActivityInvite = () => {
 
   const getAllEntities = () => {
     dispatch(
-      getAllActivityInvites(
-        isAdmin
-          ? {
-              page: paginationState.activePage - 1,
-              size: paginationState.itemsPerPage,
-              sort: `${paginationState.sort},${paginationState.order}`,
-            }
-          : {
-              query: `inviteeProfileId.equals=${currentUser.id.toString()}`,
-              page: paginationState.activePage - 1,
-              size: paginationState.itemsPerPage,
-              sort: `${paginationState.sort},${paginationState.order}`,
-            },
-      ),
+      getAllActivityInvites({
+        page: paginationState.activePage - 1,
+        size: paginationState.itemsPerPage,
+        sort: `${paginationState.sort},${paginationState.order}`,
+      }),
     );
   };
 
@@ -63,6 +54,11 @@ export const ActivityInvite = () => {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
+
+  // Filter the activityInviteList on the client-side
+  const filteredActivityInviteList = activityInviteList.filter(
+    invite => invite.inviteeProfile.id === currentUser.id.toString() || invite.createdBy === currentUser.login,
+  );
 
   // Fetch Activity Name
   const fetchActivityName = async (activityId: number) => {
@@ -107,8 +103,8 @@ export const ActivityInvite = () => {
 
   // UseEffect to fetch Invitee Profile names after activityInviteList is updated
   useEffect(() => {
-    if (activityInviteList.length > 0) {
-      activityInviteList.forEach(invite => {
+    if (filteredActivityInviteList.length > 0) {
+      filteredActivityInviteList.forEach(invite => {
         if (invite.activity.id && !activityNames[invite.activity.id]) {
           fetchActivityName(invite.activity.id);
         }
@@ -120,7 +116,7 @@ export const ActivityInvite = () => {
         }
       });
     }
-  }, [activityInviteList]);
+  }, [filteredActivityInviteList]);
 
   useEffect(() => {
     sortEntities();
@@ -173,18 +169,24 @@ export const ActivityInvite = () => {
     <div>
       <h2 id="activity-invite-heading" data-cy="ActivityInviteHeading">
         Activity Invites
-        <div className="d-flex justify-content-end">
-          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
-          </Button>
-          <Link to="/activity-invite/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp; Create a new Activity Invite
-          </Link>
-        </div>
       </h2>
+      <Card className="p-2 m-2">
+        <CardBody>
+          <p>*Use this page to track all your activity invites, both created and invited~</p>
+        </CardBody>
+      </Card>
+      <div className="d-flex justify-content-end">
+        <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
+          <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
+        </Button>
+        <Link to="/activity-invite/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+          <FontAwesomeIcon icon="plus" />
+          &nbsp; Create a new Activity Invite
+        </Link>
+      </div>
+
       <div className="table-responsive">
-        {activityInviteList && activityInviteList.length > 0 ? (
+        {filteredActivityInviteList && filteredActivityInviteList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
@@ -202,7 +204,7 @@ export const ActivityInvite = () => {
               </tr>
             </thead>
             <tbody>
-              {activityInviteList.map((activityInvite, i) => (
+              {filteredActivityInviteList.map((activityInvite, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>{i + 1}</td>
                   <td>
