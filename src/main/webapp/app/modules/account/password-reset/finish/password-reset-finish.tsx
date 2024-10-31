@@ -58,7 +58,7 @@ export const PasswordResetFinishPage = () => {
           data-cy="confirmResetPassword"
         />
         <Button color="success" type="submit" data-cy="submit">
-          Validate new password
+          Update to new password
         </Button>
       </ValidatedForm>
     );

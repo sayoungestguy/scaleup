@@ -1,3 +1,41 @@
-.footer {
-  height: 50px;
+.footer-dark {
+  background-color: #343a40;
+  color: #fff;
+  padding: 40px 0;
+
+  ul {
+    padding: 0;
+    list-style: none;
+    a {
+      color: #17a2b8;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  h5 {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #f8f9fa;
+  }
+
+  .mb-2 {
+    margin-bottom: 15px;
+  }
+
+  .btn-primary {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    &:hover {
+      background-color: #138496;
+      border-color: #117a8b;
+    }
+  }
+
+  p {
+    margin: 0;
+    color: #ccc;
+  }
 }

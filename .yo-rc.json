@@ -3,6 +3,12 @@
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "scaleup",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-entity-audit",
+        "version": "5.5.0"
+      }
+    ],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "react",
@@ -15,14 +21,16 @@
     "enableHibernateCache": true,
     "enableSwaggerCodegen": false,
     "enableTranslation": false,
-    "entities": [],
+    "entities": ["CodeTables", "UserProfile", "Skill", "Message", "Activity", "ActivityInvite", "Notification", "UserSkill"],
     "feignClient": null,
     "jhipsterVersion": "8.6.0",
     "jwtSecretKey": "OGJlMjFkYjA2N2MwNWVhZjZjZDdmZmQ0YTFjODc1ZjM2Njc3OTI4NDgwMGRmOGU5ZDJjZjgxMDcwMTQ0M2Q1MjA2NDJkOWE4OTY5MzIyMzIxNTM2NjZiMzFmNDYyNjA2YmJjODRkMTNmOGE2Y2ZmMjhkODZlMzkyZGZmNDQ5NzA=",
+    "lastLiquibaseTimestamp": 1725500734000,
     "messageBroker": false,
     "microfrontend": null,
     "microfrontends": [],
     "nativeLanguage": "en",
+    "packageFolder": "com/teamsixnus/scaleup",
     "packageName": "com.teamsixnus.scaleup",
     "prodDatabaseType": "mysql",
     "reactive": false,
@@ -34,5 +42,10 @@
     "testFrameworks": [],
     "websocket": false,
     "withAdminUi": true
+  },
+  "generator-jhipster-entity-audit": {
+    "auditFramework": "custom",
+    "auditPage": true,
+    "entityAuditEventChangelogDate": "20240825084656"
   }
 }

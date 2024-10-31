@@ -1,0 +1,68 @@
+{
+  "annotations": {
+    "changelogDate": "20240825084254"
+  },
+  "applications": ["scaleup"],
+  "dto": "mapstruct",
+  "enableAudit": true,
+  "fields": [
+    {
+      "fieldName": "category",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "codeKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "codeValue",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "auditField": true,
+      "autoGenerate": true,
+      "columnType": "varchar(50)",
+      "fieldName": "createdBy",
+      "fieldType": "String",
+      "nullable": false,
+      "readonly": true
+    },
+    {
+      "auditField": true,
+      "autoGenerate": true,
+      "fieldName": "createdDate",
+      "fieldType": "Instant",
+      "nullable": false,
+      "readonly": true
+    },
+    {
+      "auditField": true,
+      "autoGenerate": true,
+      "columnType": "varchar(50)",
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String",
+      "nullable": false,
+      "readonly": true
+    },
+    {
+      "auditField": true,
+      "autoGenerate": true,
+      "fieldName": "lastModifiedDate",
+      "fieldType": "Instant",
+      "nullable": false,
+      "readonly": true
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "CodeTables",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

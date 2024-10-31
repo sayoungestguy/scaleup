@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +76,9 @@ public class AuthenticateController {
     @GetMapping("/authenticate")
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
+        // Get the username from the request and escape it before returning
+        String remoteUser = request.getRemoteUser();
+        return remoteUser != null ? StringEscapeUtils.escapeHtml4(remoteUser) : "Anonymous";
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {

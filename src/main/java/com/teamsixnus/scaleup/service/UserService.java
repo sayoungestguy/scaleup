@@ -15,10 +15,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,7 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    @Autowired
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
@@ -53,8 +56,12 @@ public class UserService {
         this.cacheManager = cacheManager;
     }
 
+    public Optional<User> getCurrentUser() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+    }
+
     public Optional<User> activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
+        log.info("Activating user for activation key");
         return userRepository
             .findOneByActivationKey(key)
             .map(user -> {
@@ -68,7 +75,7 @@ public class UserService {
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
-        log.debug("Reset user password for reset key {}", key);
+        log.info("Reset user password for reset key");
         return userRepository
             .findOneByResetKey(key)
             .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
@@ -159,6 +166,7 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
+        user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : Constants.DEFAULT_LANGUAGE);
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -176,7 +184,7 @@ public class UserService {
         }
         userRepository.save(user);
         this.clearUserCaches(user);
-        log.debug("Created Information for User: {}", user);
+        log.info("Created Information for User");
         return user;
     }
 
@@ -212,7 +220,7 @@ public class UserService {
                     .forEach(managedAuthorities::add);
                 userRepository.save(user);
                 this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
+                log.info("Update Information for User");
                 return user;
             })
             .map(AdminUserDTO::new);
@@ -254,6 +262,10 @@ public class UserService {
             });
     }
 
+    public User getUserByLogin(String login) {
+        return userRepository.findOneByLogin(login).orElseThrow(() -> new UsernameNotFoundException("User not found with login: " + login));
+    }
+
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
@@ -288,6 +300,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getUserById() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
     }
 
     /**

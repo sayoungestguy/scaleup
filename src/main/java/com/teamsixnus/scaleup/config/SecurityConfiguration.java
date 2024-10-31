@@ -12,6 +12,7 @@ import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,8 +48,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
-            .cors(withDefaults())
-            .csrf(csrf -> csrf.disable())
+            //.cors(withDefaults())
+            .csrf(AbstractHttpConfigurer::disable)
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
             .headers(
                 headers ->
@@ -83,6 +84,7 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                    .requestMatchers(mvc.pattern("/api/code-tables/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/management/health")).permitAll()
                     .requestMatchers(mvc.pattern("/management/health/**")).permitAll()

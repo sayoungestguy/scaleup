@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity UserSkill.
+    -->
+    <changeSet id="20240905014534-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="user_profile_id"
+                                 baseTableName="tbl_user_skill"
+                                 constraintName="fk_tbl_user_skill__user_profile_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tbl_user_profile"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="skill_id"
+                                 baseTableName="tbl_user_skill"
+                                 constraintName="fk_tbl_user_skill__skill_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tbl_skill"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="skill_type_id"
+                                 baseTableName="tbl_user_skill"
+                                 constraintName="fk_tbl_user_skill__skill_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tbl_code_tables"
+                                 />
+    </changeSet>
+</databaseChangeLog>

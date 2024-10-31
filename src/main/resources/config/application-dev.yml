@@ -45,18 +45,30 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+  # mail:
+  #   host: localhost
+  #   port: 25
+  #   username:
+  #   password:
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: mail.smtp2go.com
+    port: 2525
+    username: 2000990@sit.singaporetech.edu.sg
+    password: OGmMUeE1XRXbsn7j
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
     cache: false
 
 server:
-  port: 8080
+  port: 80
 
 # ===================================================================
 # JHipster specific properties

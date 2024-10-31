@@ -19,13 +19,17 @@ import AppRoutes from 'app/routes';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
+export const notify = (message: string) => {
+  toast(message);
+};
+
 export const App = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getSession());
     dispatch(getProfile());
-  }, []);
+  }, [dispatch]);
 
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));

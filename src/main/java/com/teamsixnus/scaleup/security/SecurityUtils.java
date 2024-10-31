@@ -103,4 +103,14 @@ public final class SecurityUtils {
     private static Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
     }
+
+    // Method to check if the current user has a specific role
+    public static boolean isCurrentUserInRole(String authority) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if (authentication != null && authentication.getAuthorities() != null) {
+            return authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority));
+        }
+        return false;
+    }
 }

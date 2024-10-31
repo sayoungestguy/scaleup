@@ -51,7 +51,7 @@ describe('Password reducer tests', () => {
         updateSuccess: false,
         updateFailure: false,
       };
-      expect(password({ ...initialState, loading: true }, reset)).toEqual({
+      expect(password({ ...initialState, loading: true }, reset())).toEqual({
         ...initialState,
       });
     });
