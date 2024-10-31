@@ -10,7 +10,7 @@
         Added the entity EntityAuditEvent.
     -->
     <changeSet id="20240825084656" author="jhipster">
-        <createTable tableName="jhi_entity_audit_event">
+        <createTable tableName="tbl_entity_audit_event">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -31,14 +31,14 @@
             </column>
         </createTable>
         <createIndex indexName="idx_entity_audit_event_entity_id"
-            tableName="jhi_entity_audit_event">
+            tableName="tbl_entity_audit_event">
             <column name="entity_id" type="bigint"/>
         </createIndex>
         <createIndex indexName="idx_entity_audit_event_entity_type"
-            tableName="jhi_entity_audit_event">
+            tableName="tbl_entity_audit_event">
             <column name="entity_type" type="varchar(255)"/>
         </createIndex>
-        <dropDefaultValue tableName="jhi_entity_audit_event" columnName="modified_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="tbl_entity_audit_event" columnName="modified_date" columnDataType="datetime"/>
         <!-- TODO add an archival job for the table -->
     </changeSet>
 </databaseChangeLog>

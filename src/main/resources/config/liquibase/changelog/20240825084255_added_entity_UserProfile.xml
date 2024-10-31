@@ -10,7 +10,7 @@
         Added the entity UserProfile.
     -->
     <changeSet id="20240825084255-1" author="jhipster">
-        <createTable tableName="user_profile">
+        <createTable tableName="tbl_user_profile">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -46,8 +46,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="user_profile" columnName="created_date" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="user_profile" columnName="last_modified_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_user_profile" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_user_profile" columnName="last_modified_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -64,7 +64,7 @@
         <loadData
                   file="config/liquibase/fake-data/user_profile.csv"
                   separator=";"
-                  tableName="user_profile"
+                  tableName="tbl_user_profile"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="nickname" type="string"/>

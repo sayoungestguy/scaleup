@@ -10,7 +10,7 @@
         Added the entity Notification.
     -->
     <changeSet id="20240825084300-1" author="jhipster">
-        <createTable tableName="notification">
+        <createTable tableName="tbl_notification">
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -43,8 +43,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="notification" columnName="created_date" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="notification" columnName="last_modified_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_notification" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_notification" columnName="last_modified_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -61,7 +61,7 @@
         <loadData
                   file="config/liquibase/fake-data/notification.csv"
                   separator=";"
-                  tableName="notification"
+                  tableName="tbl_notification"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="notification_ref_id" type="string"/>

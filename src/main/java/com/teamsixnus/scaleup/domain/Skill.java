@@ -13,7 +13,7 @@ import org.springframework.data.domain.Persistable;
  * A Skill.
  */
 @Entity
-@Table(name = "skill")
+@Table(name = "tbl_skill")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @JsonIgnoreProperties(value = { "new" })
 @SuppressWarnings("common-java:DuplicatedBlocks")

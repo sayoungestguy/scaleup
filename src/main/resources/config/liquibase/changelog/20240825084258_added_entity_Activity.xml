@@ -10,7 +10,7 @@
         Added the entity Activity.
     -->
     <changeSet id="20240825084258-1" author="jhipster">
-        <createTable tableName="activity">
+        <createTable tableName="tbl_activity">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -49,9 +49,9 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="activity" columnName="activity_time" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="activity" columnName="created_date" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="activity" columnName="last_modified_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_activity" columnName="activity_time" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_activity" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_activity" columnName="last_modified_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -68,7 +68,7 @@
         <loadData
                   file="config/liquibase/fake-data/activity.csv"
                   separator=";"
-                  tableName="activity"
+                  tableName="tbl_activity"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="activity_name" type="string"/>

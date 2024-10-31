@@ -11,10 +11,10 @@
     <changeSet id="20240825084255-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="user_profile"
-                                 constraintName="fk_user_profile__user_id"
+                                 baseTableName="tbl_user_profile"
+                                 constraintName="fk_tbl_user_profile__user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"
+                                 referencedTableName="tbl_user"
                                  />
     </changeSet>
 </databaseChangeLog>

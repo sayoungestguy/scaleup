@@ -10,7 +10,7 @@
         Added the entity Skill.
     -->
     <changeSet id="20240825084256-1" author="jhipster">
-        <createTable tableName="skill">
+        <createTable tableName="tbl_skill">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -31,8 +31,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="skill" columnName="created_date" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="skill" columnName="last_modified_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_skill" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_skill" columnName="last_modified_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -49,7 +49,7 @@
         <loadData
                   file="config/liquibase/fake-data/skill.csv"
                   separator=";"
-                  tableName="skill"
+                  tableName="tbl_skill"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="skill_name" type="string"/>

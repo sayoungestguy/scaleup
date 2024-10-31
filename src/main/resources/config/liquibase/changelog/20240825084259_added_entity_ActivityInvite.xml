@@ -10,7 +10,7 @@
         Added the entity ActivityInvite.
     -->
     <changeSet id="20240825084259-1" author="jhipster">
-        <createTable tableName="activity_invite">
+        <createTable tableName="tbl_activity_invite">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -40,8 +40,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="activity_invite" columnName="created_date" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="activity_invite" columnName="last_modified_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_activity_invite" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="tbl_activity_invite" columnName="last_modified_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -58,7 +58,7 @@
         <loadData
                   file="config/liquibase/fake-data/activity_invite.csv"
                   separator=";"
-                  tableName="activity_invite"
+                  tableName="tbl_activity_invite"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="will_participate" type="boolean"/>
