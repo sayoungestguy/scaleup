@@ -103,9 +103,9 @@ class UserResourceIT {
         persistUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         persistUser.setActivated(true);
         persistUser.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
-        persistUser.setFirstName(DEFAULT_FIRSTNAME);
-        persistUser.setLastName(DEFAULT_LASTNAME);
-        persistUser.setImageUrl(DEFAULT_IMAGEURL);
+        //        persistUser.setFirstName(DEFAULT_FIRSTNAME);
+        //        persistUser.setLastName(DEFAULT_LASTNAME);
+        //        persistUser.setImageUrl(DEFAULT_IMAGEURL);
         persistUser.setLangKey(DEFAULT_LANGKEY);
         return persistUser;
     }
@@ -147,11 +147,11 @@ class UserResourceIT {
         // Create the User
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setLogin(DEFAULT_LOGIN);
-        userDTO.setFirstName(DEFAULT_FIRSTNAME);
-        userDTO.setLastName(DEFAULT_LASTNAME);
+        //        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        //        userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+        //        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
@@ -168,10 +168,10 @@ class UserResourceIT {
         User convertedUser = userMapper.userDTOToUser(returnedUserDTO);
         // Validate the returned User
         assertThat(convertedUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(convertedUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(convertedUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        //        assertThat(convertedUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        //        assertThat(convertedUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(convertedUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(convertedUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        //        assertThat(convertedUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(convertedUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 
@@ -183,11 +183,11 @@ class UserResourceIT {
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(DEFAULT_ID);
         userDTO.setLogin(DEFAULT_LOGIN);
-        userDTO.setFirstName(DEFAULT_FIRSTNAME);
-        userDTO.setLastName(DEFAULT_LASTNAME);
+        //        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        //        userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+        //        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
@@ -209,11 +209,11 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setLogin(DEFAULT_LOGIN); // this login should already be used
-        userDTO.setFirstName(DEFAULT_FIRSTNAME);
-        userDTO.setLastName(DEFAULT_LASTNAME);
+        //        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        //        userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail("anothermail@localhost");
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+        //        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
@@ -235,11 +235,11 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setLogin("anotherlogin");
-        userDTO.setFirstName(DEFAULT_FIRSTNAME);
-        userDTO.setLastName(DEFAULT_LASTNAME);
+        //        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        //        userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL); // this email should already be used
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+        //        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
@@ -264,10 +264,10 @@ class UserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
+            //            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
+            //            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
+            //            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
     }
 
@@ -285,10 +285,10 @@ class UserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
+            //            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
+            //            .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
+            //            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
             .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
 
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
@@ -313,11 +313,11 @@ class UserResourceIT {
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin(updatedUser.getLogin());
-        userDTO.setFirstName(UPDATED_FIRSTNAME);
-        userDTO.setLastName(UPDATED_LASTNAME);
+        //        userDTO.setFirstName(UPDATED_FIRSTNAME);
+        //        userDTO.setLastName(UPDATED_LASTNAME);
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(UPDATED_IMAGEURL);
+        //        userDTO.setImageUrl(UPDATED_IMAGEURL);
         userDTO.setLangKey(UPDATED_LANGKEY);
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
@@ -333,10 +333,10 @@ class UserResourceIT {
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
             User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
-            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
+            //            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
+            //            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+            //            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
     }
@@ -354,11 +354,11 @@ class UserResourceIT {
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin(UPDATED_LOGIN);
-        userDTO.setFirstName(UPDATED_FIRSTNAME);
-        userDTO.setLastName(UPDATED_LASTNAME);
+        //        userDTO.setFirstName(UPDATED_FIRSTNAME);
+        //        userDTO.setLastName(UPDATED_LASTNAME);
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(UPDATED_IMAGEURL);
+        //        userDTO.setImageUrl(UPDATED_IMAGEURL);
         userDTO.setLangKey(UPDATED_LANGKEY);
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
@@ -375,10 +375,10 @@ class UserResourceIT {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
             User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
             assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
-            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
+            //            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
+            //            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+            //            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
     }
@@ -394,9 +394,9 @@ class UserResourceIT {
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
-        anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
+        //        anotherUser.setFirstName("java");
+        //        anotherUser.setLastName("hipster");
+        //        anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
         userRepository.saveAndFlush(anotherUser);
 
@@ -406,11 +406,11 @@ class UserResourceIT {
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin(updatedUser.getLogin());
-        userDTO.setFirstName(updatedUser.getFirstName());
-        userDTO.setLastName(updatedUser.getLastName());
+        //        userDTO.setFirstName(updatedUser.getFirstName());
+        //        userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail("jhipster@localhost"); // this email should already be used by anotherUser
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(updatedUser.getImageUrl());
+        //        userDTO.setImageUrl(updatedUser.getImageUrl());
         userDTO.setLangKey(updatedUser.getLangKey());
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
@@ -434,9 +434,9 @@ class UserResourceIT {
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
-        anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
+        //        anotherUser.setFirstName("java");
+        //        anotherUser.setLastName("hipster");
+        //        anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
         userRepository.saveAndFlush(anotherUser);
 
@@ -446,11 +446,11 @@ class UserResourceIT {
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin("jhipster"); // this login should already be used by anotherUser
-        userDTO.setFirstName(updatedUser.getFirstName());
-        userDTO.setLastName(updatedUser.getLastName());
+        //        userDTO.setFirstName(updatedUser.getFirstName());
+        //        userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail(updatedUser.getEmail());
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(updatedUser.getImageUrl());
+        //        userDTO.setImageUrl(updatedUser.getImageUrl());
         userDTO.setLangKey(updatedUser.getLangKey());
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());

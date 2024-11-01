@@ -93,7 +93,7 @@ export const ActivityInviteUpdate = () => {
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="scaleupApp.activityInvite.home.createOrEditLabel" data-cy="ActivityInviteCreateUpdateHeading">
-            Create or edit a Activity Invite
+            {isNew ? 'Create' : 'Edit'} Activity Invite
           </h2>
         </Col>
       </Row>
