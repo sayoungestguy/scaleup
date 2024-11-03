@@ -9,7 +9,6 @@ import Skill from './skill';
 import Message from './message';
 import Activity from './activity';
 import ActivityInvite from './activity-invite';
-import Notification from './notification';
 import UserSkill from './user-skill';
 import SearchAppActivity from 'app/entities/search/searchAppActivity';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
@@ -25,7 +24,7 @@ export default () => {
         <Route path="message/*" element={<Message />} />
         <Route path="activity/*" element={<Activity />} />
         <Route path="activity-invite/*" element={<ActivityInvite />} />
-        <Route path="notification/*" element={<Notification />} />
+
         <Route path="user-skill/*" element={<UserSkill />} />
         <Route path="search/*" element={<SearchAppActivity />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
