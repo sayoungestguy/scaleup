@@ -43,20 +43,8 @@ class UserResourceIT {
 
     private static final Long DEFAULT_ID = 1L;
 
-    private static final String DEFAULT_PASSWORD = "passjohndoe";
-    private static final String UPDATED_PASSWORD = "passjhipster";
-
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
     private static final String UPDATED_EMAIL = "jhipster@localhost";
-
-    private static final String DEFAULT_FIRSTNAME = "john";
-    private static final String UPDATED_FIRSTNAME = "jhipsterFirstName";
-
-    private static final String DEFAULT_LASTNAME = "doe";
-    private static final String UPDATED_LASTNAME = "jhipsterLastName";
-
-    private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
-    private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
 
     private static final String DEFAULT_LANGKEY = "en";
     private static final String UPDATED_LANGKEY = "fr";
@@ -146,7 +134,7 @@ class UserResourceIT {
         userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
-        //        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
@@ -164,7 +152,7 @@ class UserResourceIT {
         // Validate the returned User
         assertThat(convertedUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(convertedUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        //        assertThat(convertedUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+
         assertThat(convertedUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 
@@ -202,7 +190,7 @@ class UserResourceIT {
         userDTO.setLogin(DEFAULT_LOGIN); // this login should already be used
         userDTO.setEmail("anothermail@localhost");
         userDTO.setActivated(true);
-        //        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
