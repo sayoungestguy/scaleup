@@ -12,8 +12,6 @@ public class ActivityInviteDTO implements Serializable {
 
     private Long id;
 
-    private Boolean willParticipate;
-
     private String createdBy;
 
     private Instant createdDate;
@@ -34,14 +32,6 @@ public class ActivityInviteDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getWillParticipate() {
-        return willParticipate;
-    }
-
-    public void setWillParticipate(Boolean willParticipate) {
-        this.willParticipate = willParticipate;
     }
 
     public String getCreatedBy() {
@@ -126,7 +116,6 @@ public class ActivityInviteDTO implements Serializable {
     public String toString() {
         return "ActivityInviteDTO{" +
             "id=" + getId() +
-            ", willParticipate='" + getWillParticipate() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +

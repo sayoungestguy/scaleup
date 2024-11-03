@@ -7,10 +7,6 @@
   "enableAudit": true,
   "fields": [
     {
-      "fieldName": "willParticipate",
-      "fieldType": "Boolean"
-    },
-    {
       "auditField": true,
       "autoGenerate": true,
       "columnType": "varchar(50)",

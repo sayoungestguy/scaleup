@@ -99,9 +99,6 @@ public class ActivityInviteQueryService extends QueryService<ActivityInvite> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ActivityInvite_.id));
             }
-            if (criteria.getWillParticipate() != null) {
-                specification = specification.and(buildSpecification(criteria.getWillParticipate(), ActivityInvite_.willParticipate));
-            }
             if (criteria.getCreatedBy() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getCreatedBy(), ActivityInvite_.createdBy));
             }

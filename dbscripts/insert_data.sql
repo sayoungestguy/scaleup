@@ -43,7 +43,7 @@ SELECT * FROM tbl_skill;
 -- View the inserted data
 SELECT * FROM tbl_code_tables;
 -- View the inserted data
-SELECT * FROM tbl_user_profiles;
+SELECT * FROM tbl_user_profile;
 
 
 
