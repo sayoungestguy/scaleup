@@ -199,7 +199,7 @@ public class UserService {
                 if (userDTO.getEmail() != null) {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
-                //                user.setImageUrl(userDTO.getImageUrl());
+
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
@@ -243,7 +243,6 @@ public class UserService {
                     user.setEmail(email.toLowerCase());
                 }
                 user.setLangKey(langKey);
-                //                user.setImageUrl(imageUrl);
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);

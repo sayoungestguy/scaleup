@@ -43,14 +43,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(name = "password_hash", length = 60, nullable = false)
     private String password;
 
-    //    @Size(max = 50)
-    //    @Column(name = "first_name", length = 50)
-    //    private String firstName;
-    //
-    //    @Size(max = 50)
-    //    @Column(name = "last_name", length = 50)
-    //    private String lastName;
-
     @Email
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
@@ -63,10 +55,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Size(min = 2, max = 10)
     @Column(name = "lang_key", length = 10)
     private String langKey;
-
-    //    @Size(max = 256)
-    //    @Column(name = "image_url", length = 256)
-    //    private String imageUrl;
 
     @Size(max = 20)
     @Column(name = "activation_key", length = 20)
@@ -195,10 +183,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     public String toString() {
         return "User{" +
             "login='" + login + '\'' +
-//            ", firstName='" + firstName + '\'' +
-//            ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
-//            ", imageUrl='" + imageUrl + '\'' +
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +

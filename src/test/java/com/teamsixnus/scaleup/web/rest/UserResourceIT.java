@@ -287,7 +287,7 @@ class UserResourceIT {
         userDTO.setLogin(updatedUser.getLogin());
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
-        //        userDTO.setImageUrl(UPDATED_IMAGEURL);
+
         userDTO.setLangKey(UPDATED_LANGKEY);
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
@@ -304,7 +304,7 @@ class UserResourceIT {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
             User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            //            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
     }
@@ -324,7 +324,7 @@ class UserResourceIT {
         userDTO.setLogin(UPDATED_LOGIN);
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
-        //        userDTO.setImageUrl(UPDATED_IMAGEURL);
+
         userDTO.setLangKey(UPDATED_LANGKEY);
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
@@ -342,7 +342,7 @@ class UserResourceIT {
             User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
             assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            //            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
     }
@@ -369,7 +369,7 @@ class UserResourceIT {
         userDTO.setLogin(updatedUser.getLogin());
         userDTO.setEmail("jhipster@localhost"); // this email should already be used by anotherUser
         userDTO.setActivated(updatedUser.isActivated());
-        //        userDTO.setImageUrl(updatedUser.getImageUrl());
+
         userDTO.setLangKey(updatedUser.getLangKey());
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
@@ -404,7 +404,7 @@ class UserResourceIT {
         userDTO.setLogin("jhipster"); // this login should already be used by anotherUser
         userDTO.setEmail(updatedUser.getEmail());
         userDTO.setActivated(updatedUser.isActivated());
-        //        userDTO.setImageUrl(updatedUser.getImageUrl());
+
         userDTO.setLangKey(updatedUser.getLangKey());
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());

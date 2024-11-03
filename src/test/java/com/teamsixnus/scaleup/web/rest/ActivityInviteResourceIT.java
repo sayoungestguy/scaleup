@@ -1,7 +1,6 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import static com.teamsixnus.scaleup.domain.ActivityInviteAsserts.*;
-import static com.teamsixnus.scaleup.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -116,7 +115,6 @@ class ActivityInviteResourceIT {
         // Validate the ActivityInvite in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
         var returnedActivityInvite = activityInviteMapper.toEntity(returnedActivityInviteDTO);
-        //assertActivityInviteUpdatableFieldsEquals(returnedActivityInvite, getPersistedActivityInvite(returnedActivityInvite));
 
         insertedActivityInvite = returnedActivityInvite;
     }
@@ -409,10 +407,6 @@ class ActivityInviteResourceIT {
         // Validate the ActivityInvite in the database
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        //        assertActivityInviteUpdatableFieldsEquals(
-        //            createUpdateProxyForBean(partialUpdatedActivityInvite, activityInvite),
-        //            getPersistedActivityInvite(activityInvite)
-        //        );
     }
 
     @Test
@@ -438,7 +432,6 @@ class ActivityInviteResourceIT {
         // Validate the ActivityInvite in the database
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        //assertActivityInviteUpdatableFieldsEquals(partialUpdatedActivityInvite, getPersistedActivityInvite(partialUpdatedActivityInvite));
     }
 
     @Test
@@ -542,9 +535,5 @@ class ActivityInviteResourceIT {
 
     protected void assertPersistedActivityInviteToMatchAllProperties(ActivityInvite expectedActivityInvite) {
         assertActivityInviteAllPropertiesEquals(expectedActivityInvite, getPersistedActivityInvite(expectedActivityInvite));
-    }
-
-    protected void assertPersistedActivityInviteToMatchUpdatableProperties(ActivityInvite expectedActivityInvite) {
-        assertActivityInviteAllUpdatablePropertiesEquals(expectedActivityInvite, getPersistedActivityInvite(expectedActivityInvite));
     }
 }
