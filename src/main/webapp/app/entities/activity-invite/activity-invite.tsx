@@ -57,7 +57,7 @@ export const ActivityInvite = () => {
 
   // Filter the activityInviteList on the client-side
   const filteredActivityInviteList = activityInviteList.filter(
-    invite => invite.inviteeProfile.id === currentUser.id.toString() || invite.createdBy === currentUser.login,
+    invite => invite.inviteeProfile.id === currentUser.id || invite.createdBy === currentUser.login,
   );
 
   // Fetch Activity Name
