@@ -14,9 +14,6 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="will_participate" type="boolean">
-                <constraints nullable="true" />
-            </column>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false" />
             </column>

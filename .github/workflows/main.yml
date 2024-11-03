@@ -216,7 +216,7 @@ jobs:
             elif [ "$(sudo docker ps -a -q -f name=scaleUp)" ]; then
                 sudo docker rm scaleUp
             fi
-            sudo docker run -d -p 8080:8080 --name scaleUp  ${{ secrets.DOCKER_USERNAME }}/scaleup:latest
+            sudo docker run -d -p 80:80 --name scaleUp  ${{ secrets.DOCKER_USERNAME }}/scaleup:latest
 
   deploy-to-main:
     name: Deploy to Production

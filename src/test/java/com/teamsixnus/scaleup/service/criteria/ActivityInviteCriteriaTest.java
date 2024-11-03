@@ -75,7 +75,6 @@ class ActivityInviteCriteriaTest {
 
     private static void setAllFilters(ActivityInviteCriteria activityInviteCriteria) {
         activityInviteCriteria.id();
-        activityInviteCriteria.willParticipate();
         activityInviteCriteria.createdBy();
         activityInviteCriteria.createdDate();
         activityInviteCriteria.lastModifiedBy();
@@ -90,7 +89,6 @@ class ActivityInviteCriteriaTest {
         return new Condition<>(
             criteria ->
                 condition.apply(criteria.getId()) &&
-                condition.apply(criteria.getWillParticipate()) &&
                 condition.apply(criteria.getCreatedBy()) &&
                 condition.apply(criteria.getCreatedDate()) &&
                 condition.apply(criteria.getLastModifiedBy()) &&
@@ -110,7 +108,6 @@ class ActivityInviteCriteriaTest {
         return new Condition<>(
             criteria ->
                 condition.apply(criteria.getId(), copy.getId()) &&
-                condition.apply(criteria.getWillParticipate(), copy.getWillParticipate()) &&
                 condition.apply(criteria.getCreatedBy(), copy.getCreatedBy()) &&
                 condition.apply(criteria.getCreatedDate(), copy.getCreatedDate()) &&
                 condition.apply(criteria.getLastModifiedBy(), copy.getLastModifiedBy()) &&

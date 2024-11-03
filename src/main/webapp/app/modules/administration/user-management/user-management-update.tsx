@@ -83,29 +83,29 @@ export const UserManagementUpdate = () => {
                   },
                 }}
               />
-              <ValidatedField
-                type="text"
-                name="firstName"
-                label="First name"
-                validate={{
-                  maxLength: {
-                    value: 50,
-                    message: 'This field cannot be longer than 50 characters.',
-                  },
-                }}
-              />
-              <ValidatedField
-                type="text"
-                name="lastName"
-                label="Last name"
-                validate={{
-                  maxLength: {
-                    value: 50,
-                    message: 'This field cannot be longer than 50 characters.',
-                  },
-                }}
-              />
-              <FormText>This field cannot be longer than 50 characters.</FormText>
+              {/*<ValidatedField*/}
+              {/*  type="text"*/}
+              {/*  name="firstName"*/}
+              {/*  label="First name"*/}
+              {/*  validate={{*/}
+              {/*    maxLength: {*/}
+              {/*      value: 50,*/}
+              {/*      message: 'This field cannot be longer than 50 characters.',*/}
+              {/*    },*/}
+              {/*  }}*/}
+              {/*/>*/}
+              {/*<ValidatedField*/}
+              {/*  type="text"*/}
+              {/*  name="lastName"*/}
+              {/*  label="Last name"*/}
+              {/*  validate={{*/}
+              {/*    maxLength: {*/}
+              {/*      value: 50,*/}
+              {/*      message: 'This field cannot be longer than 50 characters.',*/}
+              {/*    },*/}
+              {/*  }}*/}
+              {/*/>*/}
+              {/*<FormText>This field cannot be longer than 50 characters.</FormText>*/}
               <ValidatedField
                 name="email"
                 label="Email"

@@ -4,7 +4,6 @@ import skill from 'app/entities/skill/skill.reducer';
 import message from 'app/entities/message/message.reducer';
 import activity from 'app/entities/activity/activity.reducer';
 import activityInvite from 'app/entities/activity-invite/activity-invite.reducer';
-import notification from 'app/entities/notification/notification.reducer';
 import userSkill from 'app/entities/user-skill/user-skill.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -15,7 +14,6 @@ const entitiesReducers = {
   message,
   activity,
   activityInvite,
-  notification,
   userSkill,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };

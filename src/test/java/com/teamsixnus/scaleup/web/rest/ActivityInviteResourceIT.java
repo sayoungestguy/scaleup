@@ -1,7 +1,6 @@
 package com.teamsixnus.scaleup.web.rest;
 
 import static com.teamsixnus.scaleup.domain.ActivityInviteAsserts.*;
-import static com.teamsixnus.scaleup.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -9,9 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamsixnus.scaleup.IntegrationTest;
-import com.teamsixnus.scaleup.domain.*;
+import com.teamsixnus.scaleup.domain.Activity;
+import com.teamsixnus.scaleup.domain.ActivityInvite;
+import com.teamsixnus.scaleup.domain.CodeTables;
+import com.teamsixnus.scaleup.domain.UserProfile;
 import com.teamsixnus.scaleup.repository.ActivityInviteRepository;
-import com.teamsixnus.scaleup.security.AuthoritiesConstants;
 import com.teamsixnus.scaleup.service.dto.ActivityInviteDTO;
 import com.teamsixnus.scaleup.service.mapper.ActivityInviteMapper;
 import jakarta.persistence.EntityManager;
@@ -34,9 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class ActivityInviteResourceIT {
-
-    private static final Boolean DEFAULT_WILL_PARTICIPATE = false;
-    private static final Boolean UPDATED_WILL_PARTICIPATE = true;
 
     private static final String ENTITY_API_URL = "/api/activity-invites";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -70,7 +68,7 @@ class ActivityInviteResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ActivityInvite createEntity(EntityManager em) {
-        ActivityInvite activityInvite = new ActivityInvite().willParticipate(DEFAULT_WILL_PARTICIPATE);
+        ActivityInvite activityInvite = new ActivityInvite();
         return activityInvite;
     }
 
@@ -81,7 +79,7 @@ class ActivityInviteResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ActivityInvite createUpdatedEntity(EntityManager em) {
-        ActivityInvite activityInvite = new ActivityInvite().willParticipate(UPDATED_WILL_PARTICIPATE);
+        ActivityInvite activityInvite = new ActivityInvite();
         return activityInvite;
     }
 
@@ -117,7 +115,6 @@ class ActivityInviteResourceIT {
         // Validate the ActivityInvite in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
         var returnedActivityInvite = activityInviteMapper.toEntity(returnedActivityInviteDTO);
-        assertActivityInviteUpdatableFieldsEquals(returnedActivityInvite, getPersistedActivityInvite(returnedActivityInvite));
 
         insertedActivityInvite = returnedActivityInvite;
     }
@@ -151,8 +148,7 @@ class ActivityInviteResourceIT {
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(activityInvite.getId().intValue())))
-            .andExpect(jsonPath("$.[*].willParticipate").value(hasItem(DEFAULT_WILL_PARTICIPATE.booleanValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(activityInvite.getId().intValue())));
     }
 
     @Test
@@ -166,8 +162,7 @@ class ActivityInviteResourceIT {
             .perform(get(ENTITY_API_URL_ID, activityInvite.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(activityInvite.getId().intValue()))
-            .andExpect(jsonPath("$.willParticipate").value(DEFAULT_WILL_PARTICIPATE.booleanValue()));
+            .andExpect(jsonPath("$.id").value(activityInvite.getId().intValue()));
     }
 
     @Test
@@ -187,43 +182,6 @@ class ActivityInviteResourceIT {
 
     @Test
     @Transactional
-    void getAllActivityInvitesByWillParticipateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-
-        // Get all the activityInviteList where willParticipate equals to
-        defaultActivityInviteFiltering(
-            "willParticipate.equals=" + DEFAULT_WILL_PARTICIPATE,
-            "willParticipate.equals=" + UPDATED_WILL_PARTICIPATE
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllActivityInvitesByWillParticipateIsInShouldWork() throws Exception {
-        // Initialize the database
-        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-
-        // Get all the activityInviteList where willParticipate in
-        defaultActivityInviteFiltering(
-            "willParticipate.in=" + DEFAULT_WILL_PARTICIPATE + "," + UPDATED_WILL_PARTICIPATE,
-            "willParticipate.in=" + UPDATED_WILL_PARTICIPATE
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllActivityInvitesByWillParticipateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        insertedActivityInvite = activityInviteRepository.saveAndFlush(activityInvite);
-
-        // Get all the activityInviteList where willParticipate is not null
-        defaultActivityInviteFiltering("willParticipate.specified=true", "willParticipate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(username = "user", authorities = { AuthoritiesConstants.USER })
     void getAllActivityInvitesByActivityIsEqualToSomething() throws Exception {
         Activity activity;
         if (TestUtil.findAll(em, Activity.class).isEmpty()) {
@@ -301,8 +259,7 @@ class ActivityInviteResourceIT {
             .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(activityInvite.getId().intValue())))
-            .andExpect(jsonPath("$.[*].willParticipate").value(hasItem(DEFAULT_WILL_PARTICIPATE.booleanValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(activityInvite.getId().intValue())));
 
         // Check, that the count call also returns 1
         restActivityInviteMockMvc
@@ -350,7 +307,6 @@ class ActivityInviteResourceIT {
         ActivityInvite updatedActivityInvite = activityInviteRepository.findById(activityInvite.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedActivityInvite are not directly saved in db
         em.detach(updatedActivityInvite);
-        updatedActivityInvite.willParticipate(UPDATED_WILL_PARTICIPATE);
         ActivityInviteDTO activityInviteDTO = activityInviteMapper.toDto(updatedActivityInvite);
 
         restActivityInviteMockMvc
@@ -451,10 +407,6 @@ class ActivityInviteResourceIT {
         // Validate the ActivityInvite in the database
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        assertActivityInviteUpdatableFieldsEquals(
-            createUpdateProxyForBean(partialUpdatedActivityInvite, activityInvite),
-            getPersistedActivityInvite(activityInvite)
-        );
     }
 
     @Test
@@ -469,8 +421,6 @@ class ActivityInviteResourceIT {
         ActivityInvite partialUpdatedActivityInvite = new ActivityInvite();
         partialUpdatedActivityInvite.setId(activityInvite.getId());
 
-        partialUpdatedActivityInvite.willParticipate(UPDATED_WILL_PARTICIPATE);
-
         restActivityInviteMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedActivityInvite.getId())
@@ -482,7 +432,6 @@ class ActivityInviteResourceIT {
         // Validate the ActivityInvite in the database
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        assertActivityInviteUpdatableFieldsEquals(partialUpdatedActivityInvite, getPersistedActivityInvite(partialUpdatedActivityInvite));
     }
 
     @Test
@@ -586,17 +535,5 @@ class ActivityInviteResourceIT {
 
     protected void assertPersistedActivityInviteToMatchAllProperties(ActivityInvite expectedActivityInvite) {
         assertActivityInviteAllPropertiesEquals(expectedActivityInvite, getPersistedActivityInvite(expectedActivityInvite));
-    }
-
-    protected void assertPersistedActivityInviteToMatchUpdatableProperties(ActivityInvite expectedActivityInvite) {
-        assertActivityInviteAllUpdatablePropertiesEquals(expectedActivityInvite, getPersistedActivityInvite(expectedActivityInvite));
-    }
-
-    // Mock helper function to return the current user
-    private User mockCurrentUser(Long id, String username) {
-        User user = new User();
-        user.setId(id);
-        user.setLogin(username);
-        return user;
     }
 }

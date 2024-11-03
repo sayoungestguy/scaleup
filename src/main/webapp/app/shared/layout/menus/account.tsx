@@ -28,9 +28,9 @@ const accountMenuItemsAuthenticated = () => {
         <MenuItem icon="asterisk" to="/user-profile/new" data-cy="profile">
           Profile
         </MenuItem>
-        <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
-          Settings
-        </MenuItem>
+        {/*<MenuItem icon="wrench" to="/account/settings" data-cy="settings">*/}
+        {/*  Settings*/}
+        {/*</MenuItem>*/}
         <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
           Password
         </MenuItem>
@@ -47,9 +47,9 @@ const accountMenuItemsAuthenticated = () => {
         Profile
       </MenuItem>
 
-      <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
-        Settings
-      </MenuItem>
+      {/*<MenuItem icon="wrench" to="/account/settings" data-cy="settings">*/}
+      {/*  Settings*/}
+      {/*</MenuItem>*/}
       <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
         Password
       </MenuItem>
