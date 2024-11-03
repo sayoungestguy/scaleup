@@ -57,7 +57,6 @@ public class CacheConfiguration {
             createCache(cm, com.teamsixnus.scaleup.domain.Message.class.getName());
             createCache(cm, com.teamsixnus.scaleup.domain.Activity.class.getName());
             createCache(cm, com.teamsixnus.scaleup.domain.ActivityInvite.class.getName());
-            createCache(cm, com.teamsixnus.scaleup.domain.Notification.class.getName());
             createCache(cm, com.teamsixnus.scaleup.domain.UserSkill.class.getName());
             // jhipster-needle-ehcache-add-entry
         };

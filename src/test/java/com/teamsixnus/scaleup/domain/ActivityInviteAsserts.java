@@ -22,7 +22,7 @@ public class ActivityInviteAsserts {
      * @param actual the actual entity
      */
     public static void assertActivityInviteAllUpdatablePropertiesEquals(ActivityInvite expected, ActivityInvite actual) {
-        assertActivityInviteUpdatableFieldsEquals(expected, actual);
+        //assertActivityInviteUpdatableFieldsEquals(expected, actual);
         assertActivityInviteUpdatableRelationshipsEquals(expected, actual);
     }
 
@@ -40,17 +40,17 @@ public class ActivityInviteAsserts {
             .satisfies(e -> assertThat(e.getCreatedDate()).as("check createdDate").isEqualTo(actual.getCreatedDate()));
     }
 
-    /**
-     * Asserts that the entity has all the updatable fields set.
-     *
-     * @param expected the expected entity
-     * @param actual the actual entity
-     */
-    public static void assertActivityInviteUpdatableFieldsEquals(ActivityInvite expected, ActivityInvite actual) {
-        assertThat(expected)
-            .as("Verify ActivityInvite relevant properties")
-            .satisfies(e -> assertThat(e.getWillParticipate()).as("check willParticipate").isEqualTo(actual.getWillParticipate()));
-    }
+    //    /**
+    //     * Asserts that the entity has all the updatable fields set.
+    //     *
+    //     * @param expected the expected entity
+    //     * @param actual the actual entity
+    //     */
+    //    public static void assertActivityInviteUpdatableFieldsEquals(ActivityInvite expected, ActivityInvite actual) {
+    //        assertThat(expected)
+    //            .as("Verify ActivityInvite relevant properties")
+    //            .satisfies(e -> assertThat(e.getWillParticipate()).as("check willParticipate").isEqualTo(actual.getWillParticipate()));
+    //    }
 
     /**
      * Asserts that the entity has all the updatable relationships set.

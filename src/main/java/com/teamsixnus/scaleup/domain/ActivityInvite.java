@@ -26,9 +26,6 @@ public class ActivityInvite extends AbstractAuditingEntity<Long> implements Seri
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "will_participate")
-    private Boolean willParticipate;
-
     // Inherited createdBy definition
     // Inherited createdDate definition
     // Inherited lastModifiedBy definition
@@ -60,19 +57,6 @@ public class ActivityInvite extends AbstractAuditingEntity<Long> implements Seri
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getWillParticipate() {
-        return this.willParticipate;
-    }
-
-    public ActivityInvite willParticipate(Boolean willParticipate) {
-        this.setWillParticipate(willParticipate);
-        return this;
-    }
-
-    public void setWillParticipate(Boolean willParticipate) {
-        this.willParticipate = willParticipate;
     }
 
     // Inherited createdBy methods
@@ -179,7 +163,6 @@ public class ActivityInvite extends AbstractAuditingEntity<Long> implements Seri
     public String toString() {
         return "ActivityInvite{" +
             "id=" + getId() +
-            ", willParticipate='" + getWillParticipate() + "'" +
             ", createdBy='" + getCreatedBy() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
